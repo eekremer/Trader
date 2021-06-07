@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BuySellDialog</class>
+ <widget class="QDialog" name="BuySellDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1184</width>
+    <height>512</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>BUY SELL Dialog</string>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
+  <widget class="QPushButton" name="pushButton">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>370</y>
+     <width>201</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>23</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>MARACA</string>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>140</y>
+     <width>131</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>CheckBox</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
