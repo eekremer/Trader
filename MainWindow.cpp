@@ -46,8 +46,9 @@ MainWindow::MainWindow( QWidget  *parent )
 
     setDataTableViewColumnWidth();
 
-    DataViewDelegate delegate( this );
+    m_ui->dataTableView->setFont( QFont( "Arial", 30 ) );
 
+    DataViewDelegate delegate( this );
     //m_ui->dataTableView->setItemDelegate( &delegate );
 
     //----------------------------------------------------------------

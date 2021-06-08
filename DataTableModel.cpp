@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QAbstractTableModel>
 #include <QList>
+#include <QFont>
+#include <QBrush>
+#include <QDebug>
 
 
 
@@ -25,7 +28,7 @@ DataTableModel::DataTableModel(         int         rows,
 
     for ( int column = 0; column < qMax( 1, columns ); ++column )
     {
-        list.append( "" );
+        list.append( "100" );
     }
 
     for ( int row = 0; row < qMax( 1, rows ); ++row )
@@ -77,13 +80,90 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
                                            int              role       ) const
 {
 
+    // in addition to controlling what text the view displays, the model
+    // also controls the text's appearance
+
+
+    int row = index.row();
+    int col = index.column();
+
+    // generate a log message when this method gets called
+    qDebug() << QString( "row %1, col%2, role %3" ).arg( row ).arg( col ).arg( role );
+
+
     if ( !index.isValid() )
         return QVariant();
 
-    if ( role == Qt::DisplayRole )
-        return m_rowList[ index.row() ][ index.column() ];
-    else
-        return QVariant();
+
+    switch ( role )         // see this page:  https://doc.qt.io/qt-5/qt.html
+    {
+
+        //-----------------------------------------------
+
+        case Qt::DisplayRole:
+            return ( ( m_rowList[ index.row() ][ index.column() ].toInt() ) * 23 );
+
+        //-----------------------------------------------
+
+        case Qt::FontRole:
+            if ( row == 0 )
+            {
+                QFont boldFont;
+
+                boldFont.setBold( true );
+
+                return boldFont;
+            }
+
+        break;
+
+        //-----------------------------------------------
+
+        case Qt::BackgroundRole:
+            if ( row == 0 && ( col == 0 ||  col == 1 ) )     // change background only for cell( 0, 1 )
+            {
+                return QBrush( Qt::yellow );
+            }
+
+        break;
+
+        //-----------------------------------------------
+
+        case Qt::ForegroundRole:
+            if ( row == 0 && ( col == 0 ||  col == 1 ) )     // change background only for cell( 0, 1 )
+            {
+                return QBrush( Qt::red );
+            }
+
+        break;
+
+        //-----------------------------------------------
+
+        // Qt::SizeHintRole
+
+        case Qt::TextAlignmentRole:
+            if ( row == 0 && col == 1 )     // change text alignment only for cell( 0, 1 )
+            {
+                return int( Qt::AlignRight | Qt::AlignVCenter );
+            }
+
+        break;
+
+        //-----------------------------------------------
+
+        case Qt::CheckStateRole:
+            if ( row == 0 && col == 0 )     // add a checkbox to cell( 0, 0 )
+            {
+                return Qt::Checked;
+            }
+
+        break;
+
+        //-----------------------------------------------
+
+    }
+
+    return QVariant();
 
 }
 

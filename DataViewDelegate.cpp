@@ -21,7 +21,7 @@ QWidget* DataViewDelegate::createEditor(            QWidget                 *par
 
     QSpinBox *editor = new QSpinBox( parent );
 
-    editor->setFrame    ( false );
+    editor->setFrame    ( true );
     editor->setMinimum  (     0 );
     editor->setMaximum  (   100 );
 
@@ -30,8 +30,8 @@ QWidget* DataViewDelegate::createEditor(            QWidget                 *par
 
 //******************************************************************************************
 
-void DataViewDelegate::setEditorData(          QWidget         *editor,
-                                          const QModelIndex     &index      ) const
+void DataViewDelegate::setEditorData(          QWidget                  *editor,
+                                          const QModelIndex             &index          ) const
 {
 
     int value = index.model()->data( index, Qt::EditRole ).toInt();
@@ -44,9 +44,9 @@ void DataViewDelegate::setEditorData(          QWidget         *editor,
 
 //******************************************************************************************
 
-void DataViewDelegate::setModelData(           QWidget                 *editor,
+void DataViewDelegate::setModelData(            QWidget                 *editor,
                                                 QAbstractItemModel      *model,
-                                          const QModelIndex             &index      ) const
+                                          const QModelIndex             &index          ) const
 {
 
     QSpinBox *spinBox = static_cast< QSpinBox* >( editor );
@@ -63,7 +63,7 @@ void DataViewDelegate::setModelData(           QWidget                 *editor,
 
 void DataViewDelegate::updateEditorGeometry(           QWidget                 *editor,
                                                   const QStyleOptionViewItem    &option,
-                                                  const QModelIndex&    /* index */     ) const
+                                                  const QModelIndex&    /* index */         ) const
 {
 
     editor->setGeometry( option.rect );

@@ -166,10 +166,10 @@
      <widget class="QTableView" name="dataTableView">
       <property name="geometry">
        <rect>
-        <x>520</x>
+        <x>480</x>
         <y>40</y>
-        <width>731</width>
-        <height>71</height>
+        <width>771</width>
+        <height>101</height>
        </rect>
       </property>
      </widget>
