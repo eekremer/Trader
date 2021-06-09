@@ -5,6 +5,7 @@
 #include <QStyledItemDelegate>
 #include <QStyleOptionViewItem>
 
+// C++ Qt 50 - QItemDelegate - delegates in a QTableview
 
 //******************************************************************************************
 
@@ -18,20 +19,21 @@ class DataViewDelegate  :  public QStyledItemDelegate
         explicit DataViewDelegate( QObject *parent = nullptr );
 
 
-        QWidget* createEditor       (           QWidget                 *parent,
-                                          const QStyleOptionViewItem    &option,
-                                          const QModelIndex             &index      ) const override;
+        QWidget*    createEditor            (           QWidget                 *parent,
+                                                  const QStyleOptionViewItem    &option,
+                                                  const QModelIndex             &index      ) const override;
 
-        void  setEditorData         (           QWidget                 *editor,
-                                          const QModelIndex             &index      ) const override;
+        void        setEditorData           (           QWidget                 *editor,
+                                                  const QModelIndex             &index      ) const override;
 
-        void  setModelData          (           QWidget                 *editor,
-                                                QAbstractItemModel      *model,
-                                          const QModelIndex             &index      ) const override;
+        void        setModelData            (           QWidget                 *editor,
+                                                        QAbstractItemModel      *model,
+                                                  const QModelIndex             &index      ) const override;
 
-        void  updateEditorGeometry  (           QWidget                 *editor,
-                                          const QStyleOptionViewItem    &option,
-                                          const QModelIndex             &index      ) const override;
+        void        updateEditorGeometry    (           QWidget                 *editor,
+                                                  const QStyleOptionViewItem    &option,
+                                                  const QModelIndex             &index      ) const override;
+
 
 };
 

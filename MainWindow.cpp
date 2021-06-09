@@ -48,8 +48,9 @@ MainWindow::MainWindow( QWidget  *parent )
 
     m_ui->dataTableView->setFont( QFont( "Arial", 30 ) );
 
-    DataViewDelegate delegate( this );
-    //m_ui->dataTableView->setItemDelegate( &delegate );
+    m_delegate = new DataViewDelegate( this );
+
+    m_ui->dataTableView->setItemDelegate( m_delegate );
 
     //----------------------------------------------------------------
 

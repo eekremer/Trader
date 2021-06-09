@@ -222,8 +222,8 @@ QVariant  DataTableModel::headerData(       int                 section,
 //******************************************************************************************
 
 /*!
-    Returns an appropriate value for the item's flags. Valid items are
-    enabled, selectable, and editable.
+    Returning Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled is enough
+    to show an editor that a cell can be selected
 */
 
 Qt::ItemFlags  DataTableModel::flags(  const QModelIndex  &index  ) const

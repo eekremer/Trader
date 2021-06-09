@@ -10,6 +10,7 @@
 #include "Queue.h"
 #include "OrderTableModel.h"
 #include "DataTableModel.h"
+#include "DataViewDelegate.h"
 
 
 
@@ -79,6 +80,7 @@ class MainWindow : public QMainWindow
         OrderTableModel    *m_orderModel;
         DataTableModel     *m_dataModel;
         Queue               m_outboundQueue;
+        DataViewDelegate   *m_delegate;
 
 
         void                createThread();

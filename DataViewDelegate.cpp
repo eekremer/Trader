@@ -14,23 +14,29 @@ DataViewDelegate::DataViewDelegate( QObject  *parent )
 
 //******************************************************************************************
 
+//
+
 QWidget* DataViewDelegate::createEditor(            QWidget                 *parent,
                                               const QStyleOptionViewItem&   /* option */,
                                               const QModelIndex&            /* index */     ) const
+
 {
 
     QSpinBox *editor = new QSpinBox( parent );
 
-    editor->setFrame    ( true );
+    //editor->setFrame    ( true );
     editor->setMinimum  (     0 );
     editor->setMaximum  (   100 );
 
     return editor;
+
 }
 
 //******************************************************************************************
 
-void DataViewDelegate::setEditorData(          QWidget                  *editor,
+// current data in that cell
+
+void DataViewDelegate::setEditorData(           QWidget                 *editor,
                                           const QModelIndex             &index          ) const
 {
 
@@ -43,6 +49,8 @@ void DataViewDelegate::setEditorData(          QWidget                  *editor,
 }
 
 //******************************************************************************************
+
+// when you're done modifying data, this function is called to return data back in the model
 
 void DataViewDelegate::setModelData(            QWidget                 *editor,
                                                 QAbstractItemModel      *model,
@@ -61,9 +69,12 @@ void DataViewDelegate::setModelData(            QWidget                 *editor,
 
 //******************************************************************************************
 
-void DataViewDelegate::updateEditorGeometry(           QWidget                 *editor,
-                                                  const QStyleOptionViewItem    &option,
+// it allows you to set where the obj (spinbox) will be displayed in the cell
+
+void DataViewDelegate::updateEditorGeometry(            QWidget                  *editor,
+                                                  const QStyleOptionViewItem     &option,
                                                   const QModelIndex&    /* index */         ) const
+
 {
 
     editor->setGeometry( option.rect );
