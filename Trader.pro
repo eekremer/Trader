@@ -14,7 +14,6 @@ SOURCES += \
     DataDbManager.cpp \
     DataTableModel.cpp \
     DataViewDelegate.cpp \
-    Foo2.cpp \
     Main.cpp \
     MainWindow.cpp \
     OrderDbManager.cpp \
