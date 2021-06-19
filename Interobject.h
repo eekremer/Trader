@@ -31,20 +31,22 @@ struct Contract
 struct InterObject
 {
 
+    int         typeOfMessage           =   0 ;  // 1: market data;  2: order; 3: account information
+
     // Order
-    std::string 		action;  // "BUY" or "SELL"
-    double     			quantity                = 	0;
-    double   			limitPrice              = 	UNSET_DOUBLE;
-    double              takeProfitLimitPrice    =   UNSET_DOUBLE;
-    double   			stopLossPrice           = 	UNSET_DOUBLE;
-    std::string 		orderType;  // "LMT"
+    QString     action;  // "BUY" or "SELL"
+    double      quantity                = 	0 ;
+    double      limitPrice              = 	UNSET_DOUBLE;
+    double      takeProfitLimitPrice    =   UNSET_DOUBLE;
+    double      stopLossPrice           = 	UNSET_DOUBLE;
+    QString     orderType;  // "LMT"
 
     // Contract
-    std::string         symbol;
-    std::string         secType;
-    std::string         currency;
-    std::string         exchange;
-    std::string         primaryExchange;
+    QString     symbol;
+    QString     secType;
+    QString     currency;
+    QString     exchange;
+    QString     primaryExchange;
 
 };
 

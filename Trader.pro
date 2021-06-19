@@ -14,22 +14,28 @@ SOURCES += \
     DataDbManager.cpp \
     DataTableModel.cpp \
     DataViewDelegate.cpp \
+    Foo2.cpp \
+    Foo/Foo3.cpp \
     Main.cpp \
     MainWindow.cpp \
     OrderDbManager.cpp \
     OrderTableModel.cpp \
+    OrderViewDelegate.cpp \
     Queue.cpp
 
 HEADERS += \
     AccountTableModel.h \
     BuySellDialog.h \
+    Data.h \
     DataDbManager.h \
     DataTableModel.h \
     DataViewDelegate.h \
     Interobject.h \
     MainWindow.h \
+    Order.h \
     OrderDbManager.h \
     OrderTableModel.h \
+    OrderViewDelegate.h \
     Queue.h
 
 FORMS += \

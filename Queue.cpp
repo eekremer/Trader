@@ -2,6 +2,7 @@
 #include <thread>
 #include <QTextStream>
 #include <iostream>
+#include <QDebug>
 
 #include "Queue.h"
 
@@ -61,7 +62,7 @@ void Queue::getMsgFromQueue()
 {
 
 
-    InterObject  object;
+    InterObject  obj;
 
     // check whether there is any element in the queue
     if ( m_interThreadQueue.size() == 0 )
@@ -88,7 +89,7 @@ void Queue::getMsgFromQueue()
             Calling this function on an empty container causes undefined behavior
         */
 
-        object = m_interThreadQueue.front();
+        obj = m_interThreadQueue.front();
 
         /*
             std::deque::pop_front()
@@ -106,7 +107,13 @@ void Queue::getMsgFromQueue()
     //**************************************
 
 
-    qInfo( "object3.quantity: %f", object.quantity );
+
+
+    qInfo(     ( obj.symbol          ).toLatin1()      );
+    qInfo(     ( obj.secType         ).toLatin1()      );
+    qInfo(     ( obj.currency        ).toLatin1()      );
+    qInfo(     ( obj.exchange        ).toLatin1()      );
+    qInfo(     ( obj.primaryExchange ).toLatin1()      );
 
 
 }

@@ -20,7 +20,6 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QToolBar>
@@ -33,18 +32,33 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QStackedWidget *stackedWidget;
-    QWidget *page;
+    QTableView *dataTableView;
     QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout;
     QPushButton *buyButton;
     QSpacerItem *horizontalSpacer;
     QPushButton *sellButton;
-    QTableView *orderTableView;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
-    QLabel *label_2;
-    QTableView *dataTableView;
+    QWidget *verticalLayoutWidget_3;
+    QVBoxLayout *verticalLayout_3;
+    QLabel *takeProfitPriceLabel;
+    QLabel *stopLossPriceLabel;
+    QLabel *actionLabel_2;
+    QLabel *quantityLabel;
+    QLabel *orderTypeLabel;
+    QWidget *verticalLayoutWidget_4;
+    QVBoxLayout *verticalLayout_4;
+    QLabel *takeProfitLabel;
+    QLabel *stopLossLabel;
+    QLabel *actionLabel;
+    QLineEdit *quantityLineEdit;
+    QComboBox *orderTypeComboBox;
+    QWidget *verticalLayoutWidget_2;
+    QVBoxLayout *verticalLayout_2;
+    QLabel *symbolLabel;
+    QLabel *securityLabel;
+    QLabel *currencyLabel;
+    QLabel *exchangeLabel;
+    QLabel *primaryExchangeLabel;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout;
     QComboBox *symbolComboBox;
@@ -52,38 +66,10 @@ public:
     QComboBox *currencyComboBox;
     QComboBox *exchangeComboBox;
     QComboBox *primaryExchangeComboBox;
-    QWidget *verticalLayoutWidget_2;
-    QVBoxLayout *verticalLayout_2;
-    QLabel *symbolLabel;
-    QLabel *label_11;
-    QLabel *label_10;
-    QLabel *label_6;
-    QLabel *label_5;
-    QWidget *verticalLayoutWidget_3;
-    QVBoxLayout *verticalLayout_3;
-    QLabel *label_13;
-    QLabel *label_14;
-    QLabel *symbolLabel_2;
-    QLabel *label_12;
-    QLabel *label_15;
-    QWidget *verticalLayoutWidget_4;
-    QVBoxLayout *verticalLayout_4;
-    QLabel *stopLossLabel;
-    QLabel *takeProfitLabel;
-    QComboBox *actioncomboBox;
-    QLineEdit *quantityLineEdit;
-    QComboBox *orderTypeComboBox;
+    QTableView *orderTableView;
+    QPushButton *confirmButton;
     QPushButton *setupButton;
-    QWidget *page_2;
-    QPushButton *buyGoBackButton;
-    QLabel *label_8;
-    QPushButton *confirmBuy;
-    QWidget *page_3;
-    QPushButton *sellGoBackButton;
-    QLabel *label_7;
-    QWidget *page_4;
-    QPushButton *setupGoBackButton;
-    QLabel *label_9;
+    QPushButton *pushButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
     QToolBar *toolBar;
@@ -93,7 +79,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1333, 1000);
+        MainWindow->resize(1333, 889);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -103,14 +89,12 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         sizePolicy.setHeightForWidth(centralwidget->sizePolicy().hasHeightForWidth());
         centralwidget->setSizePolicy(sizePolicy);
-        stackedWidget = new QStackedWidget(centralwidget);
-        stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
-        stackedWidget->setGeometry(QRect(0, 0, 1301, 1030));
-        page = new QWidget();
-        page->setObjectName(QString::fromUtf8("page"));
-        layoutWidget = new QWidget(page);
+        dataTableView = new QTableView(centralwidget);
+        dataTableView->setObjectName(QString::fromUtf8("dataTableView"));
+        dataTableView->setGeometry(QRect(580, 30, 611, 51));
+        layoutWidget = new QWidget(centralwidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(520, 170, 391, 61));
+        layoutWidget->setGeometry(QRect(470, 110, 391, 51));
         horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -148,24 +132,138 @@ public:
 
         horizontalLayout->addWidget(sellButton);
 
-        orderTableView = new QTableView(page);
-        orderTableView->setObjectName(QString::fromUtf8("orderTableView"));
-        orderTableView->setGeometry(QRect(60, 570, 1191, 341));
-        pushButton = new QPushButton(page);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(410, 510, 89, 25));
-        pushButton_2 = new QPushButton(page);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
-        pushButton_2->setGeometry(QRect(830, 450, 291, 61));
-        label_2 = new QLabel(page);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(60, 530, 191, 31));
-        dataTableView = new QTableView(page);
-        dataTableView->setObjectName(QString::fromUtf8("dataTableView"));
-        dataTableView->setGeometry(QRect(520, 40, 731, 71));
-        verticalLayoutWidget = new QWidget(page);
+        verticalLayoutWidget_3 = new QWidget(centralwidget);
+        verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
+        verticalLayoutWidget_3->setGeometry(QRect(890, 130, 128, 251));
+        verticalLayout_3 = new QVBoxLayout(verticalLayoutWidget_3);
+        verticalLayout_3->setSpacing(6);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        verticalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
+        verticalLayout_3->setContentsMargins(7, 0, 0, 0);
+        takeProfitPriceLabel = new QLabel(verticalLayoutWidget_3);
+        takeProfitPriceLabel->setObjectName(QString::fromUtf8("takeProfitPriceLabel"));
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(takeProfitPriceLabel->sizePolicy().hasHeightForWidth());
+        takeProfitPriceLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_3->addWidget(takeProfitPriceLabel);
+
+        stopLossPriceLabel = new QLabel(verticalLayoutWidget_3);
+        stopLossPriceLabel->setObjectName(QString::fromUtf8("stopLossPriceLabel"));
+        sizePolicy2.setHeightForWidth(stopLossPriceLabel->sizePolicy().hasHeightForWidth());
+        stopLossPriceLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_3->addWidget(stopLossPriceLabel);
+
+        actionLabel_2 = new QLabel(verticalLayoutWidget_3);
+        actionLabel_2->setObjectName(QString::fromUtf8("actionLabel_2"));
+        sizePolicy2.setHeightForWidth(actionLabel_2->sizePolicy().hasHeightForWidth());
+        actionLabel_2->setSizePolicy(sizePolicy2);
+
+        verticalLayout_3->addWidget(actionLabel_2);
+
+        quantityLabel = new QLabel(verticalLayoutWidget_3);
+        quantityLabel->setObjectName(QString::fromUtf8("quantityLabel"));
+        sizePolicy2.setHeightForWidth(quantityLabel->sizePolicy().hasHeightForWidth());
+        quantityLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_3->addWidget(quantityLabel);
+
+        orderTypeLabel = new QLabel(verticalLayoutWidget_3);
+        orderTypeLabel->setObjectName(QString::fromUtf8("orderTypeLabel"));
+        sizePolicy2.setHeightForWidth(orderTypeLabel->sizePolicy().hasHeightForWidth());
+        orderTypeLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_3->addWidget(orderTypeLabel);
+
+        verticalLayoutWidget_4 = new QWidget(centralwidget);
+        verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
+        verticalLayoutWidget_4->setGeometry(QRect(1030, 130, 160, 251));
+        verticalLayout_4 = new QVBoxLayout(verticalLayoutWidget_4);
+        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
+        takeProfitLabel = new QLabel(verticalLayoutWidget_4);
+        takeProfitLabel->setObjectName(QString::fromUtf8("takeProfitLabel"));
+        sizePolicy2.setHeightForWidth(takeProfitLabel->sizePolicy().hasHeightForWidth());
+        takeProfitLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_4->addWidget(takeProfitLabel);
+
+        stopLossLabel = new QLabel(verticalLayoutWidget_4);
+        stopLossLabel->setObjectName(QString::fromUtf8("stopLossLabel"));
+        sizePolicy2.setHeightForWidth(stopLossLabel->sizePolicy().hasHeightForWidth());
+        stopLossLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_4->addWidget(stopLossLabel);
+
+        actionLabel = new QLabel(verticalLayoutWidget_4);
+        actionLabel->setObjectName(QString::fromUtf8("actionLabel"));
+        sizePolicy2.setHeightForWidth(actionLabel->sizePolicy().hasHeightForWidth());
+        actionLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_4->addWidget(actionLabel);
+
+        quantityLineEdit = new QLineEdit(verticalLayoutWidget_4);
+        quantityLineEdit->setObjectName(QString::fromUtf8("quantityLineEdit"));
+
+        verticalLayout_4->addWidget(quantityLineEdit);
+
+        orderTypeComboBox = new QComboBox(verticalLayoutWidget_4);
+        orderTypeComboBox->setObjectName(QString::fromUtf8("orderTypeComboBox"));
+
+        verticalLayout_4->addWidget(orderTypeComboBox);
+
+        verticalLayoutWidget_2 = new QWidget(centralwidget);
+        verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
+        verticalLayoutWidget_2->setGeometry(QRect(90, 140, 131, 241));
+        verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setSizeConstraint(QLayout::SetDefaultConstraint);
+        verticalLayout_2->setContentsMargins(7, 0, 0, 0);
+        symbolLabel = new QLabel(verticalLayoutWidget_2);
+        symbolLabel->setObjectName(QString::fromUtf8("symbolLabel"));
+        sizePolicy2.setHeightForWidth(symbolLabel->sizePolicy().hasHeightForWidth());
+        symbolLabel->setSizePolicy(sizePolicy2);
+        QFont font2;
+        font2.setPointSize(13);
+        symbolLabel->setFont(font2);
+
+        verticalLayout_2->addWidget(symbolLabel);
+
+        securityLabel = new QLabel(verticalLayoutWidget_2);
+        securityLabel->setObjectName(QString::fromUtf8("securityLabel"));
+        sizePolicy2.setHeightForWidth(securityLabel->sizePolicy().hasHeightForWidth());
+        securityLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_2->addWidget(securityLabel);
+
+        currencyLabel = new QLabel(verticalLayoutWidget_2);
+        currencyLabel->setObjectName(QString::fromUtf8("currencyLabel"));
+        sizePolicy2.setHeightForWidth(currencyLabel->sizePolicy().hasHeightForWidth());
+        currencyLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_2->addWidget(currencyLabel);
+
+        exchangeLabel = new QLabel(verticalLayoutWidget_2);
+        exchangeLabel->setObjectName(QString::fromUtf8("exchangeLabel"));
+        sizePolicy2.setHeightForWidth(exchangeLabel->sizePolicy().hasHeightForWidth());
+        exchangeLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_2->addWidget(exchangeLabel);
+
+        primaryExchangeLabel = new QLabel(verticalLayoutWidget_2);
+        primaryExchangeLabel->setObjectName(QString::fromUtf8("primaryExchangeLabel"));
+        sizePolicy2.setHeightForWidth(primaryExchangeLabel->sizePolicy().hasHeightForWidth());
+        primaryExchangeLabel->setSizePolicy(sizePolicy2);
+
+        verticalLayout_2->addWidget(primaryExchangeLabel);
+
+        verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(210, 40, 161, 241));
+        verticalLayoutWidget->setGeometry(QRect(230, 140, 161, 241));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -194,164 +292,23 @@ public:
 
         verticalLayout->addWidget(primaryExchangeComboBox);
 
-        verticalLayoutWidget_2 = new QWidget(page);
-        verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(70, 40, 131, 241));
-        verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
-        verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        verticalLayout_2->setSizeConstraint(QLayout::SetDefaultConstraint);
-        verticalLayout_2->setContentsMargins(7, 0, 0, 0);
-        symbolLabel = new QLabel(verticalLayoutWidget_2);
-        symbolLabel->setObjectName(QString::fromUtf8("symbolLabel"));
-        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(symbolLabel->sizePolicy().hasHeightForWidth());
-        symbolLabel->setSizePolicy(sizePolicy2);
-
-        verticalLayout_2->addWidget(symbolLabel);
-
-        label_11 = new QLabel(verticalLayoutWidget_2);
-        label_11->setObjectName(QString::fromUtf8("label_11"));
-        sizePolicy2.setHeightForWidth(label_11->sizePolicy().hasHeightForWidth());
-        label_11->setSizePolicy(sizePolicy2);
-
-        verticalLayout_2->addWidget(label_11);
-
-        label_10 = new QLabel(verticalLayoutWidget_2);
-        label_10->setObjectName(QString::fromUtf8("label_10"));
-        sizePolicy2.setHeightForWidth(label_10->sizePolicy().hasHeightForWidth());
-        label_10->setSizePolicy(sizePolicy2);
-
-        verticalLayout_2->addWidget(label_10);
-
-        label_6 = new QLabel(verticalLayoutWidget_2);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
-        sizePolicy2.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
-        label_6->setSizePolicy(sizePolicy2);
-
-        verticalLayout_2->addWidget(label_6);
-
-        label_5 = new QLabel(verticalLayoutWidget_2);
-        label_5->setObjectName(QString::fromUtf8("label_5"));
-        sizePolicy2.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
-        label_5->setSizePolicy(sizePolicy2);
-
-        verticalLayout_2->addWidget(label_5);
-
-        verticalLayoutWidget_3 = new QWidget(page);
-        verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(950, 170, 128, 251));
-        verticalLayout_3 = new QVBoxLayout(verticalLayoutWidget_3);
-        verticalLayout_3->setSpacing(6);
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-        verticalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
-        verticalLayout_3->setContentsMargins(7, 0, 0, 0);
-        label_13 = new QLabel(verticalLayoutWidget_3);
-        label_13->setObjectName(QString::fromUtf8("label_13"));
-        sizePolicy2.setHeightForWidth(label_13->sizePolicy().hasHeightForWidth());
-        label_13->setSizePolicy(sizePolicy2);
-
-        verticalLayout_3->addWidget(label_13);
-
-        label_14 = new QLabel(verticalLayoutWidget_3);
-        label_14->setObjectName(QString::fromUtf8("label_14"));
-        sizePolicy2.setHeightForWidth(label_14->sizePolicy().hasHeightForWidth());
-        label_14->setSizePolicy(sizePolicy2);
-
-        verticalLayout_3->addWidget(label_14);
-
-        symbolLabel_2 = new QLabel(verticalLayoutWidget_3);
-        symbolLabel_2->setObjectName(QString::fromUtf8("symbolLabel_2"));
-        sizePolicy2.setHeightForWidth(symbolLabel_2->sizePolicy().hasHeightForWidth());
-        symbolLabel_2->setSizePolicy(sizePolicy2);
-
-        verticalLayout_3->addWidget(symbolLabel_2);
-
-        label_12 = new QLabel(verticalLayoutWidget_3);
-        label_12->setObjectName(QString::fromUtf8("label_12"));
-        sizePolicy2.setHeightForWidth(label_12->sizePolicy().hasHeightForWidth());
-        label_12->setSizePolicy(sizePolicy2);
-
-        verticalLayout_3->addWidget(label_12);
-
-        label_15 = new QLabel(verticalLayoutWidget_3);
-        label_15->setObjectName(QString::fromUtf8("label_15"));
-        sizePolicy2.setHeightForWidth(label_15->sizePolicy().hasHeightForWidth());
-        label_15->setSizePolicy(sizePolicy2);
-
-        verticalLayout_3->addWidget(label_15);
-
-        verticalLayoutWidget_4 = new QWidget(page);
-        verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(1090, 170, 160, 251));
-        verticalLayout_4 = new QVBoxLayout(verticalLayoutWidget_4);
-        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
-        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
-        stopLossLabel = new QLabel(verticalLayoutWidget_4);
-        stopLossLabel->setObjectName(QString::fromUtf8("stopLossLabel"));
-        sizePolicy2.setHeightForWidth(stopLossLabel->sizePolicy().hasHeightForWidth());
-        stopLossLabel->setSizePolicy(sizePolicy2);
-
-        verticalLayout_4->addWidget(stopLossLabel);
-
-        takeProfitLabel = new QLabel(verticalLayoutWidget_4);
-        takeProfitLabel->setObjectName(QString::fromUtf8("takeProfitLabel"));
-        sizePolicy2.setHeightForWidth(takeProfitLabel->sizePolicy().hasHeightForWidth());
-        takeProfitLabel->setSizePolicy(sizePolicy2);
-
-        verticalLayout_4->addWidget(takeProfitLabel);
-
-        actioncomboBox = new QComboBox(verticalLayoutWidget_4);
-        actioncomboBox->setObjectName(QString::fromUtf8("actioncomboBox"));
-
-        verticalLayout_4->addWidget(actioncomboBox);
-
-        quantityLineEdit = new QLineEdit(verticalLayoutWidget_4);
-        quantityLineEdit->setObjectName(QString::fromUtf8("quantityLineEdit"));
-
-        verticalLayout_4->addWidget(quantityLineEdit);
-
-        orderTypeComboBox = new QComboBox(verticalLayoutWidget_4);
-        orderTypeComboBox->setObjectName(QString::fromUtf8("orderTypeComboBox"));
-
-        verticalLayout_4->addWidget(orderTypeComboBox);
-
-        setupButton = new QPushButton(page);
+        orderTableView = new QTableView(centralwidget);
+        orderTableView->setObjectName(QString::fromUtf8("orderTableView"));
+        orderTableView->setGeometry(QRect(30, 580, 1181, 201));
+        confirmButton = new QPushButton(centralwidget);
+        confirmButton->setObjectName(QString::fromUtf8("confirmButton"));
+        confirmButton->setGeometry(QRect(890, 420, 291, 61));
+        QFont font3;
+        font3.setPointSize(19);
+        font3.setBold(true);
+        font3.setWeight(75);
+        confirmButton->setFont(font3);
+        setupButton = new QPushButton(centralwidget);
         setupButton->setObjectName(QString::fromUtf8("setupButton"));
-        setupButton->setGeometry(QRect(220, 460, 91, 31));
-        stackedWidget->addWidget(page);
-        page_2 = new QWidget();
-        page_2->setObjectName(QString::fromUtf8("page_2"));
-        buyGoBackButton = new QPushButton(page_2);
-        buyGoBackButton->setObjectName(QString::fromUtf8("buyGoBackButton"));
-        buyGoBackButton->setGeometry(QRect(950, 40, 89, 25));
-        label_8 = new QLabel(page_2);
-        label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setGeometry(QRect(60, 40, 67, 17));
-        confirmBuy = new QPushButton(page_2);
-        confirmBuy->setObjectName(QString::fromUtf8("confirmBuy"));
-        confirmBuy->setGeometry(QRect(710, 410, 271, 71));
-        stackedWidget->addWidget(page_2);
-        page_3 = new QWidget();
-        page_3->setObjectName(QString::fromUtf8("page_3"));
-        sellGoBackButton = new QPushButton(page_3);
-        sellGoBackButton->setObjectName(QString::fromUtf8("sellGoBackButton"));
-        sellGoBackButton->setGeometry(QRect(990, 30, 89, 25));
-        label_7 = new QLabel(page_3);
-        label_7->setObjectName(QString::fromUtf8("label_7"));
-        label_7->setGeometry(QRect(50, 40, 67, 17));
-        stackedWidget->addWidget(page_3);
-        page_4 = new QWidget();
-        page_4->setObjectName(QString::fromUtf8("page_4"));
-        setupGoBackButton = new QPushButton(page_4);
-        setupGoBackButton->setObjectName(QString::fromUtf8("setupGoBackButton"));
-        setupGoBackButton->setGeometry(QRect(970, 30, 89, 25));
-        label_9 = new QLabel(page_4);
-        label_9->setObjectName(QString::fromUtf8("label_9"));
-        label_9->setGeometry(QRect(60, 40, 67, 17));
-        stackedWidget->addWidget(page_4);
+        setupButton->setGeometry(QRect(530, 450, 91, 31));
+        pushButton = new QPushButton(centralwidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setGeometry(QRect(310, 460, 89, 25));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -369,9 +326,6 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(0);
-
-
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
@@ -380,29 +334,22 @@ public:
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         buyButton->setText(QCoreApplication::translate("MainWindow", "BUY", nullptr));
         sellButton->setText(QCoreApplication::translate("MainWindow", "SELL", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("MainWindow", "SUBMIT", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "Orders", nullptr));
-        symbolLabel->setText(QCoreApplication::translate("MainWindow", "Symbol", nullptr));
-        label_11->setText(QCoreApplication::translate("MainWindow", "Security Type", nullptr));
-        label_10->setText(QCoreApplication::translate("MainWindow", "Currency", nullptr));
-        label_6->setText(QCoreApplication::translate("MainWindow", "Exchange", nullptr));
-        label_5->setText(QCoreApplication::translate("MainWindow", "Primary Exchange", nullptr));
-        label_13->setText(QCoreApplication::translate("MainWindow", "Take Profit price", nullptr));
-        label_14->setText(QCoreApplication::translate("MainWindow", "Stop Loss price", nullptr));
-        symbolLabel_2->setText(QCoreApplication::translate("MainWindow", "Action", nullptr));
-        label_12->setText(QCoreApplication::translate("MainWindow", "Quantity", nullptr));
-        label_15->setText(QCoreApplication::translate("MainWindow", "Order Type", nullptr));
-        stopLossLabel->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        takeProfitPriceLabel->setText(QCoreApplication::translate("MainWindow", "Take Profit price", nullptr));
+        stopLossPriceLabel->setText(QCoreApplication::translate("MainWindow", "Stop Loss price", nullptr));
+        actionLabel_2->setText(QCoreApplication::translate("MainWindow", "Action", nullptr));
+        quantityLabel->setText(QCoreApplication::translate("MainWindow", "Quantity", nullptr));
+        orderTypeLabel->setText(QCoreApplication::translate("MainWindow", "Order Type", nullptr));
         takeProfitLabel->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        stopLossLabel->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        actionLabel->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        symbolLabel->setText(QCoreApplication::translate("MainWindow", "Symbol", nullptr));
+        securityLabel->setText(QCoreApplication::translate("MainWindow", "Security Type", nullptr));
+        currencyLabel->setText(QCoreApplication::translate("MainWindow", "Currency", nullptr));
+        exchangeLabel->setText(QCoreApplication::translate("MainWindow", "Exchange", nullptr));
+        primaryExchangeLabel->setText(QCoreApplication::translate("MainWindow", "Primary Exchange", nullptr));
+        confirmButton->setText(QCoreApplication::translate("MainWindow", "SUBMIT", nullptr));
         setupButton->setText(QCoreApplication::translate("MainWindow", "SetUp", nullptr));
-        buyGoBackButton->setText(QCoreApplication::translate("MainWindow", "go back", nullptr));
-        label_8->setText(QCoreApplication::translate("MainWindow", "BUY", nullptr));
-        confirmBuy->setText(QCoreApplication::translate("MainWindow", "confirm BUY", nullptr));
-        sellGoBackButton->setText(QCoreApplication::translate("MainWindow", "go back", nullptr));
-        label_7->setText(QCoreApplication::translate("MainWindow", "SELL", nullptr));
-        setupGoBackButton->setText(QCoreApplication::translate("MainWindow", "go back", nullptr));
-        label_9->setText(QCoreApplication::translate("MainWindow", "SETUP", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
         toolBar->setWindowTitle(QCoreApplication::translate("MainWindow", "toolBar", nullptr));
         toolBar_2->setWindowTitle(QCoreApplication::translate("MainWindow", "toolBar_2", nullptr));
     } // retranslateUi

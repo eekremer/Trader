@@ -101,16 +101,18 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
         //-----------------------------------------------
 
         case Qt::DisplayRole:
-            return ( ( m_rowList[ index.row() ][ index.column() ].toInt() ) * 23 );
+
+            return (   m_rowList[ index.row() ][ index.column() ].toInt()   );
 
         //-----------------------------------------------
 
         case Qt::FontRole:
+
             if ( row == 0 )
             {
                 QFont boldFont;
 
-                boldFont.setBold( true );
+                boldFont.setBold( false );
 
                 return boldFont;
             }
@@ -120,9 +122,23 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
         //-----------------------------------------------
 
         case Qt::BackgroundRole:
-            if ( row == 0 && ( col == 0 ||  col == 1 ) )     // change background only for cell( 0, 1 )
+
+            if ( row == 0 && ( col == 0 || col == 1 || col == 2 ) )     // change background only for cell( 0, 1 )
             {
-                return QBrush( Qt::yellow );
+
+                return QBrush( Qt::black );
+
+
+
+            }
+
+            if ( row == 0 && ( col == 3 ||  col == 4 ) )     // change background only for cell( 0, 1 )
+            {
+
+                return QBrush( Qt::red );
+
+                // here goes RED or GREEN depending on its previous closing
+
             }
 
         break;
@@ -130,9 +146,12 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
         //-----------------------------------------------
 
         case Qt::ForegroundRole:
-            if ( row == 0 && ( col == 0 ||  col == 1 ) )     // change background only for cell( 0, 1 )
+
+            if ( row == 0 && ( col == 0 ||  col == 1 || col == 2 ) )     // change background only for cell( 0, 1 )
             {
-                return QBrush( Qt::red );
+
+                return QBrush(  Qt::white  );
+
             }
 
         break;
@@ -142,9 +161,10 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
         // Qt::SizeHintRole
 
         case Qt::TextAlignmentRole:
-            if ( row == 0 && col == 1 )     // change text alignment only for cell( 0, 1 )
+
+            if ( row == 0 )     // change text alignment only for cell( 0, 1 )
             {
-                return int( Qt::AlignRight | Qt::AlignVCenter );
+                return int( Qt::AlignRight | Qt::AlignVCenter  );
             }
 
         break;
@@ -152,6 +172,7 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
         //-----------------------------------------------
 
         case Qt::CheckStateRole:
+
             if ( row == 0 && col == 0 )     // add a checkbox to cell( 0, 0 )
             {
                 return Qt::Checked;
@@ -193,13 +214,13 @@ QVariant  DataTableModel::headerData(       int                 section,
             case 1:
                 return "ASK";
             case 2:
-                return "";      // Ticker/Exchange. For instance IBM|SMART
+                return "Last";      // Ticker/Exchange. For instance IBM|SMART
             case 3:
-                return "";      // order action: Buy or Sell
+                return "Change";      // order action: Buy or Sell
             case 4:
-                return "";      // order type: LMT, MKT, MTL...
+                return "Ch. %";      // order type: LMT, MKT, MTL...
             case 5:
-                return "";      // if LMT, limit price will be displayed
+                return "Volume";      // if LMT, limit price will be displayed
             case 6:
                 return "";
             case 7:

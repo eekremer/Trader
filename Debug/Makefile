@@ -57,10 +57,13 @@ SOURCES       = ../AccountTableModel.cpp \
 		../DataDbManager.cpp \
 		../DataTableModel.cpp \
 		../DataViewDelegate.cpp \
+		../Foo2.cpp \
+		../Foo/Foo3.cpp \
 		../Main.cpp \
 		../MainWindow.cpp \
 		../OrderDbManager.cpp \
 		../OrderTableModel.cpp \
+		../OrderViewDelegate.cpp \
 		../Queue.cpp moc_BuySellDialog.cpp \
 		moc_MainWindow.cpp \
 		moc_OrderTableModel.cpp
@@ -69,10 +72,13 @@ OBJECTS       = AccountTableModel.o \
 		DataDbManager.o \
 		DataTableModel.o \
 		DataViewDelegate.o \
+		Foo2.o \
+		Foo3.o \
 		Main.o \
 		MainWindow.o \
 		OrderDbManager.o \
 		OrderTableModel.o \
+		OrderViewDelegate.o \
 		Queue.o \
 		moc_BuySellDialog.o \
 		moc_MainWindow.o \
@@ -256,22 +262,28 @@ DIST          = ../../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.15.2/gcc_64/mkspecs/features/lex.prf \
 		../../Trader.pro ../AccountTableModel.h \
 		../BuySellDialog.h \
+		../Data.h \
 		../DataDbManager.h \
 		../DataTableModel.h \
 		../DataViewDelegate.h \
 		../Interobject.h \
 		../MainWindow.h \
+		../Order.h \
 		../OrderDbManager.h \
 		../OrderTableModel.h \
+		../OrderViewDelegate.h \
 		../Queue.h ../AccountTableModel.cpp \
 		../BuySellDialog.cpp \
 		../DataDbManager.cpp \
 		../DataTableModel.cpp \
 		../DataViewDelegate.cpp \
+		../Foo2.cpp \
+		../Foo/Foo3.cpp \
 		../Main.cpp \
 		../MainWindow.cpp \
 		../OrderDbManager.cpp \
 		../OrderTableModel.cpp \
+		../OrderViewDelegate.cpp \
 		../Queue.cpp
 QMAKE_TARGET  = Trader
 DESTDIR       = 
@@ -656,8 +668,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../Interobject.h ../MainWindow.h ../OrderDbManager.h ../OrderTableModel.h ../Queue.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../AccountTableModel.cpp ../BuySellDialog.cpp ../DataDbManager.cpp ../DataTableModel.cpp ../DataViewDelegate.cpp ../Main.cpp ../MainWindow.cpp ../OrderDbManager.cpp ../OrderTableModel.cpp ../Queue.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../Data.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../Interobject.h ../MainWindow.h ../Order.h ../OrderDbManager.h ../OrderTableModel.h ../OrderViewDelegate.h ../Queue.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../AccountTableModel.cpp ../BuySellDialog.cpp ../DataDbManager.cpp ../DataTableModel.cpp ../DataViewDelegate.cpp ../Foo2.cpp ../Foo/Foo3.cpp ../Main.cpp ../MainWindow.cpp ../OrderDbManager.cpp ../OrderTableModel.cpp ../OrderViewDelegate.cpp ../Queue.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../BuySellDialog.ui ../MainWindow.ui $(DISTDIR)/
 
 
@@ -799,6 +811,20 @@ moc_BuySellDialog.cpp: ../BuySellDialog.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qtouchdevice.h \
 		ui_BuySellDialog.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QCheckBox \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcheckbox.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
 		moc_predefs.h \
 		../../../Qt/5.15.2/gcc_64/bin/moc
 	/home/ed/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include '/home/ed/Qt projects/Trader/Debug/moc_predefs.h' -I/home/ed/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I'/home/ed/Qt projects/Trader' -I/home/ed/Qt/5.15.2/gcc_64/include -I/home/ed/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/ed/Qt/5.15.2/gcc_64/include/QtGui -I/home/ed/Qt/5.15.2/gcc_64/include/QtSql -I/home/ed/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../BuySellDialog.h -o moc_BuySellDialog.cpp
@@ -940,6 +966,11 @@ moc_MainWindow.cpp: ../MainWindow.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
 		../DataTableModel.h \
+		../DataViewDelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyledItemDelegate \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleditemdelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
+		../OrderViewDelegate.h \
 		moc_predefs.h \
 		../../../Qt/5.15.2/gcc_64/bin/moc
 	/home/ed/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include '/home/ed/Qt projects/Trader/Debug/moc_predefs.h' -I/home/ed/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I'/home/ed/Qt projects/Trader' -I/home/ed/Qt/5.15.2/gcc_64/include -I/home/ed/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/ed/Qt/5.15.2/gcc_64/include/QtGui -I/home/ed/Qt/5.15.2/gcc_64/include/QtSql -I/home/ed/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../MainWindow.h -o moc_MainWindow.cpp
@@ -1151,6 +1182,20 @@ BuySellDialog.o: ../BuySellDialog.cpp ../BuySellDialog.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qtouchdevice.h \
 		ui_BuySellDialog.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QCheckBox \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcheckbox.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o BuySellDialog.o ../BuySellDialog.cpp
 
@@ -1224,7 +1269,33 @@ DataTableModel.o: ../DataTableModel.cpp ../DataTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QList \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/QFont \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qfont.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/QBrush \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qrgba64.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qregion.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qline.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qimage.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpixelformat.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DataTableModel.o ../DataTableModel.cpp
 
 DataViewDelegate.o: ../DataViewDelegate.cpp ../DataViewDelegate.h \
@@ -1349,8 +1420,18 @@ DataViewDelegate.o: ../DataViewDelegate.cpp ../DataViewDelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qabstractitemmodel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QSpinBox \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qspinbox.h
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qspinbox.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/QPainter \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpen.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DataViewDelegate.o ../DataViewDelegate.cpp
+
+Foo2.o: ../Foo2.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Foo2.o ../Foo2.cpp
+
+Foo3.o: ../Foo/Foo3.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Foo3.o ../Foo/Foo3.cpp
 
 Main.o: ../Main.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
@@ -1497,6 +1578,11 @@ Main.o: ../Main.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
 		../DataTableModel.h \
+		../DataViewDelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyledItemDelegate \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleditemdelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
+		../OrderViewDelegate.h \
 		../OrderDbManager.h \
 		../../../Qt/5.15.2/gcc_64/include/QtSql/QSqlDatabase \
 		../../../Qt/5.15.2/gcc_64/include/QtSql/qsqldatabase.h \
@@ -1628,6 +1714,11 @@ MainWindow.o: ../MainWindow.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QTab
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qrubberband.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QDebug \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/QPainter \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpen.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/QLinearGradient \
 		../MainWindow.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1645,15 +1736,54 @@ MainWindow.o: ../MainWindow.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QTab
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
 		../DataTableModel.h \
+		../DataViewDelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyledItemDelegate \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleditemdelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
+		../OrderViewDelegate.h \
 		ui_MainWindow.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QComboBox \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcombobox.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QHBoxLayout \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qboxlayout.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlayout.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlayoutitem.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qgridlayout.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QHeaderView \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qheaderview.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QLineEdit \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlineedit.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtextcursor.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtextformat.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QMenuBar \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmenubar.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmenu.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qaction.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qactiongroup.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QSpacerItem \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStatusBar \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstatusbar.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QToolBar \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtoolbar.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QVBoxLayout \
 		../BuySellDialog.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdialog.h \
 		ui_BuySellDialog.h \
-		../DataViewDelegate.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyledItemDelegate \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleditemdelegate.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QCheckBox \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcheckbox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainWindow.o ../MainWindow.cpp
 
 OrderDbManager.o: ../OrderDbManager.cpp ../../../Qt/5.15.2/gcc_64/include/QtSql/QSqlQuery \
@@ -1806,6 +1936,9 @@ OrderTableModel.o: ../OrderTableModel.cpp ../OrderTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o OrderTableModel.o ../OrderTableModel.cpp
 
+OrderViewDelegate.o: ../OrderViewDelegate.cpp ../OrderViewDelegate.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o OrderViewDelegate.o ../OrderViewDelegate.cpp
+
 Queue.o: ../Queue.cpp ../../../Qt/5.15.2/gcc_64/include/QtCore/QTextStream \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
@@ -1871,6 +2004,7 @@ Queue.o: ../Queue.cpp ../../../Qt/5.15.2/gcc_64/include/QtCore/QTextStream \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QDebug \
 		../Queue.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \

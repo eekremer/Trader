@@ -1,14 +1,16 @@
-#include <QTableWidget>
-#include <QDebug>
-#include <chrono>
-#include <thread>
+#include  <QTableWidget>
+#include  <QDebug>
+#include  <chrono>
+#include  <thread>
+#include  <QPainter>
+#include  <QLinearGradient>
 
 
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
-#include "BuySellDialog.h"
-#include "DataViewDelegate.h"
-
+#include  "MainWindow.h"
+#include  "ui_MainWindow.h"
+#include  "BuySellDialog.h"
+#include  "DataViewDelegate.h"
+#include  "OrderViewDelegate.h"
 
 
 pthread_t        clientThread;
@@ -30,27 +32,27 @@ MainWindow::MainWindow( QWidget  *parent )
 
     // Order Table and View
 
-    m_orderModel = new OrderTableModel( 10, 9, nullptr );
+    m_orderModel = new OrderTableModel(  10,  9, nullptr  );
 
     m_ui->orderTableView->setModel(  m_orderModel  );
 
     setOrderTableViewColumnWidth();
 
+    //m_orderDelegate = new OrderViewDelegate( this );
+
     //----------------------------------------------------------------
 
     // Data Table & View
 
-    m_dataModel = new DataTableModel( 1, 5, nullptr );
+    m_dataModel = new DataTableModel(  1,  6, nullptr  );
 
     m_ui->dataTableView->setModel(  m_dataModel  );
 
     setDataTableViewColumnWidth();
+    setDataTableViewHeaderSize ();
 
-    m_ui->dataTableView->setFont( QFont( "Arial", 30 ) );
-
-    m_delegate = new DataViewDelegate( this );
-
-    m_ui->dataTableView->setItemDelegate( m_delegate );
+    m_dataDelegate = new DataViewDelegate( this );
+    m_ui->dataTableView->setItemDelegate( m_dataDelegate );
 
     //----------------------------------------------------------------
 
@@ -74,9 +76,11 @@ MainWindow::MainWindow( QWidget  *parent )
 
     //----------------------------------------------------------------
 
+    // set initial default to BUY
+    buyButtonClicked();
 
-    // set trader page as landing page
-    m_ui->stackedWidget->setCurrentIndex( 0 );
+    //----------------------------------------------------------------
+
 
 
     //*******************
@@ -156,11 +160,11 @@ void MainWindow::setMainWindowOrderParams()
     // ComboBox - Symbols
     QStringList symbols;
 
-    symbols << "AAPL" <<"AMZN" << "TSLA" << "MSFT";
+    symbols << "AAPL" << "AMZN" << "TSLA" << "MSFT";
 
     m_ui->symbolComboBox->addItems( symbols );
 
-    m_ui->symbolLabel->setStyleSheet(  "QLabel {  color : red;  }" );
+    m_ui->symbolLabel->setStyleSheet(  "QLabel {  color: white;  }" );
 
 
     //----------------------------------------------
@@ -169,9 +173,11 @@ void MainWindow::setMainWindowOrderParams()
     // ComboBox - Security Types
     QStringList secTypes;
 
-    secTypes << "STK";
+    secTypes << "STK" << "HOLA" << "CHAO";
 
     m_ui->securityTypeComboBox->addItems( secTypes );
+
+    m_ui->securityLabel->setStyleSheet(  "QLabel {  color: white;  }" );
 
 
     //----------------------------------------------
@@ -184,6 +190,8 @@ void MainWindow::setMainWindowOrderParams()
 
     m_ui->currencyComboBox->addItems( currencies );
 
+    m_ui->currencyLabel->setStyleSheet(  "QLabel {  color: white;  }" );
+
 
     //----------------------------------------------
 
@@ -195,6 +203,8 @@ void MainWindow::setMainWindowOrderParams()
 
     m_ui->exchangeComboBox->addItems( exchanges );
 
+    m_ui->exchangeLabel->setStyleSheet(  "QLabel {  color: white;  }" );
+
 
     //----------------------------------------------
 
@@ -205,6 +215,8 @@ void MainWindow::setMainWindowOrderParams()
     primaryExchanges << "ISLAND";
 
     m_ui->primaryExchangeComboBox->addItems( primaryExchanges );
+
+    m_ui->primaryExchangeLabel->setStyleSheet(  "QLabel {  color: white;  }" );
 
 
     //----------------------------------------------
@@ -219,12 +231,31 @@ void MainWindow::setMainWindowContractParams()
 
     //----------------------------------------------
 
-    // ComboBox - Action
-    QStringList actions;
+    // Label - Take Profit price
 
-    actions << "BUY" << "SELL";
+    m_ui->takeProfitPriceLabel->setStyleSheet(  "QLabel {  color: white;  }"  );
+    m_ui->takeProfitLabel->setStyleSheet     (  "QLabel {  color: white;  }"  );
 
-    m_ui->actioncomboBox->addItems( actions );
+    //----------------------------------------------
+
+    // Label - Stop Loss price
+
+    m_ui->stopLossPriceLabel->setStyleSheet  (  "QLabel {  color: white;  }"  );
+    m_ui->stopLossLabel->setStyleSheet       (  "QLabel {  color: white;  }"  );
+
+
+    //----------------------------------------------
+
+    // Label - Action
+
+    m_ui->actionLabel_2->setStyleSheet       (  "QLabel {  color: white;  }"  );
+    m_ui->actionLabel->setStyleSheet         (  "QLabel {  color: white;  }"  );
+
+    //----------------------------------------------
+
+    // LineEdit - Quantity
+
+    m_ui->quantityLabel->setStyleSheet       (  "QLabel {  color: white;  }"  );
 
     //----------------------------------------------
 
@@ -234,6 +265,8 @@ void MainWindow::setMainWindowContractParams()
     orderTypes << "LMT" << "MKT";
 
     m_ui->orderTypeComboBox->addItems( orderTypes );
+
+    m_ui->orderTypeLabel->setStyleSheet(  "QLabel {  color: white;  }"  );
 
     //----------------------------------------------
 
@@ -270,12 +303,12 @@ void MainWindow::setDataTableViewColumnWidth()
 {
 
 
-    QVector< int > columnWidths     {      200,     // BID
-                                           200,     // ASK
-                                           120,     // Change in USD
-                                           120,     // Change %
-                                            70,     // Volume
-                                           180,     //
+    QVector< int > columnWidths     {      100,     // BID
+                                           100,     // ASK
+                                           100,     // Last
+                                           100,     // Change in USD
+                                           100,     // Change %
+                                           100,     // Volume
                                     };
 
 
@@ -288,6 +321,29 @@ void MainWindow::setDataTableViewColumnWidth()
 
 //*****************************************************************************************
 
+void  MainWindow::setDataTableViewHeaderSize()
+{
+
+    //m_ui->dataTableView->setFont(   QFont( "Arial", 30 )   );
+/*
+    // Example 1
+    QFont font = m_ui->dataTableView->horizontalHeader()->font();
+
+    font.setPointSize( 14 );
+
+    m_ui->dataTableView->horizontalHeader()->setFont( font );
+*/
+    // Example 2
+    m_ui->dataTableView->horizontalHeader()->setStyleSheet(
+                                            "QHeaderView {   font-size: 12pt;"
+                                                            "color:white;"
+                                                            "background-color:black;"
+                                                                                        "}" );
+
+}
+
+//*****************************************************************************************
+
 void MainWindow::setMainWindowButtonConnection()
 {
 
@@ -295,50 +351,38 @@ void MainWindow::setMainWindowButtonConnection()
     connect(                m_ui->buyButton,
                             SIGNAL(clicked()),
                             this,
-                            SLOT(buyButtonClicked())                    );
+                            SLOT(buyButtonClicked())                            );
 
     // SELL button
     connect(                m_ui->sellButton,
                             SIGNAL(clicked()),
                             this,
-                            SLOT(sellButtonClicked())                    );
+                            SLOT(sellButtonClicked())                           );
 
 
     // Setup button
     connect(                m_ui->setupButton,
                             SIGNAL(clicked()),
                             this,
-                            SLOT(setupButtonClicked())                    );
+                            SLOT(setupButtonClicked())                          );
 
-    // BUY go-back button
-    connect(                m_ui->buyGoBackButton,
-                            SIGNAL(clicked()),
-                            this,
-                            SLOT(buyGoBackButtonClicked())                    );
-
-
-    // SELL go-back button
-    connect(                m_ui->sellGoBackButton,
-                            SIGNAL(clicked()),
-                            this,
-                            SLOT(sellGoBackButtonClicked())                    );
-
-    // Setup go-back button
-    connect(                m_ui->setupGoBackButton,
-                            SIGNAL(clicked()),
-                            this,
-                            SLOT(setupGoBackButtonClicked())                    );
 
     // Confirm buy button
-    connect(                m_ui->confirmBuy,
+    connect(                m_ui->confirmButton,
                             SIGNAL(clicked()),
                             this,
-                            SLOT(confirmBuyClicked())                           );
+                            SLOT(confirmButtonClicked())                        );
 
     connect(                m_ui->pushButton,
                             SIGNAL( clicked() ),
                             this,
-                            SLOT( on_pushButton_clicked() )                        );
+                            SLOT(on_pushButton_clicked())                       );
+
+
+    connect(                m_ui->symbolComboBox,
+                            SIGNAL(currentTextChanged(QString)),
+                            this,
+                            SLOT(symbolComboBoxTextChanged(QString))                                 );
 
 }
 
@@ -349,41 +393,28 @@ void  MainWindow::setMainWindowButtonStyleSheet()
 
 
     this->setStyleSheet(                        "QMainWindow{"
-                                                "background-color:#A3E4B7;"
+                                                "background-color: #333333;"
                                                 "}"                                     );
 
-    m_ui->buyButton->setStyleSheet(             "QPushButton{"
-                                                "background-color:#CB4335;"
-                                                "}"                                     );
+    m_ui->confirmButton->setStyleSheet(         "QPushButton{"
+                                                "background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 black, stop: 1 orange );"
+                                                "color: white;"
+                                                "font-size: 25px;"
+                                                "border-style: solid;"
+                                                "border-color: grey;"
+                                                "border-width: 1px;"
+                                                "border-radius: 5px;"
+                                                "}"
+                                                "QPushButton:hover {"
+                                                "background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 black, stop: 1  #cf8917 );"
+                                                "}"
 
-    m_ui->sellButton->setStyleSheet(            "QPushButton{"
-                                                "background-color:#2ECC71;"
-                                                "}"                                     );
+                                    );
 
-    //SET-UP button
     m_ui->setupButton->setStyleSheet(           "QPushButton{"
-                                                "background-color:#2ECC71;"
+                                                "background-color: #2ECC71;"
                                                 "}"                                     );
 
-    // go-back button
-    m_ui->buyGoBackButton->setStyleSheet(       "QPushButton{"
-                                                "background-color:#0066ff;"
-                                                "}"                                     );
-
-    // go-back button
-    m_ui->sellGoBackButton->setStyleSheet(      "QPushButton{"
-                                                "background-color:#0066ff;"
-                                                "}"                                     );
-
-    // go-back button
-    m_ui->setupButton->setStyleSheet(           "QPushButton{"
-                                                "background-color:#0066ff;"
-                                                "}"                                     );
-
-    // go-back button
-    m_ui->confirmBuy->setStyleSheet(            "QPushButton{"
-                                                "background-color:#0066ff;"
-                                                "}"                                     );
 
 }
 
@@ -395,9 +426,83 @@ void MainWindow::buyButtonClicked()
 
     qInfo( "BUY button clicked !!" );
 
-    // go to page BUY
-    //m_ui->stackedWidget->setCurrentIndex( 1 );
+    m_ui->buyButton->setStyleSheet(             "QPushButton{"
+                                                "background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 black, stop: 1 green );"
+                                                "color: white;"
+                                                "font-size: 25px;"
+                                                "border-style: solid;"
+                                                "border-color: black;"
+                                                "border-width: 1px;"
+                                                "border-radius: 5px;"
+                                                "}"
+                                                "QPushButton:hover {"
+                                                "background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #7f8c8d, stop: 1  green );"
+                                                "}"
+                                                                                            );
 
+
+    m_ui->sellButton->setStyleSheet(            "QPushButton{"
+                                                "background-color: #999999;"
+                                                "color: #454545;"
+                                                "font-size: 25px;"
+                                                "border-style: solid;"
+                                                "border-color: black;"
+                                                "border-width: 1px;"
+                                                "border-radius: 5px;"
+                                                "}"
+                                                "QPushButton:hover {"
+                                                "background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 grey, stop: 1  #7f8c8d );"
+                                                "}"
+                                                                                            );
+
+    m_ui->actionLabel->setText( "BUY" );
+
+}
+
+//*****************************************************************************************
+
+// slot: SELL button
+void MainWindow::sellButtonClicked()
+{
+
+    qInfo( "SELL button clicked !!" );
+
+    qInfo( "BUY button clicked !!" );
+
+    m_ui->sellButton->setStyleSheet(            "QPushButton{"
+                                                "background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 black, stop: 1 red );"
+                                                "color: white;"
+                                                "font-size: 25px;"
+                                                "border-style: solid;"
+                                                "border-color: grey;"
+                                                "border-width: 1px;"
+                                                "border-radius: 5px;"
+                                                "}"
+                                                "QPushButton:hover {"
+                                                "background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #7f8c8d, stop: 1 red );"
+                                                "}"                                         );
+
+    m_ui->buyButton->setStyleSheet(            "QPushButton{"
+                                                "background-color: #999999;"
+                                                "color: #454545;"
+                                                "font-size: 25px;"
+                                                "border-style: solid;"
+                                                "border-color: grey;"
+                                                "border-width: 1px;"
+                                                "border-radius: 5px;"
+                                                "}"
+                                                "QPushButton:hover {"
+                                                "background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 grey, stop: 1  #7f8c8d );"
+                                                "}"                                    );
+
+    m_ui->actionLabel->setText( "SELL" );
+
+}
+
+//***************************************************************************************
+
+void MainWindow::confirmButtonClicked()
+{
 
     // go to BUY dialog
     BuySellDialog dialog( this );
@@ -407,24 +512,9 @@ void MainWindow::buyButtonClicked()
 
     }
 
-
 }
 
-//*******************************************************************************************************
-
-// slot: SELL button
-void MainWindow::sellButtonClicked()
-{
-
-    qInfo( "SELL button clicked !!" );
-
-    // go to page SELL
-    m_ui->stackedWidget->setCurrentIndex( 2 );
-
-}
-
-
-//*******************************************************************************************************
+//****************************************************************************************
 
 // slot: Setup button
 void MainWindow::setupButtonClicked()
@@ -433,11 +523,11 @@ void MainWindow::setupButtonClicked()
     qInfo( "Setup button clicked !!" );
 
     // go to page SELL
-    m_ui->stackedWidget->setCurrentIndex( 3 );
+
 
 }
 
-//*******************************************************************************************************
+//****************************************************************************************
 
 void MainWindow::goToBuySellDialog()
 {
@@ -446,28 +536,7 @@ void MainWindow::goToBuySellDialog()
 
 }
 
-//*******************************************************************************************************
-
-void MainWindow::buyGoBackButtonClicked()
-{
-    m_ui->stackedWidget->setCurrentIndex( 0 );
-}
-
-//*******************************************************************************************************
-
-void MainWindow::sellGoBackButtonClicked()
-{
-    m_ui->stackedWidget->setCurrentIndex( 0 );
-}
-
-//*******************************************************************************************************
-
-void MainWindow::setupGoBackButtonClicked()
-{
-    m_ui->stackedWidget->setCurrentIndex( 0 );
-}
-
-//*******************************************************************************************************
+//****************************************************************************************
 
 void MainWindow::confirmBuyClicked()
 {
@@ -497,11 +566,9 @@ void MainWindow::confirmBuyClicked()
 
     //******************************************
 
-    m_ui->stackedWidget->setCurrentIndex( 0 );
-
 }
 
-//*******************************************************************************************************
+//**************************************************************************************
 
 
 // this will be the main...
@@ -527,8 +594,7 @@ void* MainWindow::executeClientWork( void *lpParam )
 
 }
 
-//*******************************************************************************************************
-
+//************************************************************************************
 
 
 void MainWindow::on_pushButton_clicked()
@@ -544,7 +610,7 @@ void MainWindow::on_pushButton_clicked()
 
 }
 
-//*******************************************************************************************************
+//***************************************************************************************
 
 void* MainWindow::doSomeThingBigger( void  *arg )
 {
@@ -574,4 +640,31 @@ void* MainWindow::doSomeThingBigger( void  *arg )
 
 }
 
-//*******************************************************************************************************
+//***************************************************************************************
+
+
+void MainWindow::symbolComboBoxTextChanged( const QString&  symbol )
+{
+
+    InterObject marketDataToRequest;
+
+    // populate obj
+    marketDataToRequest.typeOfMessage   =  1;       // market data request
+    marketDataToRequest.symbol          =  symbol;
+    marketDataToRequest.secType         =  m_ui->securityTypeComboBox->currentText();
+    marketDataToRequest.currency        =  m_ui->currencyComboBox->currentText();
+    marketDataToRequest.exchange        =  m_ui->exchangeComboBox->currentText();
+    marketDataToRequest.primaryExchange =  m_ui->primaryExchangeComboBox->currentText();
+
+    // insert obj into the queue
+    this->m_outboundQueue.insertMsgIntoQueue( &marketDataToRequest );
+
+    // hack
+    int index = m_ui->securityTypeComboBox->currentIndex();
+    qInfo( "index: %d", index );
+
+}
+
+//***************************************************************************************
+
+

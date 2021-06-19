@@ -22,6 +22,10 @@ BuySellDialog::BuySellDialog( QWidget *parent )
 
     setupUi( this );
 
+    this->setStyleSheet(                "QDialog{"
+                                        "background-color: #333333;"
+                                        "}"                                         );
+
 
 }
 

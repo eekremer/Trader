@@ -11,6 +11,7 @@
 #include "OrderTableModel.h"
 #include "DataTableModel.h"
 #include "DataViewDelegate.h"
+#include "OrderViewDelegate.h"
 
 
 
@@ -31,13 +32,14 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
 
+
         Q_OBJECT
 
     public:
 
         MainWindow( QWidget *parent = nullptr );
 
-        ~MainWindow();
+       ~MainWindow();
 
 
     signals:
@@ -47,19 +49,16 @@ class MainWindow : public QMainWindow
 
     private slots:
 
-        void  buyButtonClicked();
-        void  sellButtonClicked();
-        void  setupButtonClicked();
+        void                buyButtonClicked();
+        void                sellButtonClicked();
+        void                setupButtonClicked();
+        void                confirmBuyClicked();
+        void                on_pushButton_clicked();
+        void                confirmButtonClicked();
 
-        void  buyGoBackButtonClicked();
-        void  sellGoBackButtonClicked();
-        void  setupGoBackButtonClicked();
+        void                goToBuySellDialog();
+        void                symbolComboBoxTextChanged( const QString&  symbol );
 
-        void  confirmBuyClicked();
-
-        void  on_pushButton_clicked();
-
-        void  goToBuySellDialog();
 
     public:
 
@@ -70,6 +69,8 @@ class MainWindow : public QMainWindow
         void                setMainWindowContractParams  ();
         void                setOrderTableViewColumnWidth ();
         void                setDataTableViewColumnWidth  ();
+        void                setDataTableViewHeaderSize   ();
+
         void                setMainWindowButtonConnection();
         void                setMainWindowButtonStyleSheet();
 
@@ -80,13 +81,12 @@ class MainWindow : public QMainWindow
         OrderTableModel    *m_orderModel;
         DataTableModel     *m_dataModel;
         Queue               m_outboundQueue;
-        DataViewDelegate   *m_delegate;
-
+        DataViewDelegate   *m_dataDelegate;
+        OrderViewDelegate  *m_orderDelegate;
 
         void                createThread();
 
-        static
-        void*               executeClientWork( void*  lpParam );
+        static void*        executeClientWork( void*  lpParam );
 
 };
 

@@ -5,7 +5,15 @@
 #include <QStyledItemDelegate>
 #include <QStyleOptionViewItem>
 
-// C++ Qt 50 - QItemDelegate - delegates in a QTableview
+/*
+
+    In Qt, the model behaves the same as it does for classic MVC. But instead of a controller,
+    Qt uses a slightly different abstraction: the delegate.
+
+    The delegate is used to provide fine control over how items are rendered and edited. Qt provides
+    a default delegate for every type of view.
+
+*/
 
 //******************************************************************************************
 
@@ -22,7 +30,12 @@ class DataViewDelegate  :  public QStyledItemDelegate
         QWidget*    createEditor            (           QWidget                 *parent,
                                                   const QStyleOptionViewItem    &option,
                                                   const QModelIndex             &index      ) const override;
+/*
+        void        paint                   (           QPainter                *painter,
+                                                  const QStyleOptionViewItem    &option,
+                                                  const QModelIndex             &index      ) const override;
 
+*/
         void        setEditorData           (           QWidget                 *editor,
                                                   const QModelIndex             &index      ) const override;
 
@@ -30,10 +43,13 @@ class DataViewDelegate  :  public QStyledItemDelegate
                                                         QAbstractItemModel      *model,
                                                   const QModelIndex             &index      ) const override;
 
+        QSize       sizeHint                (     const QStyleOptionViewItem    &option,
+                                                  const QModelIndex             &index      ) const override;
+/*
         void        updateEditorGeometry    (           QWidget                 *editor,
                                                   const QStyleOptionViewItem    &option,
                                                   const QModelIndex             &index      ) const override;
-
+*/
 
 };
 
