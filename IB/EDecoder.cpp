@@ -185,22 +185,23 @@ const char* EDecoder::processTickOptionComputationMsg( 				const char* 	ptr,
 																	const char* 	endPtr			) 
 {
 
-	int version = m_serverVersion;
+    int     version         =   m_serverVersion;
 
 	int 	tickerId;
 	int 	tickTypeInt;
-	int 	tickAttrib 	= 	0;
+    int 	tickAttrib      = 	0;
 
 	double 	impliedVol;
 	double 	delta;
 
-	double 	optPrice 	= 	DBL_MAX;
-	double 	pvDividend 	= 	DBL_MAX;
+    double 	optPrice        = 	DBL_MAX;
+    double 	pvDividend      = 	DBL_MAX;
 
-	double 	gamma 		= 	DBL_MAX;
-	double 	vega 		= 	DBL_MAX;
-	double 	theta 		= 	DBL_MAX;
-	double 	undPrice 	= 	DBL_MAX;
+    double 	gamma           = 	DBL_MAX;
+    double 	vega            = 	DBL_MAX;
+    double 	theta           = 	DBL_MAX;
+    double 	undPrice        = 	DBL_MAX;
+
 
 	if ( m_serverVersion < MIN_SERVER_VER_PRICE_BASED_VOLATILITY )
 	{
@@ -342,22 +343,23 @@ const char* EDecoder::processTickStringMsg(				const char* 	ptr,
 														const char* 	endPtr				) 
 {
 
-	int 		version;
-	int 		tickerId;
-	int 		tickTypeInt;
-	std::string value;
+    int             version;
+    int             tickerId;
+    int             tickTypeInt;
+    std::string     value;
 
 	DECODE_FIELD( 	version		);
 	DECODE_FIELD( 	tickerId	);
 	DECODE_FIELD( 	tickTypeInt	);
 	DECODE_FIELD( 	value 		);
 
+
 	//****************************************************************************
 	// callback
 	//****************************************************************************
 
 	m_pEWrapper->tickString( 				tickerId, 
-											(TickType)tickTypeInt, 
+                                  (TickType)tickTypeInt,
 											value								);
 
 	//****************************************************************************
@@ -3848,9 +3850,13 @@ int EDecoder::parseAndProcessMsg(			const char*& 	beginPtr,
 				ptr = processTickGenericMsg( ptr, endPtr );
 				break;
 
+            //********************************************
+
 			case TICK_STRING:
 				ptr = processTickStringMsg( ptr, endPtr );
 				break;
+
+            //********************************************
 
 			case TICK_EFP:
 				ptr = processTickEfpMsg( ptr, endPtr );

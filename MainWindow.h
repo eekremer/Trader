@@ -63,7 +63,9 @@ class MainWindow : public QMainWindow
     public:
 
         Queue               getQueue();
+
         static void*        doSomeThingBigger( void  *arg );
+        static void*        exMain( void*  arg );
 
         void                setMainWindowOrderParams     ();
         void                setMainWindowContractParams  ();
@@ -84,9 +86,10 @@ class MainWindow : public QMainWindow
         DataViewDelegate   *m_dataDelegate;
         OrderViewDelegate  *m_orderDelegate;
 
-        void                createThread();
 
-        static void*        executeClientWork( void*  lpParam );
+        void                createExMainThread();
+
+        static void*        executeExMainWork( void*  lpParam );
 
 };
 

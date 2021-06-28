@@ -11,8 +11,10 @@
 #include  "BuySellDialog.h"
 #include  "DataViewDelegate.h"
 #include  "OrderViewDelegate.h"
+#include  "Implementation/Proxy.cpp"
 
 
+pthread_t        exMainThread;
 pthread_t        clientThread;
 pthread_t        tid1;
 pthread_mutex_t  mutex;
@@ -80,14 +82,19 @@ MainWindow::MainWindow( QWidget  *parent )
     buyButtonClicked();
 
     //----------------------------------------------------------------
-
+/*
+    pthread_create(                &exMainThread,
+                                    NULL,
+                                   &exMain,
+                                    this                            );
+*/
 
 
     //*******************
     // pthreads
     //*******************
 
-    createThread();
+    createExMainThread();
 
     //*******************
 
@@ -111,28 +118,162 @@ MainWindow::~MainWindow()
 }
 
 //*********************************************************************************************
-void MainWindow::createThread()
+
+
+void* MainWindow::exMain( void*  arg )
+{
+
+    // hack
+    //const char* host = argc > 1 ? argv[ 1 ] : "";
+
+    // hard code
+    const char* host = "127.0.0.1";
+
+    /*
+        int  atoi(  const char   *str  )
+
+        Convert a string to an integer.
+    */
+
+    // hack
+    //int port = argc > 2 ? atoi( argv[ 2 ] ) : 0;
+
+    // hard code
+    int port = 7497;
+
+    if( port <= 0 )
+        port = 7496;  // production account ( paper account 7497 )
+
+    // hack
+    //const char* connectOptions = argc > 3 ? argv[ 3 ] : "";
+
+    // hard coding
+    const char* connectOptions = "";
+
+    int 		clientId 	= 0;
+    unsigned 	attempt 	= 0;
+
+    printf( 			"Start of C++ Socket Client Test %u\n",
+                        attempt 										);
+
+
+    for (;;)
+    {
+
+        ++attempt;
+
+        printf( 		   "Attempt %u of %u \n",
+                            attempt,
+                            MAX_ATTEMPTS 								);
+
+
+        //******************************************
+        //
+        // create EClientSocket and EReader objects
+        //
+        //******************************************
+
+        TestCppClient client;
+
+        //******************************************
+        //******************************************
+
+
+
+        // Run time error will occur (here) if TestCppClient.exe is compiled in debug mode but TwsSocketClient.dll is compiled in Release mode
+        // TwsSocketClient.dll (in Release Mode) is copied by API installer into SysWOW64 folder within Windows directory
+
+        if( connectOptions )
+        {
+
+            client.setConnectOptions( connectOptions );
+
+        }
+
+        client.connect( 		host,
+                                port,
+                                clientId 		);
+
+
+        int trial = 0;
+
+        while( client.isConnected() )
+        {
+
+
+            // stuff goes here !!!!
+ /*
+            if ( trial == 1 )
+            {
+                // contractDetails
+                client.setState(  	ST_CONTRACTOPERATION  		);
+            }
+
+
+            if ( trial == 2 )
+            {
+                // reqMktDepth and reqMktData
+                client.setState(  	ST_REROUTECFD				);
+            }
+ */
+/*
+            if ( trial == 3 )
+            {
+                // reqMktDepth and reqMktData
+                client.setState(  	ST_REQMKTDEPTHEXCHANGES		);
+            }
+*/
+            if ( trial == 4 )
+            {
+
+                // reqMktDepth and reqMktData
+                client.setState(  	ST_TICKDATAOPERATION		);
+            }
+
+
+            //****************************************
+            //****************************************
+
+            client.processMessages();
+
+            //****************************************
+            //****************************************
+
+            trial++;
+
+        }
+
+        if( attempt >= MAX_ATTEMPTS )
+        {
+            break;
+        }
+
+        printf( 				"Sleeping %u seconds before next attempt\n",
+                                SLEEP_TIME 											);
+
+        std::this_thread::sleep_for(    std::chrono::seconds( SLEEP_TIME ) 			);
+
+    }
+
+    printf ( "End of C++ Socket Client Test\n" );
+
+
+    return nullptr;
+
+}
+
+//*********************************************************************************************
+
+void MainWindow::createExMainThread()
 {
 
     pthread_mutex_init(         &mutex,
                                  NULL                         );
 
-    /*
-
-        The pthread_create() function starts a new thread in the calling process.
-        The new thread starts execution by invoking start_routine(); arg is passed as
-        the sole argument of start_routine().
-
-        int pthread_create(                 pthread_t *restrict         thread,
-                                 const pthread_attr_t *restrict         attr,
-                                                void                    *(*start_routine)(void *),
-                                            void *restrict              arg                                 );
-
-    */
-
     pthread_create(             &clientThread,
                                 NULL,
-                                &executeClientWork,   // C function
+                                //&executeExMainWork,   // C function
+                                &proxy,
                                 &m_outboundQueue                            );
 
     // note: we are passing on a pointer to the queue object as an arg for the C function
@@ -572,7 +713,7 @@ void MainWindow::confirmBuyClicked()
 
 
 // this will be the main...
-void* MainWindow::executeClientWork( void *lpParam )
+void* MainWindow::executeExMainWork( void  *lpParam )
 {
 
     while( 1 )
@@ -587,6 +728,7 @@ void* MainWindow::executeClientWork( void *lpParam )
 
         // we check whether there is any object in the queue
         pThis->getMsgFromQueue();
+
 
     }
 

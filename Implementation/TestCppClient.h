@@ -12,6 +12,8 @@
 #include <memory>
 #include <vector>
 
+
+
 class EClientSocket;
 
 
@@ -117,6 +119,7 @@ enum State
 class TestCppClient : public EWrapper
 {
 
+
 //! [ ewrapperimpl ]
 public:
 
@@ -125,6 +128,7 @@ public:
 
 	void 	setConnectOptions	( 		const std::string&				);
 	void 	processMessages		(										);
+
 
 public:
 
@@ -138,7 +142,9 @@ public:
 	State 	getState			(											);
 	void	setState			(			State  		state				); 
 
+
 private:
+
     void 	pnlOperation					();
     void 	pnlSingleOperation				();
 	void 	tickDataOperation				();
@@ -182,6 +188,7 @@ private:
 	void 	whatIfSamples					();
 	void 	reqCurrentTime					();
 
+
 public:
 
 	// events
@@ -194,6 +201,7 @@ private:
 	void 	printContractDetailsMsg			(	const ContractDetails		&contractDetails		);
 	void 	printContractDetailsSecIdList	(	const TagValueListSPtr 		&secIdList				);
 	void 	printBondContractDetailsMsg		(	const ContractDetails		&contractDetails		);
+
 
 private:
 

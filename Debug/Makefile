@@ -57,14 +57,40 @@ SOURCES       = ../AccountTableModel.cpp \
 		../DataDbManager.cpp \
 		../DataTableModel.cpp \
 		../DataViewDelegate.cpp \
-		../Foo2.cpp \
-		../Foo/Foo3.cpp \
 		../Main.cpp \
 		../MainWindow.cpp \
 		../OrderDbManager.cpp \
 		../OrderTableModel.cpp \
 		../OrderViewDelegate.cpp \
-		../Queue.cpp moc_BuySellDialog.cpp \
+		../Queue.cpp \
+		../IB/ContractCondition.cpp \
+		../IB/DefaultEWrapper.cpp \
+		../IB/EClient.cpp \
+		../IB/EClientSocket.cpp \
+		../IB/EDecoder.cpp \
+		../IB/EMessage.cpp \
+		../IB/EMutex.cpp \
+		../IB/EOrderDecoder.cpp \
+		../IB/EReader.cpp \
+		../IB/EReaderOSSignal.cpp \
+		../IB/ESocket.cpp \
+		../IB/executioncondition.cpp \
+		../IB/MarginCondition.cpp \
+		../IB/OperatorCondition.cpp \
+		../IB/OrderCondition.cpp \
+		../IB/PercentChangeCondition.cpp \
+		../IB/PriceCondition.cpp \
+		../IB/SoftDollarTier.cpp \
+		../IB/TimeCondition.cpp \
+		../IB/VolumeCondition.cpp \
+		../Implementation/AccountSummaryTags.cpp \
+		../Implementation/AvailableAlgoParams.cpp \
+		../Implementation/ContractSamples.cpp \
+		../Implementation/OrderSamples.cpp \
+		../Implementation/ScannerSubscriptionSamples.cpp \
+		../Implementation/StdAfx.cpp \
+		../Implementation/TestCppClient.cpp \
+		../Implementation/Utils.cpp moc_BuySellDialog.cpp \
 		moc_MainWindow.cpp \
 		moc_OrderTableModel.cpp
 OBJECTS       = AccountTableModel.o \
@@ -72,14 +98,40 @@ OBJECTS       = AccountTableModel.o \
 		DataDbManager.o \
 		DataTableModel.o \
 		DataViewDelegate.o \
-		Foo2.o \
-		Foo3.o \
 		Main.o \
 		MainWindow.o \
 		OrderDbManager.o \
 		OrderTableModel.o \
 		OrderViewDelegate.o \
 		Queue.o \
+		ContractCondition.o \
+		DefaultEWrapper.o \
+		EClient.o \
+		EClientSocket.o \
+		EDecoder.o \
+		EMessage.o \
+		EMutex.o \
+		EOrderDecoder.o \
+		EReader.o \
+		EReaderOSSignal.o \
+		ESocket.o \
+		executioncondition.o \
+		MarginCondition.o \
+		OperatorCondition.o \
+		OrderCondition.o \
+		PercentChangeCondition.o \
+		PriceCondition.o \
+		SoftDollarTier.o \
+		TimeCondition.o \
+		VolumeCondition.o \
+		AccountSummaryTags.o \
+		AvailableAlgoParams.o \
+		ContractSamples.o \
+		OrderSamples.o \
+		ScannerSubscriptionSamples.o \
+		StdAfx.o \
+		TestCppClient.o \
+		Utils.o \
 		moc_BuySellDialog.o \
 		moc_MainWindow.o \
 		moc_OrderTableModel.o
@@ -272,19 +324,104 @@ DIST          = ../../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../OrderDbManager.h \
 		../OrderTableModel.h \
 		../OrderViewDelegate.h \
-		../Queue.h ../AccountTableModel.cpp \
+		../Queue.h \
+		../IB/bar.h \
+		../IB/CommissionReport.h \
+		../IB/CommonDefs.h \
+		../IB/Contract.h \
+		../IB/ContractCondition.h \
+		../IB/DefaultEWrapper.h \
+		../IB/DepthMktDataDescription.h \
+		../IB/EClient.h \
+		../IB/EClientException.h \
+		../IB/EClientMsgSink.h \
+		../IB/EClientSocket.h \
+		../IB/EDecoder.h \
+		../IB/EMessage.h \
+		../IB/EMutex.h \
+		../IB/EOrderDecoder.h \
+		../IB/EPosixClientSocketPlatform.h \
+		../IB/EReader.h \
+		../IB/EReaderOSSignal.h \
+		../IB/ESocket.h \
+		../IB/ETransport.h \
+		../IB/EWrapper.h \
+		../IB/EWrapper_prototypes.h \
+		../IB/Execution.h \
+		../IB/executioncondition.h \
+		../IB/FamilyCode.h \
+		../IB/HistogramEntry.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/IExternalizable.h \
+		../IB/MarginCondition.h \
+		../IB/NewsProvider.h \
+		../IB/OperatorCondition.h \
+		../IB/Order.h \
+		../IB/OrderCondition.h \
+		../IB/OrderState.h \
+		../IB/PercentChangeCondition.h \
+		../IB/platformspecific.h \
+		../IB/PriceCondition.h \
+		../IB/PriceIncrement.h \
+		../IB/resource.h \
+		../IB/ScannerSubscription.h \
+		../IB/SoftDollarTier.h \
+		../IB/TagValue.h \
+		../IB/TickAttrib.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/TickAttribLast.h \
+		../IB/TimeCondition.h \
+		../IB/TwsSocketClientErrors.h \
+		../IB/VolumeCondition.h \
+		../Implementation/AccountSummaryTags.h \
+		../Implementation/AvailableAlgoParams.h \
+		../Implementation/ContractSamples.h \
+		../Implementation/FAMethodSamples.h \
+		../Implementation/OrderSamples.h \
+		../Implementation/ScannerSubscriptionSamples.h \
+		../Implementation/StdAfx.h \
+		../Implementation/TestCppClient.h \
+		../Implementation/Utils.h ../AccountTableModel.cpp \
 		../BuySellDialog.cpp \
 		../DataDbManager.cpp \
 		../DataTableModel.cpp \
 		../DataViewDelegate.cpp \
-		../Foo2.cpp \
-		../Foo/Foo3.cpp \
 		../Main.cpp \
 		../MainWindow.cpp \
 		../OrderDbManager.cpp \
 		../OrderTableModel.cpp \
 		../OrderViewDelegate.cpp \
-		../Queue.cpp
+		../Queue.cpp \
+		../IB/ContractCondition.cpp \
+		../IB/DefaultEWrapper.cpp \
+		../IB/EClient.cpp \
+		../IB/EClientSocket.cpp \
+		../IB/EDecoder.cpp \
+		../IB/EMessage.cpp \
+		../IB/EMutex.cpp \
+		../IB/EOrderDecoder.cpp \
+		../IB/EReader.cpp \
+		../IB/EReaderOSSignal.cpp \
+		../IB/ESocket.cpp \
+		../IB/executioncondition.cpp \
+		../IB/MarginCondition.cpp \
+		../IB/OperatorCondition.cpp \
+		../IB/OrderCondition.cpp \
+		../IB/PercentChangeCondition.cpp \
+		../IB/PriceCondition.cpp \
+		../IB/SoftDollarTier.cpp \
+		../IB/TimeCondition.cpp \
+		../IB/VolumeCondition.cpp \
+		../Implementation/AccountSummaryTags.cpp \
+		../Implementation/AvailableAlgoParams.cpp \
+		../Implementation/ContractSamples.cpp \
+		../Implementation/OrderSamples.cpp \
+		../Implementation/ScannerSubscriptionSamples.cpp \
+		../Implementation/StdAfx.cpp \
+		../Implementation/TestCppClient.cpp \
+		../Implementation/Utils.cpp
 QMAKE_TARGET  = Trader
 DESTDIR       = 
 TARGET        = Trader
@@ -668,8 +805,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../Data.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../Interobject.h ../MainWindow.h ../Order.h ../OrderDbManager.h ../OrderTableModel.h ../OrderViewDelegate.h ../Queue.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../AccountTableModel.cpp ../BuySellDialog.cpp ../DataDbManager.cpp ../DataTableModel.cpp ../DataViewDelegate.cpp ../Foo2.cpp ../Foo/Foo3.cpp ../Main.cpp ../MainWindow.cpp ../OrderDbManager.cpp ../OrderTableModel.cpp ../OrderViewDelegate.cpp ../Queue.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../Data.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../Interobject.h ../MainWindow.h ../Order.h ../OrderDbManager.h ../OrderTableModel.h ../OrderViewDelegate.h ../Queue.h ../IB/bar.h ../IB/CommissionReport.h ../IB/CommonDefs.h ../IB/Contract.h ../IB/ContractCondition.h ../IB/DefaultEWrapper.h ../IB/DepthMktDataDescription.h ../IB/EClient.h ../IB/EClientException.h ../IB/EClientMsgSink.h ../IB/EClientSocket.h ../IB/EDecoder.h ../IB/EMessage.h ../IB/EMutex.h ../IB/EOrderDecoder.h ../IB/EPosixClientSocketPlatform.h ../IB/EReader.h ../IB/EReaderOSSignal.h ../IB/ESocket.h ../IB/ETransport.h ../IB/EWrapper.h ../IB/EWrapper_prototypes.h ../IB/Execution.h ../IB/executioncondition.h ../IB/FamilyCode.h ../IB/HistogramEntry.h ../IB/HistoricalTick.h ../IB/HistoricalTickBidAsk.h ../IB/HistoricalTickLast.h ../IB/IExternalizable.h ../IB/MarginCondition.h ../IB/NewsProvider.h ../IB/OperatorCondition.h ../IB/Order.h ../IB/OrderCondition.h ../IB/OrderState.h ../IB/PercentChangeCondition.h ../IB/platformspecific.h ../IB/PriceCondition.h ../IB/PriceIncrement.h ../IB/resource.h ../IB/ScannerSubscription.h ../IB/SoftDollarTier.h ../IB/TagValue.h ../IB/TickAttrib.h ../IB/TickAttribBidAsk.h ../IB/TickAttribLast.h ../IB/TimeCondition.h ../IB/TwsSocketClientErrors.h ../IB/VolumeCondition.h ../Implementation/AccountSummaryTags.h ../Implementation/AvailableAlgoParams.h ../Implementation/ContractSamples.h ../Implementation/FAMethodSamples.h ../Implementation/OrderSamples.h ../Implementation/ScannerSubscriptionSamples.h ../Implementation/StdAfx.h ../Implementation/TestCppClient.h ../Implementation/Utils.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../AccountTableModel.cpp ../BuySellDialog.cpp ../DataDbManager.cpp ../DataTableModel.cpp ../DataViewDelegate.cpp ../Main.cpp ../MainWindow.cpp ../OrderDbManager.cpp ../OrderTableModel.cpp ../OrderViewDelegate.cpp ../Queue.cpp ../IB/ContractCondition.cpp ../IB/DefaultEWrapper.cpp ../IB/EClient.cpp ../IB/EClientSocket.cpp ../IB/EDecoder.cpp ../IB/EMessage.cpp ../IB/EMutex.cpp ../IB/EOrderDecoder.cpp ../IB/EReader.cpp ../IB/EReaderOSSignal.cpp ../IB/ESocket.cpp ../IB/executioncondition.cpp ../IB/MarginCondition.cpp ../IB/OperatorCondition.cpp ../IB/OrderCondition.cpp ../IB/PercentChangeCondition.cpp ../IB/PriceCondition.cpp ../IB/SoftDollarTier.cpp ../IB/TimeCondition.cpp ../IB/VolumeCondition.cpp ../Implementation/AccountSummaryTags.cpp ../Implementation/AvailableAlgoParams.cpp ../Implementation/ContractSamples.cpp ../Implementation/OrderSamples.cpp ../Implementation/ScannerSubscriptionSamples.cpp ../Implementation/StdAfx.cpp ../Implementation/TestCppClient.cpp ../Implementation/Utils.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../BuySellDialog.ui ../MainWindow.ui $(DISTDIR)/
 
 
@@ -811,20 +948,6 @@ moc_BuySellDialog.cpp: ../BuySellDialog.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qtouchdevice.h \
 		ui_BuySellDialog.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QCheckBox \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcheckbox.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qicon.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
 		moc_predefs.h \
 		../../../Qt/5.15.2/gcc_64/bin/moc
 	/home/ed/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include '/home/ed/Qt projects/Trader/Debug/moc_predefs.h' -I/home/ed/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I'/home/ed/Qt projects/Trader' -I/home/ed/Qt/5.15.2/gcc_64/include -I/home/ed/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/ed/Qt/5.15.2/gcc_64/include/QtGui -I/home/ed/Qt/5.15.2/gcc_64/include/QtSql -I/home/ed/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../BuySellDialog.h -o moc_BuySellDialog.cpp
@@ -1182,20 +1305,6 @@ BuySellDialog.o: ../BuySellDialog.cpp ../BuySellDialog.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qtouchdevice.h \
 		ui_BuySellDialog.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QCheckBox \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcheckbox.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qicon.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o BuySellDialog.o ../BuySellDialog.cpp
 
@@ -1426,12 +1535,6 @@ DataViewDelegate.o: ../DataViewDelegate.cpp ../DataViewDelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qtextoption.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qpen.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DataViewDelegate.o ../DataViewDelegate.cpp
-
-Foo2.o: ../Foo2.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Foo2.o ../Foo2.cpp
-
-Foo3.o: ../Foo/Foo3.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Foo3.o ../Foo/Foo3.cpp
 
 Main.o: ../Main.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
@@ -1742,48 +1845,37 @@ MainWindow.o: ../MainWindow.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QTab
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
 		../OrderViewDelegate.h \
 		ui_MainWindow.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QComboBox \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcombobox.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QHBoxLayout \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qboxlayout.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlayout.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlayoutitem.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qgridlayout.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QHeaderView \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qheaderview.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QLineEdit \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlineedit.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qtextcursor.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qtextformat.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QMenuBar \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmenubar.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmenu.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qaction.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qactiongroup.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QSpacerItem \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStatusBar \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstatusbar.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QToolBar \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtoolbar.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QVBoxLayout \
 		../BuySellDialog.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdialog.h \
 		ui_BuySellDialog.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QCheckBox \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcheckbox.h
+		../Implementation/Proxy.cpp \
+		../Implementation/StdAfx.h \
+		../Implementation/TestCppClient.h \
+		../IB/EWrapper.h \
+		../IB/CommonDefs.h \
+		../IB/SoftDollarTier.h \
+		../IB/platformspecific.h \
+		../IB/DepthMktDataDescription.h \
+		../IB/FamilyCode.h \
+		../IB/NewsProvider.h \
+		../IB/TickAttrib.h \
+		../IB/HistogramEntry.h \
+		../IB/bar.h \
+		../IB/PriceIncrement.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EWrapper_prototypes.h \
+		../IB/EReaderOSSignal.h \
+		../IB/EReaderSignal.h \
+		../IB/EReader.h \
+		../IB/EDecoder.h \
+		../IB/Contract.h \
+		../IB/TagValue.h \
+		../IB/EMutex.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainWindow.o ../MainWindow.cpp
 
 OrderDbManager.o: ../OrderDbManager.cpp ../../../Qt/5.15.2/gcc_64/include/QtSql/QSqlQuery \
@@ -2052,6 +2144,595 @@ Queue.o: ../Queue.cpp ../../../Qt/5.15.2/gcc_64/include/QtCore/QTextStream \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
 		../Interobject.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Queue.o ../Queue.cpp
+
+ContractCondition.o: ../IB/ContractCondition.cpp ../Implementation/StdAfx.h \
+		../IB/ContractCondition.h \
+		../IB/OperatorCondition.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h \
+		../IB/EDecoder.h \
+		../IB/Contract.h \
+		../IB/TagValue.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EClient.h \
+		../IB/CommonDefs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ContractCondition.o ../IB/ContractCondition.cpp
+
+DefaultEWrapper.o: ../IB/DefaultEWrapper.cpp ../Implementation/StdAfx.h \
+		../IB/DefaultEWrapper.h \
+		../IB/EWrapper.h \
+		../IB/CommonDefs.h \
+		../IB/SoftDollarTier.h \
+		../IB/platformspecific.h \
+		../IB/DepthMktDataDescription.h \
+		../IB/FamilyCode.h \
+		../IB/NewsProvider.h \
+		../IB/TickAttrib.h \
+		../IB/HistogramEntry.h \
+		../IB/bar.h \
+		../IB/PriceIncrement.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EWrapper_prototypes.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DefaultEWrapper.o ../IB/DefaultEWrapper.cpp
+
+EClient.o: ../IB/EClient.cpp ../Implementation/StdAfx.h \
+		../IB/EPosixClientSocketPlatform.h \
+		../IB/EClient.h \
+		../IB/platformspecific.h \
+		../IB/CommonDefs.h \
+		../IB/TagValue.h \
+		../IB/Contract.h \
+		../IB/EWrapper.h \
+		../IB/SoftDollarTier.h \
+		../IB/DepthMktDataDescription.h \
+		../IB/FamilyCode.h \
+		../IB/NewsProvider.h \
+		../IB/TickAttrib.h \
+		../IB/HistogramEntry.h \
+		../IB/bar.h \
+		../IB/PriceIncrement.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EWrapper_prototypes.h \
+		../IB/TwsSocketClientErrors.h \
+		../IB/Order.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/OrderState.h \
+		../IB/Execution.h \
+		../IB/ScannerSubscription.h \
+		../IB/CommissionReport.h \
+		../IB/EDecoder.h \
+		../IB/EMessage.h \
+		../IB/ETransport.h \
+		../IB/EClientException.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o EClient.o ../IB/EClient.cpp
+
+EClientSocket.o: ../IB/EClientSocket.cpp ../Implementation/StdAfx.h \
+		../IB/EPosixClientSocketPlatform.h \
+		../IB/EClientSocket.h \
+		../IB/EClient.h \
+		../IB/platformspecific.h \
+		../IB/CommonDefs.h \
+		../IB/TagValue.h \
+		../IB/Contract.h \
+		../IB/EClientMsgSink.h \
+		../IB/ESocket.h \
+		../IB/ETransport.h \
+		../IB/TwsSocketClientErrors.h \
+		../IB/EWrapper.h \
+		../IB/SoftDollarTier.h \
+		../IB/DepthMktDataDescription.h \
+		../IB/FamilyCode.h \
+		../IB/NewsProvider.h \
+		../IB/TickAttrib.h \
+		../IB/HistogramEntry.h \
+		../IB/bar.h \
+		../IB/PriceIncrement.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EWrapper_prototypes.h \
+		../IB/EDecoder.h \
+		../IB/EReaderSignal.h \
+		../IB/EReader.h \
+		../IB/EMutex.h \
+		../IB/EReaderOSSignal.h \
+		../IB/EMessage.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o EClientSocket.o ../IB/EClientSocket.cpp
+
+EDecoder.o: ../IB/EDecoder.cpp ../Implementation/StdAfx.h \
+		../IB/EWrapper.h \
+		../IB/CommonDefs.h \
+		../IB/SoftDollarTier.h \
+		../IB/platformspecific.h \
+		../IB/DepthMktDataDescription.h \
+		../IB/FamilyCode.h \
+		../IB/NewsProvider.h \
+		../IB/TickAttrib.h \
+		../IB/HistogramEntry.h \
+		../IB/bar.h \
+		../IB/PriceIncrement.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EWrapper_prototypes.h \
+		../IB/Order.h \
+		../IB/TagValue.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/Contract.h \
+		../IB/OrderState.h \
+		../IB/Execution.h \
+		../IB/CommissionReport.h \
+		../IB/TwsSocketClientErrors.h \
+		../IB/EDecoder.h \
+		../IB/EClientMsgSink.h \
+		../IB/EOrderDecoder.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o EDecoder.o ../IB/EDecoder.cpp
+
+EMessage.o: ../IB/EMessage.cpp ../Implementation/StdAfx.h \
+		../IB/EMessage.h \
+		../IB/platformspecific.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o EMessage.o ../IB/EMessage.cpp
+
+EMutex.o: ../IB/EMutex.cpp ../Implementation/StdAfx.h \
+		../IB/EMutex.h \
+		../IB/platformspecific.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o EMutex.o ../IB/EMutex.cpp
+
+EOrderDecoder.o: ../IB/EOrderDecoder.cpp ../Implementation/StdAfx.h \
+		../IB/EOrderDecoder.h \
+		../IB/platformspecific.h \
+		../IB/Contract.h \
+		../IB/TagValue.h \
+		../IB/Order.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/SoftDollarTier.h \
+		../IB/OrderState.h \
+		../IB/EDecoder.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o EOrderDecoder.o ../IB/EOrderDecoder.cpp
+
+EReader.o: ../IB/EReader.cpp ../Implementation/StdAfx.h \
+		../IB/Contract.h \
+		../IB/TagValue.h \
+		../IB/EDecoder.h \
+		../IB/platformspecific.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EMutex.h \
+		../IB/EReader.h \
+		../IB/EReaderOSSignal.h \
+		../IB/EReaderSignal.h \
+		../IB/EClientSocket.h \
+		../IB/EClient.h \
+		../IB/CommonDefs.h \
+		../IB/EClientMsgSink.h \
+		../IB/ESocket.h \
+		../IB/ETransport.h \
+		../IB/EPosixClientSocketPlatform.h \
+		../IB/EMessage.h \
+		../IB/DefaultEWrapper.h \
+		../IB/EWrapper.h \
+		../IB/SoftDollarTier.h \
+		../IB/DepthMktDataDescription.h \
+		../IB/FamilyCode.h \
+		../IB/NewsProvider.h \
+		../IB/TickAttrib.h \
+		../IB/HistogramEntry.h \
+		../IB/bar.h \
+		../IB/PriceIncrement.h \
+		../IB/EWrapper_prototypes.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o EReader.o ../IB/EReader.cpp
+
+EReaderOSSignal.o: ../IB/EReaderOSSignal.cpp ../Implementation/StdAfx.h \
+		../IB/EReaderOSSignal.h \
+		../IB/platformspecific.h \
+		../IB/EReaderSignal.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o EReaderOSSignal.o ../IB/EReaderOSSignal.cpp
+
+ESocket.o: ../IB/ESocket.cpp ../Implementation/StdAfx.h \
+		../IB/EMessage.h \
+		../IB/platformspecific.h \
+		../IB/ESocket.h \
+		../IB/ETransport.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ESocket.o ../IB/ESocket.cpp
+
+executioncondition.o: ../IB/executioncondition.cpp ../Implementation/StdAfx.h \
+		../IB/executioncondition.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h \
+		../IB/EDecoder.h \
+		../IB/Contract.h \
+		../IB/TagValue.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EClient.h \
+		../IB/CommonDefs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o executioncondition.o ../IB/executioncondition.cpp
+
+MarginCondition.o: ../IB/MarginCondition.cpp ../Implementation/StdAfx.h \
+		../IB/MarginCondition.h \
+		../IB/OperatorCondition.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MarginCondition.o ../IB/MarginCondition.cpp
+
+OperatorCondition.o: ../IB/OperatorCondition.cpp ../Implementation/StdAfx.h \
+		../IB/OperatorCondition.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h \
+		../IB/EDecoder.h \
+		../IB/Contract.h \
+		../IB/TagValue.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EClient.h \
+		../IB/CommonDefs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o OperatorCondition.o ../IB/OperatorCondition.cpp
+
+OrderCondition.o: ../IB/OrderCondition.cpp ../Implementation/StdAfx.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h \
+		../IB/executioncondition.h \
+		../IB/MarginCondition.h \
+		../IB/OperatorCondition.h \
+		../IB/TimeCondition.h \
+		../IB/PercentChangeCondition.h \
+		../IB/ContractCondition.h \
+		../IB/Order.h \
+		../IB/TagValue.h \
+		../IB/SoftDollarTier.h \
+		../IB/PriceCondition.h \
+		../IB/VolumeCondition.h \
+		../IB/EDecoder.h \
+		../IB/Contract.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EClient.h \
+		../IB/CommonDefs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o OrderCondition.o ../IB/OrderCondition.cpp
+
+PercentChangeCondition.o: ../IB/PercentChangeCondition.cpp ../Implementation/StdAfx.h \
+		../IB/PercentChangeCondition.h \
+		../IB/ContractCondition.h \
+		../IB/OperatorCondition.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h \
+		../IB/Order.h \
+		../IB/TagValue.h \
+		../IB/SoftDollarTier.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PercentChangeCondition.o ../IB/PercentChangeCondition.cpp
+
+PriceCondition.o: ../IB/PriceCondition.cpp ../Implementation/StdAfx.h \
+		../IB/PriceCondition.h \
+		../IB/ContractCondition.h \
+		../IB/OperatorCondition.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h \
+		../IB/EDecoder.h \
+		../IB/Contract.h \
+		../IB/TagValue.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EClient.h \
+		../IB/CommonDefs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PriceCondition.o ../IB/PriceCondition.cpp
+
+SoftDollarTier.o: ../IB/SoftDollarTier.cpp ../Implementation/StdAfx.h \
+		../IB/SoftDollarTier.h \
+		../IB/platformspecific.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o SoftDollarTier.o ../IB/SoftDollarTier.cpp
+
+TimeCondition.o: ../IB/TimeCondition.cpp ../Implementation/StdAfx.h \
+		../IB/TimeCondition.h \
+		../IB/OperatorCondition.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o TimeCondition.o ../IB/TimeCondition.cpp
+
+VolumeCondition.o: ../IB/VolumeCondition.cpp ../Implementation/StdAfx.h \
+		../IB/VolumeCondition.h \
+		../IB/ContractCondition.h \
+		../IB/OperatorCondition.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o VolumeCondition.o ../IB/VolumeCondition.cpp
+
+AccountSummaryTags.o: ../Implementation/AccountSummaryTags.cpp ../Implementation/StdAfx.h \
+		../Implementation/AccountSummaryTags.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AccountSummaryTags.o ../Implementation/AccountSummaryTags.cpp
+
+AvailableAlgoParams.o: ../Implementation/AvailableAlgoParams.cpp ../Implementation/StdAfx.h \
+		../Implementation/AvailableAlgoParams.h \
+		../IB/Order.h \
+		../IB/TagValue.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h \
+		../IB/SoftDollarTier.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AvailableAlgoParams.o ../Implementation/AvailableAlgoParams.cpp
+
+ContractSamples.o: ../Implementation/ContractSamples.cpp ../Implementation/StdAfx.h \
+		../Implementation/ContractSamples.h \
+		../IB/Contract.h \
+		../IB/TagValue.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ContractSamples.o ../Implementation/ContractSamples.cpp
+
+OrderSamples.o: ../Implementation/OrderSamples.cpp ../Implementation/StdAfx.h \
+		../IB/Order.h \
+		../IB/TagValue.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/platformspecific.h \
+		../IB/SoftDollarTier.h \
+		../Implementation/OrderSamples.h \
+		../IB/PriceCondition.h \
+		../IB/ContractCondition.h \
+		../IB/OperatorCondition.h \
+		../IB/executioncondition.h \
+		../IB/MarginCondition.h \
+		../IB/PercentChangeCondition.h \
+		../IB/TimeCondition.h \
+		../IB/VolumeCondition.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o OrderSamples.o ../Implementation/OrderSamples.cpp
+
+ScannerSubscriptionSamples.o: ../Implementation/ScannerSubscriptionSamples.cpp ../Implementation/StdAfx.h \
+		../IB/ScannerSubscription.h \
+		../Implementation/ScannerSubscriptionSamples.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ScannerSubscriptionSamples.o ../Implementation/ScannerSubscriptionSamples.cpp
+
+StdAfx.o: ../Implementation/StdAfx.cpp ../Implementation/StdAfx.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o StdAfx.o ../Implementation/StdAfx.cpp
+
+TestCppClient.o: ../Implementation/TestCppClient.cpp ../Implementation/StdAfx.h \
+		../Implementation/TestCppClient.h \
+		../IB/EWrapper.h \
+		../IB/CommonDefs.h \
+		../IB/SoftDollarTier.h \
+		../IB/platformspecific.h \
+		../IB/DepthMktDataDescription.h \
+		../IB/FamilyCode.h \
+		../IB/NewsProvider.h \
+		../IB/TickAttrib.h \
+		../IB/HistogramEntry.h \
+		../IB/bar.h \
+		../IB/PriceIncrement.h \
+		../IB/HistoricalTick.h \
+		../IB/HistoricalTickBidAsk.h \
+		../IB/TickAttribBidAsk.h \
+		../IB/HistoricalTickLast.h \
+		../IB/TickAttribLast.h \
+		../IB/EWrapper_prototypes.h \
+		../IB/EReaderOSSignal.h \
+		../IB/EReaderSignal.h \
+		../IB/EReader.h \
+		../IB/EDecoder.h \
+		../IB/Contract.h \
+		../IB/TagValue.h \
+		../IB/EMutex.h \
+		../IB/EClientSocket.h \
+		../IB/EClient.h \
+		../IB/EClientMsgSink.h \
+		../IB/ESocket.h \
+		../IB/ETransport.h \
+		../IB/EPosixClientSocketPlatform.h \
+		../IB/Order.h \
+		../IB/OrderCondition.h \
+		../IB/IExternalizable.h \
+		../IB/OrderState.h \
+		../IB/Execution.h \
+		../Implementation/ContractSamples.h \
+		../Implementation/OrderSamples.h \
+		../IB/ScannerSubscription.h \
+		../Implementation/ScannerSubscriptionSamples.h \
+		../IB/executioncondition.h \
+		../IB/PriceCondition.h \
+		../IB/ContractCondition.h \
+		../IB/OperatorCondition.h \
+		../IB/MarginCondition.h \
+		../IB/PercentChangeCondition.h \
+		../IB/TimeCondition.h \
+		../IB/VolumeCondition.h \
+		../Implementation/AvailableAlgoParams.h \
+		../Implementation/FAMethodSamples.h \
+		../Implementation/AccountSummaryTags.h \
+		../Implementation/Utils.h \
+		../IB/CommissionReport.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QModelIndex \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../MainWindow.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qwidget.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpalette.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qrgba64.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qregion.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qline.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qimage.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpixelformat.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qfont.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qfontinfo.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qcursor.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qkeysequence.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qevent.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qurl.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qurlquery.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qfile.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtabwidget.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QTableView \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtableview.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractitemview.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qframe.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleoption.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qvalidator.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qregularexpression.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qslider.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractslider.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyle.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtabbar.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qrubberband.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QItemDelegate \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qitemdelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/QStandardItemModel \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qstandarditemmodel.h \
+		../Queue.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
+		../Interobject.h \
+		../OrderTableModel.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QAbstractTableModel \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
+		../DataTableModel.h \
+		../DataViewDelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyledItemDelegate \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleditemdelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
+		../OrderViewDelegate.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o TestCppClient.o ../Implementation/TestCppClient.cpp
+
+Utils.o: ../Implementation/Utils.cpp ../Implementation/StdAfx.h \
+		../Implementation/Utils.h \
+		../IB/platformspecific.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Utils.o ../Implementation/Utils.cpp
 
 moc_BuySellDialog.o: moc_BuySellDialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_BuySellDialog.o moc_BuySellDialog.cpp

@@ -39,12 +39,16 @@
 #include <fstream>
 #include <cstdint>
 
+#include <QModelIndex>
+#include "MainWindow.h"
+
 
 const int PING_DEADLINE 		=  2; // seconds
 const int SLEEP_BETWEEN_PINGS 	= 30; // seconds
 
 
-///////////////////////////////////////////////////////////
+extern MainWindow window;  //global var
+//MainWindow window;
 
 //**********************************************************************************************************************
 
@@ -949,6 +953,7 @@ void TestCppClient::historicalDataRequests()
     char 		queryTime[ 80 ];
 
 	std::time( &rawtime );
+
     timeinfo = std::localtime( &rawtime );
 	
 	std::strftime(							queryTime, 
@@ -978,8 +983,8 @@ void TestCppClient::historicalDataRequests()
 	std::this_thread::sleep_for(			std::chrono::seconds( 2 )								);
 	
 	/*** Canceling historical data requests ***/
-	m_pClient->cancelHistoricalData( 4001 );
-	m_pClient->cancelHistoricalData( 4002 );
+    m_pClient->cancelHistoricalData(    4001    );
+    m_pClient->cancelHistoricalData(    4002    );
 
 	m_state = ST_HISTORICALDATAREQUESTS_ACK;
 
@@ -2613,6 +2618,18 @@ void TestCppClient::tickString(				TickerId 				tickerId,
 											(int)tickType, 
 											value.c_str()									);
 
+   // QModelIndex index1 = window.m
+
+
+    /*
+            m_orderModel->index(               0,
+                                                            0,
+                                                            QModelIndex()                   );
+
+    m_orderModel->setData(                  index1,
+                                            "200",
+                                            Qt::EditRole          );
+        */
 }
 //! [tickstring]
 

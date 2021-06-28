@@ -10,6 +10,7 @@
 #include <thread>
 
 #include "TestCppClient.h"
+#include<QDebug>
 
 
 const unsigned 	MAX_ATTEMPTS  =  50;
@@ -25,7 +26,7 @@ const unsigned 	SLEEP_TIME    =  10;
 
 //int main( 	int argc, char** argv 	)
 
-void proxy()
+void* proxy( void*  arg )
 {
 
     // hack
@@ -121,7 +122,6 @@ void proxy()
  				client.setState(  	ST_REROUTECFD				);
 			}
 
-			
 			if ( trial == 3 )
 			{
 				// reqMktDepth and reqMktData
@@ -130,11 +130,12 @@ void proxy()
 
 			if ( trial == 4 )
 			{
-	
+
 				// reqMktDepth and reqMktData
  				client.setState(  	ST_TICKDATAOPERATION		);
 			}		
 
+            qInfo(      "Before processMessages()..."       );
 
 			//****************************************
 			//****************************************
@@ -153,13 +154,16 @@ void proxy()
 			break;
 		}
 
-		printf( 				"Sleeping %u seconds before next attempt\n", 
-								SLEEP_TIME 											);
+        qInfo(      "could not connect with TWS..."       );
 
-        //std::this_thread::sleep_for( std::chrono::seconds( SLEEP_TIME ) 			);
+        //printf(    "Sleeping %u seconds before next attempt\n",  SLEEP_TIME       );
+
+        std::this_thread::sleep_for(    std::chrono::seconds( SLEEP_TIME ) 			);
 	
 	}
 
     printf ( "End of C++ Socket Client Test\n" );
+
+    return nullptr;
 
 }

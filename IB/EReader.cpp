@@ -119,7 +119,7 @@ void EReader::start()
 
 #if defined(IB_POSIX)
 
-void * EReader::readToQueueThread( void* lpParam )
+void* EReader::readToQueueThread( void* lpParam )
 
 #elif defined(IB_WIN32)
 
