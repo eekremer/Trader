@@ -3,7 +3,7 @@
 
 #include "StdAfx.h"
 
-#include "TestCppClient.h"
+#include "Client.h"
 
 #include "IB/EClientSocket.h"
 #include "IB/EPosixClientSocketPlatform.h"
@@ -43,23 +43,27 @@
 #include "MainWindow.h"
 
 
-const int PING_DEADLINE 		=  2; // seconds
-const int SLEEP_BETWEEN_PINGS 	= 30; // seconds
+const int       PING_DEADLINE 		=  2; // seconds
+const int       SLEEP_BETWEEN_PINGS = 30; // seconds
+const unsigned 	MAX_ATTEMPTS        =  50  ;
+const unsigned 	SLEEP_TIME          =  10  ;
+const char*     host                =  "127.0.0.1";
+      int       port                =  7497;
+const char*     connectOptions      =  ""  ;
+      int 		clientId            =   0  ;
+      unsigned 	attempt             =   0  ;
 
-
-extern MainWindow window;  //global var
-//MainWindow window;
 
 //**********************************************************************************************************************
 
 // member funcs
 //! [ socket_init ]
-TestCppClient::TestCppClient() 		:		m_osSignal		( 	2000 										), //2-seconds timeout
-											m_pClient		(	new EClientSocket( this, &m_osSignal ) 		), 
-											m_state			( 	ST_CONNECT 									), 
-											m_sleepDeadline	( 	0											), 
-											m_orderId		(	0											), 
-											m_extraAuth		(	false										)
+Client::Client()        :		m_osSignal		( 	2000 										), //2-seconds timeout
+                                m_pClient		(	new EClientSocket( this, &m_osSignal ) 		),
+                                m_state			( 	ST_CONNECT 									),
+                                m_sleepDeadline	( 	0											),
+                                m_orderId		(	0											),
+                                m_extraAuth		(	false										)
 {
 	// nothing
 }
@@ -67,7 +71,7 @@ TestCppClient::TestCppClient() 		:		m_osSignal		( 	2000 										), //2-seconds
 //**********************************************************************************************************************
 
 //! [ socket_init ]
-TestCppClient::~TestCppClient()
+Client::~Client()
 {
 
 	// destroy the reader before the client
@@ -80,7 +84,7 @@ TestCppClient::~TestCppClient()
 
 //**********************************************************************************************************************
 
-bool TestCppClient::connect(			const char 	   *host, 
+bool Client::connect(			const char 	   *host,
 										int 			port, 
 										int 			clientId			)
 {
@@ -125,7 +129,7 @@ bool TestCppClient::connect(			const char 	   *host,
 
 //**********************************************************************************************************************
 
-void TestCppClient::disconnect() const
+void Client::disconnect() const
 {
 
 	m_pClient->eDisconnect();
@@ -136,7 +140,7 @@ void TestCppClient::disconnect() const
 
 //**********************************************************************************************************************
 
-bool TestCppClient::isConnected() const
+bool Client::isConnected() const
 {
 
 	return m_pClient->isConnected();
@@ -145,7 +149,7 @@ bool TestCppClient::isConnected() const
 
 //**********************************************************************************************************************
 
-void TestCppClient::setConnectOptions( 	const std::string&  connectOptions	)
+void Client::setConnectOptions( 	const std::string&  connectOptions	)
 {
 
 	m_pClient->setConnectOptions(	connectOptions	);
@@ -154,18 +158,133 @@ void TestCppClient::setConnectOptions( 	const std::string&  connectOptions	)
 
 //**********************************************************************************************************************
 
-void TestCppClient::processMessages()
+void* Client::setClient( void*  arg )
+{
+
+
+    int 		clientId 	= 0;
+    unsigned 	attempt 	= 0;
+
+    MainWindow *m_win = reinterpret_cast< MainWindow* >( arg );
+
+
+    qInfo(          "Start of C++ Socket Client Test %u\n",
+                    attempt                                             );
+
+    for (;;)
+    {
+
+        ++attempt;
+
+        qInfo(              "Attempt %u of %u \n",
+                            attempt,
+                            MAX_ATTEMPTS                                );
+
+        // Run time error will occur (here) if TestCppClient.exe is compiled in debug mode but TwsSocketClient.dll is compiled in Release mode
+        // TwsSocketClient.dll (in Release Mode) is copied by API installer into SysWOW64 folder within Windows directory
+
+        if( connectOptions )
+        {
+
+            m_win->m_client->setConnectOptions( connectOptions );
+
+        }
+
+        m_win->m_client->connect(               host,
+                                                port,
+                                                clientId                    );
+
+        int trial = 0;
+
+        while( m_win->m_client->isConnected() )
+        {
+
+
+            // stuff goes here !!!!
+
+            if ( trial == 1 )
+            {
+                // contractDetails
+                m_win->m_client->setState(  	ST_CONTRACTOPERATION  		);
+            }
+
+
+            if ( trial == 2 )
+            {
+                // reqMktDepth and reqMktData
+                m_win->m_client->setState(  	ST_REROUTECFD				);
+            }
+
+            if ( trial == 3 )
+            {
+                // reqMktDepth and reqMktData
+                m_win->m_client->setState(  	ST_REQMKTDEPTHEXCHANGES		);
+            }
+
+            if ( trial == 4 )
+            {
+
+                // reqMktDepth and reqMktData
+                m_win->m_client->setState(  	ST_TICKDATAOPERATION		);
+            }
+
+
+            qInfo(          "before processMessages()...\n"                 );
+
+            //****************************************
+            //****************************************
+
+            m_win->m_client->processMessages();
+
+            //****************************************
+            //****************************************
+
+            trial++;
+
+        }
+
+        if( attempt >= MAX_ATTEMPTS )
+        {
+            break;
+        }
+
+
+        qInfo(      "could not connect with TWS...\n"                         );
+        qInfo(      "going to sleep for %u seconds...\n",  SLEEP_TIME         );
+
+        std::this_thread::sleep_for(    std::chrono::seconds( SLEEP_TIME ) 			);
+
+    }
+
+    printf ( "End of C++ Socket Client Test\n" );
+
+
+    return nullptr;
+
+}
+
+//**********************************************************************************************************************
+
+void Client::processMessages()
 {
 
 
 	time_t now = time( NULL );
 
 
+
+    //pthread_mutex_lock  (    );
+
+
+
+
+    //pthread_mutex_unlock(  guiEventQueueMutex  );
+
+
 	/*****************************************************************/
-    /* Below are few quick-to-test examples on the IB API functions grouped by functionality. Uncomment the relevant methods. */
+    //  Below are few quick-to-test examples on the IB API functions
+    //  grouped by functionality. Uncomment the relevant methods.
     /*****************************************************************/
-
-
 
 	switch ( m_state ) 
 	{
@@ -523,14 +642,14 @@ void TestCppClient::processMessages()
 
 //********************************************************************************************
 
-State TestCppClient::getState()
+State Client::getState()
 {
 	return m_state;
 } 
 
 //********************************************************************************************
 
-void TestCppClient::setState(	State state	 ) 
+void Client::setState(	State state	 )
 {
 	m_state = state;
 }
@@ -539,7 +658,7 @@ void TestCppClient::setState(	State state	 )
 
 // methods
 //! [connectack]
-void TestCppClient::connectAck() 
+void Client::connectAck()
 {
 
 	if ( !m_extraAuth && m_pClient->asyncEConnect() )
@@ -550,7 +669,7 @@ void TestCppClient::connectAck()
 
 //*********************************************************************************************
 
-void TestCppClient::reqCurrentTime()
+void Client::reqCurrentTime()
 { 
 
 	printf( "Requesting Current Time\n");
@@ -566,7 +685,7 @@ void TestCppClient::reqCurrentTime()
 
 //**********************************************************************************************************************
 
-void TestCppClient::pnlOperation()
+void Client::pnlOperation()
 {
 
 	//! [reqpnl]
@@ -587,7 +706,7 @@ void TestCppClient::pnlOperation()
 
 //**********************************************************************************************************************
 
-void TestCppClient::pnlSingleOperation()
+void Client::pnlSingleOperation()
 {
 
 	//! [reqpnlsingle]
@@ -609,7 +728,7 @@ void TestCppClient::pnlSingleOperation()
 
 //**********************************************************************************************************************
 
-void TestCppClient::tickDataOperation()
+void Client::tickDataOperation()
 {
 
 
@@ -789,7 +908,7 @@ void TestCppClient::tickDataOperation()
 
 //**********************************************************************************************************************
 
-void TestCppClient::tickOptionComputationOperation()
+void Client::tickOptionComputationOperation()
 {
 
 	/*** Requesting real time market data ***/
@@ -820,7 +939,7 @@ void TestCppClient::tickOptionComputationOperation()
 
 //**********************************************************************************************************************
 
-void TestCppClient::delayedTickDataOperation()
+void Client::delayedTickDataOperation()
 {
 	/*** Requesting delayed market data ***/
 
@@ -856,7 +975,7 @@ void TestCppClient::delayedTickDataOperation()
 
 //**********************************************************************************************************************
 
-void TestCppClient::marketDepthOperations()
+void Client::marketDepthOperations()
 {
 	/*** Requesting the Deep Book ***/
 	//! [reqmarketdepth]
@@ -898,7 +1017,7 @@ void TestCppClient::marketDepthOperations()
 
 //**********************************************************************************************************************
 
-void TestCppClient::realTimeBars()
+void Client::realTimeBars()
 {
 
 	/*** Requesting real time bars ***/
@@ -925,7 +1044,7 @@ void TestCppClient::realTimeBars()
 
 //**********************************************************************************************************************
 
-void TestCppClient::marketDataType()
+void Client::marketDataType()
 {
 
 	//! [reqmarketdatatype]
@@ -943,7 +1062,7 @@ void TestCppClient::marketDataType()
 
 //**********************************************************************************************************************
 
-void TestCppClient::historicalDataRequests()
+void Client::historicalDataRequests()
 {
 
 	/*** Requesting historical data ***/
@@ -992,7 +1111,7 @@ void TestCppClient::historicalDataRequests()
 
 //**********************************************************************************************************************
 
-void TestCppClient::optionsOperations()
+void Client::optionsOperations()
 {
 
 	//! [reqsecdefoptparams]
@@ -1041,7 +1160,7 @@ void TestCppClient::optionsOperations()
 
 //**********************************************************************************************************************
 
-void TestCppClient::contractOperations()
+void Client::contractOperations()
 {
 
 
@@ -1113,7 +1232,7 @@ void TestCppClient::contractOperations()
 
 //**********************************************************************************************************************
 
-void TestCppClient::marketScanners()
+void Client::marketScanners()
 {
 
 	/*** Requesting all available parameters which can be used to build a scanner request ***/
@@ -1175,7 +1294,7 @@ void TestCppClient::marketScanners()
 
 //**********************************************************************************************************************
 
-void TestCppClient::fundamentals()
+void Client::fundamentals()
 {
 
 	/*** Requesting Fundamentals ***/
@@ -1199,7 +1318,7 @@ void TestCppClient::fundamentals()
 
 //**********************************************************************************************************************
 
-void TestCppClient::bulletins()
+void Client::bulletins()
 {
 
 	/*** Requesting Interactive Broker's news bulletins */
@@ -1220,7 +1339,7 @@ void TestCppClient::bulletins()
 
 //**********************************************************************************************************************
 
-void TestCppClient::accountOperations()
+void Client::accountOperations()
 {
 
 	/*** Requesting managed accounts***/
@@ -1319,7 +1438,7 @@ void TestCppClient::accountOperations()
 
 //**********************************************************************************************************************
 
-void TestCppClient::orderOperations()
+void Client::orderOperations()
 {
 
 	/*** Requesting the next valid id ***/
@@ -1411,7 +1530,7 @@ void TestCppClient::orderOperations()
 //********************************************************************************************************************************
 
 //oca: One Cancels All
-void TestCppClient::ocaSamples()
+void Client::ocaSamples()
 {
 
 	//OCA ORDER
@@ -1442,7 +1561,7 @@ void TestCppClient::ocaSamples()
 
 //********************************************************************************************************************************
 
-void TestCppClient::conditionSamples()
+void Client::conditionSamples()
 {
 
 	//! [order_conditioning_activate]
@@ -1518,7 +1637,7 @@ void TestCppClient::conditionSamples()
 
 }
 
-void TestCppClient::bracketSample()
+void Client::bracketSample()
 {
 
 	Order 	parent;
@@ -1555,7 +1674,7 @@ void TestCppClient::bracketSample()
 
 //**********************************************************************************************************************
 
-void TestCppClient::hedgeSample()
+void Client::hedgeSample()
 {
 
 	//F Hedge order
@@ -1589,7 +1708,7 @@ void TestCppClient::hedgeSample()
 
 //**********************************************************************************************************************
 
-void TestCppClient::testAlgoSamples()
+void Client::testAlgoSamples()
 {
 
 	//! [algo_base_order]
@@ -1812,7 +1931,7 @@ void TestCppClient::testAlgoSamples()
 
 //**********************************************************************************************************************
 
-void TestCppClient::financialAdvisorOrderSamples()
+void Client::financialAdvisorOrderSamples()
 {
 
 	//! [faorderoneaccount]
@@ -1865,7 +1984,7 @@ void TestCppClient::financialAdvisorOrderSamples()
 
 //**********************************************************************************************************************
 
-void TestCppClient::financialAdvisorOperations()
+void Client::financialAdvisorOperations()
 {
 	/*** Requesting FA information ***/
 	//! [requestfaaliases]
@@ -1907,7 +2026,7 @@ void TestCppClient::financialAdvisorOperations()
 
 //**********************************************************************************************************************
 
-void TestCppClient::testDisplayGroups()
+void Client::testDisplayGroups()
 {
 
 	//! [querydisplaygroups]
@@ -1938,7 +2057,7 @@ void TestCppClient::testDisplayGroups()
 
 //**********************************************************************************************************************
 
-void TestCppClient::miscelaneous()
+void Client::miscelaneous()
 {
 
 	/*** Request TWS' current time ***/
@@ -1953,7 +2072,7 @@ void TestCppClient::miscelaneous()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqFamilyCodes()
+void Client::reqFamilyCodes()
 {
 
 	/*** Request TWS' family codes ***/
@@ -1967,7 +2086,7 @@ void TestCppClient::reqFamilyCodes()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqMatchingSymbols()
+void Client::reqMatchingSymbols()
 {
 	/*** Request TWS' mathing symbols ***/
 	//! [reqmatchingsymbols]
@@ -1980,7 +2099,7 @@ void TestCppClient::reqMatchingSymbols()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqMktDepthExchanges()
+void Client::reqMktDepthExchanges()
 {
 
 	/*** Request TWS' market depth exchanges ***/
@@ -1994,7 +2113,7 @@ void TestCppClient::reqMktDepthExchanges()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqNewsTicks()
+void Client::reqNewsTicks()
 {
 
 	//! [reqmktdata_ticknews]
@@ -2018,7 +2137,7 @@ void TestCppClient::reqNewsTicks()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqSmartComponents()
+void Client::reqSmartComponents()
 {
 
 	static bool bFirstRun = true;
@@ -2057,7 +2176,7 @@ void TestCppClient::reqSmartComponents()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqNewsProviders()
+void Client::reqNewsProviders()
 {
 
 	/*** Request TWS' news providers ***/
@@ -2071,7 +2190,7 @@ void TestCppClient::reqNewsProviders()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqNewsArticle()
+void Client::reqNewsArticle()
 {
 
 	/*** Request TWS' news article ***/
@@ -2091,7 +2210,7 @@ void TestCppClient::reqNewsArticle()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqHistoricalNews()
+void Client::reqHistoricalNews()
 {
 
 	//! [reqHistoricalNews]
@@ -2116,7 +2235,7 @@ void TestCppClient::reqHistoricalNews()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqHeadTimestamp() 
+void Client::reqHeadTimestamp()
 {
 
 	//! [reqHeadTimeStamp]
@@ -2139,7 +2258,7 @@ void TestCppClient::reqHeadTimestamp()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqHistogramData() 
+void Client::reqHistogramData()
 {
 
 	//! [reqHistogramData]
@@ -2161,7 +2280,7 @@ void TestCppClient::reqHistogramData()
 
 //**********************************************************************************************************************
 
-void TestCppClient::rerouteCFDOperations()
+void Client::rerouteCFDOperations()
 {
 
     //! [reqmktdatacfd]
@@ -2225,7 +2344,7 @@ void TestCppClient::rerouteCFDOperations()
 
 //**********************************************************************************************************************
 
-void TestCppClient::marketRuleOperations()
+void Client::marketRuleOperations()
 {
 
 	m_pClient->reqContractDetails(			17001, 
@@ -2248,7 +2367,7 @@ void TestCppClient::marketRuleOperations()
 
 //**********************************************************************************************************************
 
-void TestCppClient::continuousFuturesOperations()
+void Client::continuousFuturesOperations()
 {
 
 	m_pClient->reqContractDetails(			18001, 
@@ -2290,7 +2409,7 @@ void TestCppClient::continuousFuturesOperations()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqHistoricalTicks() 
+void Client::reqHistoricalTicks()
 {
 
 	//! [reqhistoricalticks]
@@ -2331,7 +2450,7 @@ void TestCppClient::reqHistoricalTicks()
 
 //**********************************************************************************************************************
 
-void TestCppClient::reqTickByTickData() 
+void Client::reqTickByTickData()
 {
 
     /*** Requesting tick-by-tick data (only refresh) ***/
@@ -2409,7 +2528,7 @@ void TestCppClient::reqTickByTickData()
 
 //**********************************************************************************************************************
 
-void TestCppClient::whatIfSamples()
+void Client::whatIfSamples()
 {
 
     /*** Placing waht-if order ***/
@@ -2426,7 +2545,7 @@ void TestCppClient::whatIfSamples()
 //**********************************************************************************************************************
 
 //! [nextvalidid]
-void TestCppClient::nextValidId(  OrderId   orderId  )
+void Client::nextValidId(  OrderId   orderId  )
 {
 
 	printf(									"Next Valid Id: %ld\n", 
@@ -2482,7 +2601,7 @@ void TestCppClient::nextValidId(  OrderId   orderId  )
 
 //**********************************************************************************************************************
 
-void TestCppClient::currentTime( long time )
+void Client::currentTime( long time )
 {
 
 	if ( m_state == ST_PING_ACK ) 
@@ -2508,7 +2627,7 @@ void TestCppClient::currentTime( long time )
 //**********************************************************************************************************************
 
 //! [error]
-void TestCppClient::error(					int 					id, 
+void Client::error(					int 					id,
 											int 					errorCode, 
 											const std::string& 		errorString				)
 {
@@ -2524,7 +2643,7 @@ void TestCppClient::error(					int 					id,
 //**********************************************************************************************************************
 
 //! [tickprice]
-void TestCppClient::tickPrice( 				TickerId 			tickerId, 
+void Client::tickPrice( 				TickerId 			tickerId,
 											TickType 			field, 
 											double 				price, 
 									  const TickAttrib& 		attribs						) 
@@ -2544,7 +2663,7 @@ void TestCppClient::tickPrice( 				TickerId 			tickerId,
 //**********************************************************************************************************************
 
 //! [ticksize]
-void TestCppClient::tickSize( 				TickerId 	tickerId, 
+void Client::tickSize( 				TickerId 	tickerId,
 											TickType 	field, 
 											int 		size				) 
 {
@@ -2560,7 +2679,7 @@ void TestCppClient::tickSize( 				TickerId 	tickerId,
 //**********************************************************************************************************************
 
 //! [tickoptioncomputation]
-void TestCppClient::tickOptionComputation( 			TickerId 	tickerId, 
+void Client::tickOptionComputation( 			TickerId 	tickerId,
 													TickType 	tickType, 
 													int 		tickAttrib, 
 													double 		impliedVol, 
@@ -2592,7 +2711,7 @@ void TestCppClient::tickOptionComputation( 			TickerId 	tickerId,
 //**********************************************************************************************************************
 
 //! [tickgeneric]
-void TestCppClient::tickGeneric(			TickerId 	tickerId, 
+void Client::tickGeneric(			TickerId 	tickerId,
 											TickType 	tickType, 
 											double 		value				) 
 {
@@ -2608,7 +2727,7 @@ void TestCppClient::tickGeneric(			TickerId 	tickerId,
 //**********************************************************************************************************************
 
 //! [tickstring]
-void TestCppClient::tickString(				TickerId 				tickerId, 
+void Client::tickString(				TickerId 				tickerId,
 											TickType 				tickType, 
 											const std::string& 		value					) 
 {
@@ -2635,7 +2754,7 @@ void TestCppClient::tickString(				TickerId 				tickerId,
 
 //**********************************************************************************************************************
 
-void TestCppClient::tickEFP(				TickerId 				tickerId, 
+void Client::tickEFP(				TickerId 				tickerId,
 											TickType 				tickType, 
 											double 					basisPoints, 
 											const std::string& 		formattedBasisPoints,
@@ -2662,7 +2781,7 @@ void TestCppClient::tickEFP(				TickerId 				tickerId,
 //**********************************************************************************************************************
 
 //! [orderstatus]
-void TestCppClient::orderStatus(			OrderId 				orderId, 
+void Client::orderStatus(			OrderId 				orderId,
 											const std::string& 		status, 
 											double 					filled,
 											double 					remaining, 
@@ -2693,7 +2812,7 @@ void TestCppClient::orderStatus(			OrderId 				orderId,
 //**********************************************************************************************************************
 
 //! [openorder]
-void TestCppClient::openOrder( 				OrderId orderId, 
+void Client::openOrder( 				OrderId orderId,
 											const Contract& contract, 
 											const Order& order, 
 											const OrderState& orderState					) 
@@ -2722,7 +2841,7 @@ void TestCppClient::openOrder( 				OrderId orderId,
 //**********************************************************************************************************************
 
 //! [openorderend]
-void TestCppClient::openOrderEnd() 
+void Client::openOrderEnd()
 {
 
 	printf( 								"OpenOrderEnd\n"								);
@@ -2732,15 +2851,15 @@ void TestCppClient::openOrderEnd()
 
 //**********************************************************************************************************************
 
-void TestCppClient::winError( 				const std::string& 		str, 
-											int 					lastError				) 
+void Client::winError(                const std::string& 		str,
+                                            int 			    lastError                   )
 {
 	// nothing
 }
 
 //**********************************************************************************************************************
 
-void TestCppClient::connectionClosed() 
+void Client::connectionClosed()
 {
 	printf( "Connection Closed\n");
 }
@@ -2748,7 +2867,7 @@ void TestCppClient::connectionClosed()
 //**********************************************************************************************************************
 
 //! [updateaccountvalue]
-void TestCppClient::updateAccountValue(		const std::string& 		key, 
+void Client::updateAccountValue(		const std::string& 		key,
 											const std::string& 		val,
                                        		const std::string& 		currency, 
 											const std::string& 		accountName				) 
@@ -2766,7 +2885,7 @@ void TestCppClient::updateAccountValue(		const std::string& 		key,
 //**********************************************************************************************************************
 
 //! [updateportfolio]
-void TestCppClient::updatePortfolio(		const Contract& 	contract, 
+void Client::updatePortfolio(		const Contract& 	contract,
 											double 				position,
                                     		double 				marketPrice, 
 											double 				marketValue, 
@@ -2794,7 +2913,7 @@ void TestCppClient::updatePortfolio(		const Contract& 	contract,
 //**********************************************************************************************************************
 
 //! [updateaccounttime]
-void TestCppClient::updateAccountTime(		const std::string& timeStamp		) 
+void Client::updateAccountTime(		const std::string& timeStamp		)
 {
 
 	printf( 								"UpdateAccountTime. Time: %s\n", 
@@ -2806,7 +2925,7 @@ void TestCppClient::updateAccountTime(		const std::string& timeStamp		)
 //**********************************************************************************************************************
 
 //! [accountdownloadend]
-void TestCppClient::accountDownloadEnd(		const std::string& accountName		) 
+void Client::accountDownloadEnd(		const std::string& accountName		)
 {
 
 	printf( 								"Account download finished: %s\n", 
@@ -2818,7 +2937,7 @@ void TestCppClient::accountDownloadEnd(		const std::string& accountName		)
 //**********************************************************************************************************************
 
 //! [contractdetails]
-void TestCppClient::contractDetails( 		int 						reqId, 
+void Client::contractDetails( 		int 						reqId,
 											const ContractDetails& 		contractDetails			) 
 {
 
@@ -2838,7 +2957,7 @@ void TestCppClient::contractDetails( 		int 						reqId,
 //**********************************************************************************************************************
 
 //! [bondcontractdetails]
-void TestCppClient::bondContractDetails( 	int 						reqId, 
+void Client::bondContractDetails( 	int 						reqId,
 											const ContractDetails& 		contractDetails			) 
 {
 
@@ -2855,7 +2974,7 @@ void TestCppClient::bondContractDetails( 	int 						reqId,
 
 //**********************************************************************************************************************
 
-void TestCppClient::printContractMsg(		const Contract& 	contract	) 
+void Client::printContractMsg(		const Contract& 	contract	)
 {
 	printf(				"\tConId: %ld\n"			, contract.conId);
 	printf(				"\tSymbol: %s\n"			, contract.symbol.c_str()						);
@@ -2873,7 +2992,7 @@ void TestCppClient::printContractMsg(		const Contract& 	contract	)
 
 //**********************************************************************************************************************
 
-void TestCppClient::printContractDetailsMsg(	const ContractDetails&  contractDetails		) 
+void Client::printContractDetailsMsg(	const ContractDetails&  contractDetails		)
 {
 
 	printf(				"\tMarketName: %s\n"		, 	contractDetails.marketName.c_str()			);
@@ -2907,7 +3026,7 @@ void TestCppClient::printContractDetailsMsg(	const ContractDetails&  contractDet
 
 //**********************************************************************************************************************
 
-void TestCppClient::printContractDetailsSecIdList(	const TagValueListSPtr  &secIdList	) 
+void Client::printContractDetailsSecIdList(	const TagValueListSPtr  &secIdList	)
 {
 
 	const int secIdListCount = secIdList.get() ? secIdList->size() : 0;
@@ -2936,7 +3055,7 @@ void TestCppClient::printContractDetailsSecIdList(	const TagValueListSPtr  &secI
 
 //**********************************************************************************************************************
 
-void TestCppClient::printBondContractDetailsMsg(	const ContractDetails& 	contractDetails		) 
+void Client::printBondContractDetailsMsg(	const ContractDetails& 	contractDetails		)
 {
 
 	printf(				"\tSymbol: %s\n"			, 	contractDetails.contract.symbol.c_str()			);
@@ -2980,7 +3099,7 @@ void TestCppClient::printBondContractDetailsMsg(	const ContractDetails& 	contrac
 //**********************************************************************************************************************
 
 //! [contractdetailsend]
-void TestCppClient::contractDetailsEnd( int  reqId ) 
+void Client::contractDetailsEnd( int  reqId )
 {
 
 	printf( 				"ContractDetailsEnd. %d\n", 
@@ -2992,7 +3111,7 @@ void TestCppClient::contractDetailsEnd( int  reqId )
 //**********************************************************************************************************************
 
 //! [execdetails]
-void TestCppClient::execDetails( 			int 				reqId, 	
+void Client::execDetails( 			int 				reqId,
 											const Contract& 	contract, 
 											const Execution& 	execution				) 
 {
@@ -3013,7 +3132,7 @@ void TestCppClient::execDetails( 			int 				reqId,
 //**********************************************************************************************************************
 
 //! [execdetailsend]
-void TestCppClient::execDetailsEnd( int reqId) 
+void Client::execDetailsEnd( int reqId)
 {
 
 	printf( 				"ExecDetailsEnd. %d\n", 
@@ -3025,7 +3144,7 @@ void TestCppClient::execDetailsEnd( int reqId)
 //**********************************************************************************************************************
 
 //! [updatemktdepth]
-void TestCppClient::updateMktDepth(					TickerId 		id, 
+void Client::updateMktDepth(					TickerId 		id,
 													int 			position, 
 													int 			operation, 
 													int 			side,
@@ -3047,7 +3166,7 @@ void TestCppClient::updateMktDepth(					TickerId 		id,
 //**********************************************************************************************************************
 
 //! [updatemktdepthl2]
-void TestCppClient::updateMktDepthL2(				TickerId 				id, 
+void Client::updateMktDepthL2(				TickerId 				id,
 													int 					position, 
 													const std::string& 		marketMaker, 
 													int 					operation,
@@ -3072,7 +3191,7 @@ void TestCppClient::updateMktDepthL2(				TickerId 				id,
 //**********************************************************************************************************************
 
 //! [updatenewsbulletin]
-void TestCppClient::updateNewsBulletin(					int 					msgId, 
+void Client::updateNewsBulletin(					int 					msgId,
 														int 					msgType, 
 														const std::string& 		newsMessage, 
 														const std::string& 		originExch				) 
@@ -3090,7 +3209,7 @@ void TestCppClient::updateNewsBulletin(					int 					msgId,
 //**********************************************************************************************************************
 
 //! [managedaccounts]
-void TestCppClient::managedAccounts( 		const std::string& 	accountsList	) 
+void Client::managedAccounts( 		const std::string& 	accountsList	)
 {
 
 	printf( 					"Account List: %s\n", 
@@ -3102,7 +3221,7 @@ void TestCppClient::managedAccounts( 		const std::string& 	accountsList	)
 //**********************************************************************************************************************
 
 //! [receivefa]
-void TestCppClient::receiveFA(				faDataType 				pFaDataType, 
+void Client::receiveFA(				faDataType 				pFaDataType,
 											const std::string& 		cxml					) 	
 {
 
@@ -3114,7 +3233,7 @@ void TestCppClient::receiveFA(				faDataType 				pFaDataType,
 //**********************************************************************************************************************
 
 //! [historicaldata]
-void TestCppClient::historicalData(			  	  TickerId 		reqId, 
+void Client::historicalData(			  	  TickerId 		reqId,
 											const Bar& 			bar				) 
 {
 
@@ -3135,7 +3254,7 @@ void TestCppClient::historicalData(			  	  TickerId 		reqId,
 //**********************************************************************************************************************
 
 //! [historicaldataend]
-void TestCppClient::historicalDataEnd(					int 					reqId, 
+void Client::historicalDataEnd(					int 					reqId,
 														const std::string& 		startDateStr, 
 														const std::string& 		endDateStr				 			)
 {
@@ -3148,7 +3267,7 @@ void TestCppClient::historicalDataEnd(					int 					reqId,
 //**********************************************************************************************************************
 
 //! [scannerparameters]
-void TestCppClient::scannerParameters(	const std::string& xml	) 
+void Client::scannerParameters(	const std::string& xml	)
 {
 
 	printf( "ScannerParameters. %s\n", xml.c_str()	);
@@ -3159,7 +3278,7 @@ void TestCppClient::scannerParameters(	const std::string& xml	)
 //**********************************************************************************************************************
 
 //! [scannerdata]
-void TestCppClient::scannerData(			int 						reqId, 
+void Client::scannerData(			int 						reqId,
 											int 						rank, 
 											const ContractDetails& 		contractDetails,
                                 			const std::string& 			distance, 
@@ -3185,7 +3304,7 @@ void TestCppClient::scannerData(			int 						reqId,
 //**********************************************************************************************************************
 
 //! [scannerdataend]
-void TestCppClient::scannerDataEnd(		int  reqId	) 
+void Client::scannerDataEnd(		int  reqId	)
 {
 
 	printf( 					"ScannerDataEnd. %d\n", 
@@ -3197,7 +3316,7 @@ void TestCppClient::scannerDataEnd(		int  reqId	)
 //**********************************************************************************************************************
 
 //! [realtimebar]
-void TestCppClient::realtimeBar(			TickerId 		reqId, 
+void Client::realtimeBar(			TickerId 		reqId,
 											long 			time, 
 											double 			open, 
 											double 			high, 
@@ -3225,7 +3344,7 @@ void TestCppClient::realtimeBar(			TickerId 		reqId,
 //**********************************************************************************************************************
 
 //! [fundamentaldata]
-void TestCppClient::fundamentalData(				TickerId 				reqId, 
+void Client::fundamentalData(				TickerId 				reqId,
 													const std::string& 		data			) 
 {
 
@@ -3238,8 +3357,8 @@ void TestCppClient::fundamentalData(				TickerId 				reqId,
 
 //**********************************************************************************************************************
 
-void TestCppClient::deltaNeutralValidation(			int 							reqId, 
-													const DeltaNeutralContract& 	deltaNeutralContract		) 
+void Client::deltaNeutralValidation(			int 				    reqId,
+                                          const DeltaNeutralContract& 	deltaNeutralContract		)
 {
 
 	printf( 					"DeltaNeutralValidation. %d, ConId: %ld, Delta: %g, Price: %g\n", 
@@ -3253,7 +3372,7 @@ void TestCppClient::deltaNeutralValidation(			int 							reqId,
 //**********************************************************************************************************************
 
 //! [ticksnapshotend]
-void TestCppClient::tickSnapshotEnd(  int  reqId  ) 
+void Client::tickSnapshotEnd(  int  reqId  )
 {
 
 	printf( 					"TickSnapshotEnd: %d\n", 
@@ -3263,7 +3382,7 @@ void TestCppClient::tickSnapshotEnd(  int  reqId  )
 //! [ticksnapshotend]
 
 //! [marketdatatype]
-void TestCppClient::marketDataType(				TickerId 	reqId, 
+void Client::marketDataType(				TickerId 	reqId,
 												int 		marketDataType				) 
 {
 
@@ -3277,7 +3396,7 @@ void TestCppClient::marketDataType(				TickerId 	reqId,
 //**********************************************************************************************************************
 
 //! [commissionreport]
-void TestCppClient::commissionReport(  const CommissionReport&  commissionReport  ) 
+void Client::commissionReport(  const CommissionReport&  commissionReport  )
 {
 
 	printf( 					"CommissionReport. %s - %g %s RPNL %g \n", 
@@ -3292,7 +3411,7 @@ void TestCppClient::commissionReport(  const CommissionReport&  commissionReport
 //**********************************************************************************************************************
 
 //! [position]
-void TestCppClient::position( 	const std::string& 		account, 
+void Client::position( 	const std::string& 		account,
 								const Contract& 		contract, 
 								double 					position, 
 								double 					avgCost				) 
@@ -3312,7 +3431,7 @@ void TestCppClient::position( 	const std::string& 		account,
 //**********************************************************************************************************************
 
 //! [positionend]
-void TestCppClient::positionEnd() 
+void Client::positionEnd()
 {
 
 	printf( 					"PositionEnd\n"								);
@@ -3323,7 +3442,7 @@ void TestCppClient::positionEnd()
 //**********************************************************************************************************************
 
 //! [accountsummary]
-void TestCppClient::accountSummary( 			int 					reqId, 
+void Client::accountSummary( 			int 					reqId,
 												const std::string& 		account, 
 												const std::string& 		tag, 
 												const std::string& 		value, 
@@ -3343,7 +3462,7 @@ void TestCppClient::accountSummary( 			int 					reqId,
 //**********************************************************************************************************************
 
 //! [accountsummaryend]
-void TestCppClient::accountSummaryEnd(  int  reqId  ) 
+void Client::accountSummaryEnd(  int  reqId  )
 {
 
 	printf( 				"AccountSummaryEnd. Req Id: %d\n", 
@@ -3354,7 +3473,7 @@ void TestCppClient::accountSummaryEnd(  int  reqId  )
 
 //**********************************************************************************************************************
 
-void TestCppClient::verifyMessageAPI(  const std::string&  apiData	) 
+void Client::verifyMessageAPI(  const std::string&  apiData	)
 {
 
 	printf(					"verifyMessageAPI: %s\b", 
@@ -3364,7 +3483,7 @@ void TestCppClient::verifyMessageAPI(  const std::string&  apiData	)
 
 //**********************************************************************************************************************
 
-void TestCppClient::verifyCompleted( 			bool 					isSuccessful, 
+void Client::verifyCompleted( 			bool 					isSuccessful,
 												const std::string& 		errorText				) 
 {
 
@@ -3376,7 +3495,7 @@ void TestCppClient::verifyCompleted( 			bool 					isSuccessful,
 
 //**********************************************************************************************************************
 
-void TestCppClient::verifyAndAuthMessageAPI( 		const std::string& 	 apiDatai, 
+void Client::verifyAndAuthMessageAPI( 		const std::string& 	 apiDatai,
 													const std::string& 	 xyzChallenge			) 
 {
 
@@ -3388,8 +3507,8 @@ void TestCppClient::verifyAndAuthMessageAPI( 		const std::string& 	 apiDatai,
 
 //**********************************************************************************************************************
 
-void TestCppClient::verifyAndAuthCompleted( 		bool 					isSuccessful, 
-													const std::string& 		errorText				) 
+void Client::verifyAndAuthCompleted( 		bool 			    isSuccessful,
+                                      const std::string& 		errorText				)
 {
 
 	printf(					"verifyAndAuthCompleted. IsSuccessful: %d - Error: %s\n", 
@@ -3404,7 +3523,7 @@ void TestCppClient::verifyAndAuthCompleted( 		bool 					isSuccessful,
 //**********************************************************************************************************************
 
 //! [displaygrouplist]
-void TestCppClient::displayGroupList( 		int 					reqId, 
+void Client::displayGroupList( 		int 					reqId,
 											const std::string& 		groups			) 
 {
 
@@ -3418,7 +3537,7 @@ void TestCppClient::displayGroupList( 		int 					reqId,
 //**********************************************************************************************************************
 
 //! [displaygroupupdated]
-void TestCppClient::displayGroupUpdated( 	int 					reqId, 
+void Client::displayGroupUpdated( 	int 					reqId,
 											const std::string& 		contractInfo		) 
 {
 
@@ -3430,7 +3549,7 @@ void TestCppClient::displayGroupUpdated( 	int 					reqId,
 //**********************************************************************************************************************
 
 //! [positionmulti]
-void TestCppClient::positionMulti( 				int 					reqId, 
+void Client::positionMulti( 				int 					reqId,
 												const std::string& 		account,
 												const std::string& 		modelCode, 
 												const Contract& 		contract, 
@@ -3454,7 +3573,7 @@ void TestCppClient::positionMulti( 				int 					reqId,
 //**********************************************************************************************************************
 
 //! [positionmultiend]
-void TestCppClient::positionMultiEnd(  int reqId ) 
+void Client::positionMultiEnd(  int  reqId  )
 {
 
 	printf(						"Position Multi End. Request: %d\n", 
@@ -3466,12 +3585,12 @@ void TestCppClient::positionMultiEnd(  int reqId )
 //**********************************************************************************************************************
 
 //! [accountupdatemulti]
-void TestCppClient::accountUpdateMulti( 				int 					reqId, 
-														const std::string& 		account, 
-														const std::string& 		modelCode, 
-														const std::string& 		key, 
-														const std::string& 		value, 
-														const std::string& 		currency				) 
+void Client::accountUpdateMulti( 			  int 			    reqId,
+                                        const std::string& 		account,
+                                        const std::string& 		modelCode,
+                                        const std::string& 		key,
+                                        const std::string& 		value,
+                                        const std::string& 		currency				)
 {
 
 	printf(					"AccountUpdate Multi. Request: %d, Account: %s, ModelCode: %s, Key, %s, Value: %s, Currency: %s\n", 
@@ -3488,7 +3607,7 @@ void TestCppClient::accountUpdateMulti( 				int 					reqId,
 //**********************************************************************************************************************
 
 //! [accountupdatemultiend]
-void TestCppClient::accountUpdateMultiEnd(  int  reqId  ) 
+void Client::accountUpdateMultiEnd(  int  reqId  )
 {
 
 	printf(					"Account Update Multi End. Request: %d\n", 
@@ -3500,7 +3619,7 @@ void TestCppClient::accountUpdateMultiEnd(  int  reqId  )
 //**********************************************************************************************************************
 
 //! [securityDefinitionOptionParameter]
-void TestCppClient::securityDefinitionOptionalParameter(					int 							reqId, 
+void Client::securityDefinitionOptionalParameter(					int 							reqId,
 																			const std::string& 				exchange, 
 																			int 							underlyingConId, 
 																			const std::string& 				tradingClass,
@@ -3520,7 +3639,7 @@ void TestCppClient::securityDefinitionOptionalParameter(					int 							reqId,
 //**********************************************************************************************************************
 
 //! [securityDefinitionOptionParameterEnd]
-void TestCppClient::securityDefinitionOptionalParameterEnd(  int  reqId ) 
+void Client::securityDefinitionOptionalParameterEnd(  int  reqId )
 {
 
 	printf(					"Security Definition Optional Parameter End. Request: %d\n", 
@@ -3532,7 +3651,7 @@ void TestCppClient::securityDefinitionOptionalParameterEnd(  int  reqId )
 //**********************************************************************************************************************
 
 //! [softDollarTiers]
-void TestCppClient::softDollarTiers(			int 									reqId, 
+void Client::softDollarTiers(			int 									reqId,
 												const std::vector< SoftDollarTier > 	&tiers				) 
 {
 
@@ -3551,7 +3670,7 @@ void TestCppClient::softDollarTiers(			int 									reqId,
 //**********************************************************************************************************************
 
 //! [familyCodes]
-void TestCppClient::familyCodes( const std::vector< FamilyCode > &familyCodes ) 
+void Client::familyCodes( const std::vector< FamilyCode > &familyCodes )
 {
 
 	printf(					"Family codes (%lu):\n", 
@@ -3573,7 +3692,7 @@ void TestCppClient::familyCodes( const std::vector< FamilyCode > &familyCodes )
 //**********************************************************************************************************************
 
 //! [symbolSamples]
-void TestCppClient::symbolSamples(				int 										reqId, 
+void Client::symbolSamples(				int 										reqId,
 												const std::vector< ContractDescription > 	&contractDescriptions			) 
 {
 
@@ -3616,7 +3735,7 @@ void TestCppClient::symbolSamples(				int 										reqId,
 //**********************************************************************************************************************
 
 //! [mktDepthExchanges]
-void TestCppClient::mktDepthExchanges(	const std::vector< DepthMktDataDescription > 	&depthMktDataDescriptions	) 
+void Client::mktDepthExchanges(	const std::vector< DepthMktDataDescription > 	&depthMktDataDescriptions	)
 {
 
 	printf(					"Mkt Depth Exchanges (%lu):\n", 
@@ -3640,7 +3759,7 @@ void TestCppClient::mktDepthExchanges(	const std::vector< DepthMktDataDescriptio
 //**********************************************************************************************************************
 
 //! [tickNews]
-void TestCppClient::tickNews(				int 					tickerId, 
+void Client::tickNews(				int 					tickerId,
 											time_t 					timeStamp, 
 											const std::string& 		providerCode, 
 											const std::string& 		articleId, 
@@ -3662,7 +3781,7 @@ void TestCppClient::tickNews(				int 					tickerId,
 //**********************************************************************************************************************
 
 //! [smartcomponents]]
-void TestCppClient::smartComponents(			int 							reqId, 
+void Client::smartComponents(			int 							reqId,
 												const SmartComponentsMap& 		theMap				) 
 {
 
@@ -3685,7 +3804,7 @@ void TestCppClient::smartComponents(			int 							reqId,
 //**********************************************************************************************************************
 
 //! [tickReqParams]
-void TestCppClient::tickReqParams(					int 					tickerId, 
+void Client::tickReqParams(					int 					tickerId,
 													double 					minTick, 
 													const std::string& 		bboExchange, 
 													int 					snapshotPermissions					) 
@@ -3705,7 +3824,7 @@ void TestCppClient::tickReqParams(					int 					tickerId,
 //**********************************************************************************************************************
 
 //! [newsProviders]
-void TestCppClient::newsProviders( const std::vector< NewsProvider >  &newsProviders ) 
+void Client::newsProviders( const std::vector< NewsProvider >  &newsProviders )
 {
 
 	printf(					"News providers (%lu):\n", 
@@ -3727,7 +3846,7 @@ void TestCppClient::newsProviders( const std::vector< NewsProvider >  &newsProvi
 //**********************************************************************************************************************
 
 //! [newsArticle]
-void TestCppClient::newsArticle(				int 					requestId, 
+void Client::newsArticle(				int 					requestId,
 												int 					articleType, 
 												const std::string& 		articleText					) 
 {
@@ -3782,7 +3901,7 @@ void TestCppClient::newsArticle(				int 					requestId,
 //**********************************************************************************************************************
 
 //! [historicalNews]
-void TestCppClient::historicalNews(				int 					requestId, 
+void Client::historicalNews(				int 					requestId,
 												const std::string& 		time, 
 												const std::string& 		providerCode, 
 												const std::string& 		articleId, 
@@ -3802,7 +3921,7 @@ void TestCppClient::historicalNews(				int 					requestId,
 //**********************************************************************************************************************
 
 //! [historicalNewsEnd]
-void TestCppClient::historicalNewsEnd(				int 	requestId, 
+void Client::historicalNewsEnd(				int 	requestId,
 													bool 	hasMore					) 
 {
 
@@ -3816,7 +3935,7 @@ void TestCppClient::historicalNewsEnd(				int 	requestId,
 //**********************************************************************************************************************
 
 //! [headTimestamp]
-void TestCppClient::headTimestamp(				int 					reqId, 
+void Client::headTimestamp(				int 					reqId,
 												const std::string& 		headTimestamp				) 
 {
 
@@ -3830,7 +3949,7 @@ void TestCppClient::headTimestamp(				int 					reqId,
 //**********************************************************************************************************************
 
 //! [histogramData]
-void TestCppClient::histogramData(			int 							reqId, 
+void Client::histogramData(			int 							reqId,
 											const HistogramDataVector& 		data			) 
 {
 
@@ -3851,7 +3970,7 @@ void TestCppClient::histogramData(			int 							reqId,
 //**********************************************************************************************************************
 
 //! [historicalDataUpdate]
-void TestCppClient::historicalDataUpdate(			TickerId 		reqId, 
+void Client::historicalDataUpdate(			TickerId 		reqId,
 													const Bar& 		bar						) 
 {
 
@@ -3872,7 +3991,7 @@ void TestCppClient::historicalDataUpdate(			TickerId 		reqId,
 //**********************************************************************************************************************
 
 //! [rerouteMktDataReq]
-void TestCppClient::rerouteMktDataReq(				int 					reqId, 
+void Client::rerouteMktDataReq(				int 					reqId,
 													int 					conid, 
 													const std::string& 		exchange			) 
 {
@@ -3888,7 +4007,7 @@ void TestCppClient::rerouteMktDataReq(				int 					reqId,
 //**********************************************************************************************************************
 
 //! [rerouteMktDepthReq]
-void TestCppClient::rerouteMktDepthReq(				int 					reqId, 
+void Client::rerouteMktDepthReq(				int 					reqId,
 													int 					conid, 
 													const std::string& 		exchange				) 
 {
@@ -3904,7 +4023,7 @@ void TestCppClient::rerouteMktDepthReq(				int 					reqId,
 //**********************************************************************************************************************
 
 //! [marketRule]
-void TestCppClient::marketRule(int marketRuleId, const std::vector<PriceIncrement> &priceIncrements) 
+void Client::marketRule(int marketRuleId, const std::vector<PriceIncrement> &priceIncrements)
 {
 
 	printf(					"Market Rule Id: %d\n", 
@@ -3925,7 +4044,7 @@ void TestCppClient::marketRule(int marketRuleId, const std::vector<PriceIncremen
 //**********************************************************************************************************************
 
 //! [pnl]
-void TestCppClient::pnl(				int 		reqId, 
+void Client::pnl(				int 		reqId,
 										double 		dailyPnL, 
 										double 		unrealizedPnL, 
 										double 		realizedPnL					) 
@@ -3943,7 +4062,7 @@ void TestCppClient::pnl(				int 		reqId,
 //**********************************************************************************************************************
 
 //! [pnlsingle]
-void TestCppClient::pnlSingle(				int 		reqId, 
+void Client::pnlSingle(				int 		reqId,
 											int 		pos, 
 											double 		dailyPnL, 
 											double 		unrealizedPnL, 
@@ -3965,7 +4084,7 @@ void TestCppClient::pnlSingle(				int 		reqId,
 //**********************************************************************************************************************
 
 //! [historicalticks]
-void TestCppClient::historicalTicks(			int 									reqId, 
+void Client::historicalTicks(			int 									reqId,
 												const std::vector<HistoricalTick>& 		ticks, 
 												bool 									done				) 
 {
@@ -3985,7 +4104,7 @@ void TestCppClient::historicalTicks(			int 									reqId,
 //**********************************************************************************************************************
 
 //! [historicalticksbidask]
-void TestCppClient::historicalTicksBidAsk(				int 										reqId, 
+void Client::historicalTicksBidAsk(				int 										reqId,
 														const std::vector<HistoricalTickBidAsk>& 	ticks, 
 														bool 										done				) 
 {
@@ -4007,7 +4126,7 @@ void TestCppClient::historicalTicksBidAsk(				int 										reqId,
 //**********************************************************************************************************************
 
 //! [historicaltickslast]
-void TestCppClient::historicalTicksLast(				int 										reqId, 
+void Client::historicalTicksLast(				int 										reqId,
 														const std::vector<HistoricalTickLast>&  	ticks, 
 														bool 										done			) 
 {
@@ -4029,7 +4148,7 @@ void TestCppClient::historicalTicksLast(				int 										reqId,
 //**********************************************************************************************************************
 
 //! [tickbytickalllast]
-void TestCppClient::tickByTickAllLast(				int 					reqId, 
+void Client::tickByTickAllLast(				int 					reqId,
 													int 					tickType, 
 													time_t 					time, 
 													double 					price, 
@@ -4056,7 +4175,7 @@ void TestCppClient::tickByTickAllLast(				int 					reqId,
 //**********************************************************************************************************************
 
 //! [tickbytickbidask]
-void TestCppClient::tickByTickBidAsk(				int 						reqId, 
+void Client::tickByTickBidAsk(				int 						reqId,
 													time_t 						time, 
 													double 						bidPrice, 
 													double 						askPrice, 
@@ -4081,7 +4200,7 @@ void TestCppClient::tickByTickBidAsk(				int 						reqId,
 //**********************************************************************************************************************
 
 //! [tickbytickmidpoint]
-void TestCppClient::tickByTickMidPoint(			int 		reqId, 
+void Client::tickByTickMidPoint(			int 		reqId,
 												time_t 		time, 
 												double 		midPoint		) 
 {
@@ -4097,7 +4216,7 @@ void TestCppClient::tickByTickMidPoint(			int 		reqId,
 //**********************************************************************************************************************
 
 //! [orderbound]
-void TestCppClient::orderBound(					long long 		orderId, 
+void Client::orderBound(					long long 		orderId,
 												int 			apiClientId, 
 												int 			apiOrderId					) 
 {
@@ -4113,7 +4232,7 @@ void TestCppClient::orderBound(					long long 		orderId,
 //**********************************************************************************************************************
 
 //! [completedorder]
-void TestCppClient::completedOrder(				const Contract& 	contract, 
+void Client::completedOrder(				const Contract& 	contract,
 												const Order& 		order, 
 												const OrderState& 	orderState				) 
 {
@@ -4143,7 +4262,7 @@ void TestCppClient::completedOrder(				const Contract& 	contract,
 //**********************************************************************************************************************
 
 //! [completedordersend]
-void TestCppClient::completedOrdersEnd() 
+void Client::completedOrdersEnd()
 {
 
 	printf( 				"CompletedOrdersEnd\n"							);
@@ -4154,7 +4273,7 @@ void TestCppClient::completedOrdersEnd()
 //**********************************************************************************************************************
 
 //! [replacefaend]
-void TestCppClient::replaceFAEnd(			int 					reqId, 
+void Client::replaceFAEnd(			int 					reqId,
 											const std::string& 		text			) 
 {
 

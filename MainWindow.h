@@ -12,6 +12,7 @@
 #include "DataTableModel.h"
 #include "DataViewDelegate.h"
 #include "OrderViewDelegate.h"
+#include "Implementation/Client.h"
 
 
 
@@ -25,6 +26,10 @@ namespace Ui
 }
 
 QT_END_NAMESPACE
+
+
+// forward declaration
+class Client;
 
 
 //***********************************************************************************
@@ -62,10 +67,9 @@ class MainWindow : public QMainWindow
 
     public:
 
-        Queue               getQueue();
+        Queue*              getQueue();
 
-        static void*        doSomeThingBigger( void  *arg );
-        static void*        exMain( void*  arg );
+        static void*        doSomeThingBigger            (  void*    arg  );
 
         void                setMainWindowOrderParams     ();
         void                setMainWindowContractParams  ();
@@ -77,22 +81,30 @@ class MainWindow : public QMainWindow
         void                setMainWindowButtonStyleSheet();
 
 
+    public:
+
+        Client              *m_client; // needs to be a ptr as it's an incomplete type
+        pthread_t           clientThread;
+        pthread_mutex_t     guiEventQueueMutex;
+
+
     private:
 
         Ui::MainWindow     *m_ui;
         OrderTableModel    *m_orderModel;
         DataTableModel     *m_dataModel;
-        Queue               m_outboundQueue;
         DataViewDelegate   *m_dataDelegate;
         OrderViewDelegate  *m_orderDelegate;
+        Queue              *m_guiEventQueue;
 
 
         void                createExMainThread();
 
         static void*        executeExMainWork( void*  lpParam );
 
+
+
 };
 
 //***********************************************************************************
-
 #endif // MAINWINDOW_H

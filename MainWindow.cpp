@@ -11,13 +11,8 @@
 #include  "BuySellDialog.h"
 #include  "DataViewDelegate.h"
 #include  "OrderViewDelegate.h"
-#include  "Implementation/Proxy.cpp"
+#include  "Implementation/Client.h"
 
-
-pthread_t        exMainThread;
-pthread_t        clientThread;
-pthread_t        tid1;
-pthread_mutex_t  mutex;
 
 
 //********************************************************************************************
@@ -82,28 +77,47 @@ MainWindow::MainWindow( QWidget  *parent )
     buyButtonClicked();
 
     //----------------------------------------------------------------
-/*
-    pthread_create(                &exMainThread,
+
+
+
+    //******************************************
+    //
+    // create EClientSocket and EReader objects
+    //
+    //******************************************
+
+    m_client = new Client();
+
+    //******************************************
+    //******************************************
+
+
+
+    //****************************************************************
+    //****************************************************************
+
+    pthread_mutex_init(            &guiEventQueueMutex,
+                                    NULL                            );
+
+    pthread_create(                &clientThread,
                                     NULL,
-                                   &exMain,
+                                   &( m_client->setClient ),
                                     this                            );
-*/
+
+    m_guiEventQueue  =  new Queue(  &guiEventQueueMutex  );
+
+    //****************************************************************
+    //****************************************************************
 
 
-    //*******************
-    // pthreads
-    //*******************
 
-    createExMainThread();
-
-    //*******************
-
+/*
 
     pthread_create(                 &tid1,
                                      NULL,
                                     &doSomeThingBigger,
                                     this                                 );
-
+*/
     // initialize random seed
     srand( time( NULL ) );
 
@@ -114,178 +128,19 @@ MainWindow::MainWindow( QWidget  *parent )
 
 MainWindow::~MainWindow()
 {
-    delete m_ui;
-}
 
-//*********************************************************************************************
-
-
-void* MainWindow::exMain( void*  arg )
-{
-
-    // hack
-    //const char* host = argc > 1 ? argv[ 1 ] : "";
-
-    // hard code
-    const char* host = "127.0.0.1";
-
-    /*
-        int  atoi(  const char   *str  )
-
-        Convert a string to an integer.
-    */
-
-    // hack
-    //int port = argc > 2 ? atoi( argv[ 2 ] ) : 0;
-
-    // hard code
-    int port = 7497;
-
-    if( port <= 0 )
-        port = 7496;  // production account ( paper account 7497 )
-
-    // hack
-    //const char* connectOptions = argc > 3 ? argv[ 3 ] : "";
-
-    // hard coding
-    const char* connectOptions = "";
-
-    int 		clientId 	= 0;
-    unsigned 	attempt 	= 0;
-
-    printf( 			"Start of C++ Socket Client Test %u\n",
-                        attempt 										);
-
-
-    for (;;)
-    {
-
-        ++attempt;
-
-        printf( 		   "Attempt %u of %u \n",
-                            attempt,
-                            MAX_ATTEMPTS 								);
-
-
-        //******************************************
-        //
-        // create EClientSocket and EReader objects
-        //
-        //******************************************
-
-        TestCppClient client;
-
-        //******************************************
-        //******************************************
-
-
-
-        // Run time error will occur (here) if TestCppClient.exe is compiled in debug mode but TwsSocketClient.dll is compiled in Release mode
-        // TwsSocketClient.dll (in Release Mode) is copied by API installer into SysWOW64 folder within Windows directory
-
-        if( connectOptions )
-        {
-
-            client.setConnectOptions( connectOptions );
-
-        }
-
-        client.connect( 		host,
-                                port,
-                                clientId 		);
-
-
-        int trial = 0;
-
-        while( client.isConnected() )
-        {
-
-
-            // stuff goes here !!!!
- /*
-            if ( trial == 1 )
-            {
-                // contractDetails
-                client.setState(  	ST_CONTRACTOPERATION  		);
-            }
-
-
-            if ( trial == 2 )
-            {
-                // reqMktDepth and reqMktData
-                client.setState(  	ST_REROUTECFD				);
-            }
- */
-/*
-            if ( trial == 3 )
-            {
-                // reqMktDepth and reqMktData
-                client.setState(  	ST_REQMKTDEPTHEXCHANGES		);
-            }
-*/
-            if ( trial == 4 )
-            {
-
-                // reqMktDepth and reqMktData
-                client.setState(  	ST_TICKDATAOPERATION		);
-            }
-
-
-            //****************************************
-            //****************************************
-
-            client.processMessages();
-
-            //****************************************
-            //****************************************
-
-            trial++;
-
-        }
-
-        if( attempt >= MAX_ATTEMPTS )
-        {
-            break;
-        }
-
-        printf( 				"Sleeping %u seconds before next attempt\n",
-                                SLEEP_TIME 											);
-
-        std::this_thread::sleep_for(    std::chrono::seconds( SLEEP_TIME ) 			);
-
-    }
-
-    printf ( "End of C++ Socket Client Test\n" );
-
-
-    return nullptr;
+    delete  m_ui;
+    delete  m_guiEventQueue;
 
 }
 
 //*********************************************************************************************
 
-void MainWindow::createExMainThread()
+Queue* MainWindow::getQueue()
 {
 
-    pthread_mutex_init(         &mutex,
-                                 NULL                         );
+    return m_guiEventQueue;
 
-    pthread_create(             &clientThread,
-                                NULL,
-                                //&executeExMainWork,   // C function
-                                &proxy,
-                                &m_outboundQueue                            );
-
-    // note: we are passing on a pointer to the queue object as an arg for the C function
-
-}
-
-
-//********************************************************************************************
-
-Queue MainWindow::getQueue()
-{
-    return m_outboundQueue;
 }
 
 //********************************************************************************************
@@ -703,7 +558,7 @@ void MainWindow::confirmBuyClicked()
 
     //******************************************
 
-    m_outboundQueue.insertMsgIntoQueue( &object );
+    m_guiEventQueue->insertMsgIntoQueue( &object );
 
     //******************************************
 
@@ -799,7 +654,7 @@ void MainWindow::symbolComboBoxTextChanged( const QString&  symbol )
     marketDataToRequest.primaryExchange =  m_ui->primaryExchangeComboBox->currentText();
 
     // insert obj into the queue
-    this->m_outboundQueue.insertMsgIntoQueue( &marketDataToRequest );
+    this->m_guiEventQueue->insertMsgIntoQueue( &marketDataToRequest );
 
     // hack
     int index = m_ui->securityTypeComboBox->currentIndex();

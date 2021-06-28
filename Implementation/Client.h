@@ -9,13 +9,15 @@
 #include "IB/EReaderOSSignal.h"
 #include "IB/EReader.h"
 
+#include "../MainWindow.h"
+
 #include <memory>
 #include <vector>
 
 
 
 class EClientSocket;
-
+class MainWindow;
 
 
 enum State 
@@ -116,15 +118,15 @@ enum State
 //******************************************************************************************
 
 //! [ ewrapperimpl ]
-class TestCppClient : public EWrapper
+class Client : public EWrapper
 {
 
 
 //! [ ewrapperimpl ]
 public:
 
-	TestCppClient();
-   ~TestCppClient();
+    Client();
+   ~Client();
 
 	void 	setConnectOptions	( 		const std::string&				);
 	void 	processMessages		(										);
@@ -194,6 +196,8 @@ public:
 	// events
     #include "IB/EWrapper_prototypes.h"
 
+    static
+    void*   setClient                       (         void*                  arg                    );
 
 private:
 
@@ -217,6 +221,9 @@ private:
 	std::unique_ptr< EReader > 		m_pReader;
     bool 							m_extraAuth;
 	std::string 					m_bboExchange;
+
+ //   static
+ //   MainWindow                      m_win;
 
 };
 

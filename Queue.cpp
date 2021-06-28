@@ -7,13 +7,14 @@
 #include "Queue.h"
 
 
-extern pthread_mutex_t mutex;
 
 
 //****************************************************************************
 
-Queue::Queue()
+Queue::Queue(  pthread_mutex_t*  a_mutex  )
 {
+
+    m_mutex = a_mutex;
 
 }
 
@@ -35,18 +36,18 @@ void Queue::insertMsgIntoQueue( InterObject* obj )
     qInfo( "at the beginning of Queue::insertMsgIntoQueue()" );
 
 
-    //************************************
+    //********************************************
     // Mutual exclusion
-    //************************************
+    //********************************************
 
-    pthread_mutex_lock( &mutex );
+    pthread_mutex_lock  (  m_mutex  );
 
         m_interThreadQueue.push_back( *obj );
 
-    pthread_mutex_unlock( &mutex );
+    pthread_mutex_unlock(  m_mutex  );
 
-    //************************************
-    //************************************
+    //********************************************
+    //********************************************
 
 
     //object2 = this->interThreadQueue.front();
@@ -80,7 +81,7 @@ void Queue::getMsgFromQueue()
     //  Mutual exclusion zone
     //**************************************
 
-    pthread_mutex_lock( &mutex );
+    pthread_mutex_lock(  m_mutex  );
 
         /*
             std::deque::front()
@@ -101,7 +102,7 @@ void Queue::getMsgFromQueue()
         m_interThreadQueue.pop_front();
 
 
-    pthread_mutex_unlock( &mutex );
+    pthread_mutex_unlock(  m_mutex  );
 
     //**************************************
     //**************************************

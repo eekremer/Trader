@@ -43,11 +43,10 @@ SOURCES += \
     Implementation/AccountSummaryTags.cpp \
     Implementation/AvailableAlgoParams.cpp \
     Implementation/ContractSamples.cpp \
-    Implementation/Proxy.cpp \
     Implementation/OrderSamples.cpp \
     Implementation/ScannerSubscriptionSamples.cpp \
     Implementation/StdAfx.cpp \
-    Implementation/TestCppClient.cpp \
+    Implementation/Client.cpp \
     Implementation/Utils.cpp
 
 
@@ -122,7 +121,7 @@ HEADERS += \
     Implementation/OrderSamples.h \
     Implementation/ScannerSubscriptionSamples.h \
     Implementation/StdAfx.h \
-    Implementation/TestCppClient.h \
+    Implementation/Client.h \
     Implementation/Utils.h
 
 

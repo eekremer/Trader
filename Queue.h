@@ -14,16 +14,18 @@ class Queue
 
     public:
 
-        Queue();
-       ~Queue( void );
+        Queue(  pthread_mutex_t*  );
+       ~Queue(  void              );
 
-        void  insertMsgIntoQueue( InterObject* );
-        void  getMsgFromQueue();
+
+        void  insertMsgIntoQueue(   InterObject*  );
+        void  getMsgFromQueue   ();
 
 
     private:
 
         std::deque< InterObject >    m_interThreadQueue;
+        pthread_mutex_t*             m_mutex;
 
 
 };

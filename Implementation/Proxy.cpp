@@ -13,8 +13,7 @@
 #include<QDebug>
 
 
-const unsigned 	MAX_ATTEMPTS  =  50;
-const unsigned 	SLEEP_TIME    =  10;
+
 
 
 /* IMPORTANT: always use your paper trading account. The code below will submit orders as part of the demonstration. */

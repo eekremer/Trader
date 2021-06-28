@@ -8,16 +8,19 @@
 #include "OrderDbManager.h"
 
 
-
 static const QString path = "example.db";  // change to any path you wish
 
 
+
+//**************************************************************************
 
 int main( int argc, char *argv[] ) //
 {
 
 
     QApplication app( argc, argv );
+
+
 
     MainWindow window;
 
@@ -48,7 +51,9 @@ int main( int argc, char *argv[] ) //
     }
     else
     {
+
         qDebug() << "Database is not open!";
+
     }
 
     //---------------------------------------
@@ -59,4 +64,4 @@ int main( int argc, char *argv[] ) //
 
 }
 
-
+//****************************************************************************
