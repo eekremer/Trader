@@ -19,7 +19,7 @@ SOURCES += \
     OrderDbManager.cpp \
     OrderTableModel.cpp \
     OrderViewDelegate.cpp \
-    Queue.cpp \
+    Implementation/Queue.cpp \
     IB/ContractCondition.cpp \
     IB/DefaultEWrapper.cpp \
     IB/EClient.cpp \
@@ -57,13 +57,13 @@ HEADERS += \
     DataDbManager.h \
     DataTableModel.h \
     DataViewDelegate.h \
-    Interobject.h \
+    Implementation/InterObject.h \
     MainWindow.h \
     Order.h \
     OrderDbManager.h \
     OrderTableModel.h \
     OrderViewDelegate.h \
-    Queue.h \
+    Implementation/Queue.h \
     IB/bar.h \
     IB/CommissionReport.h \
     IB/CommonDefs.h \

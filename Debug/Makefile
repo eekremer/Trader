@@ -62,7 +62,7 @@ SOURCES       = ../AccountTableModel.cpp \
 		../OrderDbManager.cpp \
 		../OrderTableModel.cpp \
 		../OrderViewDelegate.cpp \
-		../Queue.cpp \
+		../Implementation/Queue.cpp \
 		../IB/ContractCondition.cpp \
 		../IB/DefaultEWrapper.cpp \
 		../IB/EClient.cpp \
@@ -318,13 +318,13 @@ DIST          = ../../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../DataDbManager.h \
 		../DataTableModel.h \
 		../DataViewDelegate.h \
-		../Interobject.h \
+		../Implementation/InterObject.h \
 		../MainWindow.h \
 		../Order.h \
 		../OrderDbManager.h \
 		../OrderTableModel.h \
 		../OrderViewDelegate.h \
-		../Queue.h \
+		../Implementation/Queue.h \
 		../IB/bar.h \
 		../IB/CommissionReport.h \
 		../IB/CommonDefs.h \
@@ -393,7 +393,7 @@ DIST          = ../../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../OrderDbManager.cpp \
 		../OrderTableModel.cpp \
 		../OrderViewDelegate.cpp \
-		../Queue.cpp \
+		../Implementation/Queue.cpp \
 		../IB/ContractCondition.cpp \
 		../IB/DefaultEWrapper.cpp \
 		../IB/EClient.cpp \
@@ -805,8 +805,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../Data.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../Interobject.h ../MainWindow.h ../Order.h ../OrderDbManager.h ../OrderTableModel.h ../OrderViewDelegate.h ../Queue.h ../IB/bar.h ../IB/CommissionReport.h ../IB/CommonDefs.h ../IB/Contract.h ../IB/ContractCondition.h ../IB/DefaultEWrapper.h ../IB/DepthMktDataDescription.h ../IB/EClient.h ../IB/EClientException.h ../IB/EClientMsgSink.h ../IB/EClientSocket.h ../IB/EDecoder.h ../IB/EMessage.h ../IB/EMutex.h ../IB/EOrderDecoder.h ../IB/EPosixClientSocketPlatform.h ../IB/EReader.h ../IB/EReaderOSSignal.h ../IB/ESocket.h ../IB/ETransport.h ../IB/EWrapper.h ../IB/EWrapper_prototypes.h ../IB/Execution.h ../IB/executioncondition.h ../IB/FamilyCode.h ../IB/HistogramEntry.h ../IB/HistoricalTick.h ../IB/HistoricalTickBidAsk.h ../IB/HistoricalTickLast.h ../IB/IExternalizable.h ../IB/MarginCondition.h ../IB/NewsProvider.h ../IB/OperatorCondition.h ../IB/Order.h ../IB/OrderCondition.h ../IB/OrderState.h ../IB/PercentChangeCondition.h ../IB/platformspecific.h ../IB/PriceCondition.h ../IB/PriceIncrement.h ../IB/resource.h ../IB/ScannerSubscription.h ../IB/SoftDollarTier.h ../IB/TagValue.h ../IB/TickAttrib.h ../IB/TickAttribBidAsk.h ../IB/TickAttribLast.h ../IB/TimeCondition.h ../IB/TwsSocketClientErrors.h ../IB/VolumeCondition.h ../Implementation/AccountSummaryTags.h ../Implementation/AvailableAlgoParams.h ../Implementation/ContractSamples.h ../Implementation/FAMethodSamples.h ../Implementation/OrderSamples.h ../Implementation/ScannerSubscriptionSamples.h ../Implementation/StdAfx.h ../Implementation/Client.h ../Implementation/Utils.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../AccountTableModel.cpp ../BuySellDialog.cpp ../DataDbManager.cpp ../DataTableModel.cpp ../DataViewDelegate.cpp ../Main.cpp ../MainWindow.cpp ../OrderDbManager.cpp ../OrderTableModel.cpp ../OrderViewDelegate.cpp ../Queue.cpp ../IB/ContractCondition.cpp ../IB/DefaultEWrapper.cpp ../IB/EClient.cpp ../IB/EClientSocket.cpp ../IB/EDecoder.cpp ../IB/EMessage.cpp ../IB/EMutex.cpp ../IB/EOrderDecoder.cpp ../IB/EReader.cpp ../IB/EReaderOSSignal.cpp ../IB/ESocket.cpp ../IB/executioncondition.cpp ../IB/MarginCondition.cpp ../IB/OperatorCondition.cpp ../IB/OrderCondition.cpp ../IB/PercentChangeCondition.cpp ../IB/PriceCondition.cpp ../IB/SoftDollarTier.cpp ../IB/TimeCondition.cpp ../IB/VolumeCondition.cpp ../Implementation/AccountSummaryTags.cpp ../Implementation/AvailableAlgoParams.cpp ../Implementation/ContractSamples.cpp ../Implementation/OrderSamples.cpp ../Implementation/ScannerSubscriptionSamples.cpp ../Implementation/StdAfx.cpp ../Implementation/Client.cpp ../Implementation/Utils.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../Data.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../Implementation/InterObject.h ../MainWindow.h ../Order.h ../OrderDbManager.h ../OrderTableModel.h ../OrderViewDelegate.h ../Implementation/Queue.h ../IB/bar.h ../IB/CommissionReport.h ../IB/CommonDefs.h ../IB/Contract.h ../IB/ContractCondition.h ../IB/DefaultEWrapper.h ../IB/DepthMktDataDescription.h ../IB/EClient.h ../IB/EClientException.h ../IB/EClientMsgSink.h ../IB/EClientSocket.h ../IB/EDecoder.h ../IB/EMessage.h ../IB/EMutex.h ../IB/EOrderDecoder.h ../IB/EPosixClientSocketPlatform.h ../IB/EReader.h ../IB/EReaderOSSignal.h ../IB/ESocket.h ../IB/ETransport.h ../IB/EWrapper.h ../IB/EWrapper_prototypes.h ../IB/Execution.h ../IB/executioncondition.h ../IB/FamilyCode.h ../IB/HistogramEntry.h ../IB/HistoricalTick.h ../IB/HistoricalTickBidAsk.h ../IB/HistoricalTickLast.h ../IB/IExternalizable.h ../IB/MarginCondition.h ../IB/NewsProvider.h ../IB/OperatorCondition.h ../IB/Order.h ../IB/OrderCondition.h ../IB/OrderState.h ../IB/PercentChangeCondition.h ../IB/platformspecific.h ../IB/PriceCondition.h ../IB/PriceIncrement.h ../IB/resource.h ../IB/ScannerSubscription.h ../IB/SoftDollarTier.h ../IB/TagValue.h ../IB/TickAttrib.h ../IB/TickAttribBidAsk.h ../IB/TickAttribLast.h ../IB/TimeCondition.h ../IB/TwsSocketClientErrors.h ../IB/VolumeCondition.h ../Implementation/AccountSummaryTags.h ../Implementation/AvailableAlgoParams.h ../Implementation/ContractSamples.h ../Implementation/FAMethodSamples.h ../Implementation/OrderSamples.h ../Implementation/ScannerSubscriptionSamples.h ../Implementation/StdAfx.h ../Implementation/Client.h ../Implementation/Utils.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../AccountTableModel.cpp ../BuySellDialog.cpp ../DataDbManager.cpp ../DataTableModel.cpp ../DataViewDelegate.cpp ../Main.cpp ../MainWindow.cpp ../OrderDbManager.cpp ../OrderTableModel.cpp ../OrderViewDelegate.cpp ../Implementation/Queue.cpp ../IB/ContractCondition.cpp ../IB/DefaultEWrapper.cpp ../IB/EClient.cpp ../IB/EClientSocket.cpp ../IB/EDecoder.cpp ../IB/EMessage.cpp ../IB/EMutex.cpp ../IB/EOrderDecoder.cpp ../IB/EReader.cpp ../IB/EReaderOSSignal.cpp ../IB/ESocket.cpp ../IB/executioncondition.cpp ../IB/MarginCondition.cpp ../IB/OperatorCondition.cpp ../IB/OrderCondition.cpp ../IB/PercentChangeCondition.cpp ../IB/PriceCondition.cpp ../IB/SoftDollarTier.cpp ../IB/TimeCondition.cpp ../IB/VolumeCondition.cpp ../Implementation/AccountSummaryTags.cpp ../Implementation/AvailableAlgoParams.cpp ../Implementation/ContractSamples.cpp ../Implementation/OrderSamples.cpp ../Implementation/ScannerSubscriptionSamples.cpp ../Implementation/StdAfx.cpp ../Implementation/Client.cpp ../Implementation/Utils.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../BuySellDialog.ui ../MainWindow.ui $(DISTDIR)/
 
 
@@ -1080,10 +1080,10 @@ moc_MainWindow.cpp: ../MainWindow.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qitemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/QStandardItemModel \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qstandarditemmodel.h \
-		../Queue.h \
+		../Implementation/Queue.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Interobject.h \
+		../Implementation/InterObject.h \
 		../OrderTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QAbstractTableModel \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
@@ -1698,10 +1698,10 @@ Main.o: ../Main.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qitemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/QStandardItemModel \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qstandarditemmodel.h \
-		../Queue.h \
+		../Implementation/Queue.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Interobject.h \
+		../Implementation/InterObject.h \
 		../OrderTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QAbstractTableModel \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
@@ -1881,10 +1881,10 @@ MainWindow.o: ../MainWindow.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QTab
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qitemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/QStandardItemModel \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qstandarditemmodel.h \
-		../Queue.h \
+		../Implementation/Queue.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Interobject.h \
+		../Implementation/InterObject.h \
 		../OrderTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QAbstractTableModel \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
@@ -2080,7 +2080,7 @@ OrderTableModel.o: ../OrderTableModel.cpp ../OrderTableModel.h \
 OrderViewDelegate.o: ../OrderViewDelegate.cpp ../OrderViewDelegate.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o OrderViewDelegate.o ../OrderViewDelegate.cpp
 
-Queue.o: ../Queue.cpp ../../../Qt/5.15.2/gcc_64/include/QtCore/QTextStream \
+Queue.o: ../Implementation/Queue.cpp ../../../Qt/5.15.2/gcc_64/include/QtCore/QTextStream \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
@@ -2146,7 +2146,7 @@ Queue.o: ../Queue.cpp ../../../Qt/5.15.2/gcc_64/include/QtCore/QTextStream \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QDebug \
-		../Queue.h \
+		../Implementation/Queue.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -2191,8 +2191,8 @@ Queue.o: ../Queue.cpp ../../../Qt/5.15.2/gcc_64/include/QtCore/QTextStream \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qicon.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Interobject.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Queue.o ../Queue.cpp
+		../Implementation/InterObject.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Queue.o ../Implementation/Queue.cpp
 
 ContractCondition.o: ../IB/ContractCondition.cpp ../Implementation/StdAfx.h \
 		../IB/ContractCondition.h \
@@ -2733,10 +2733,10 @@ Client.o: ../Implementation/Client.cpp ../Implementation/StdAfx.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qitemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/QStandardItemModel \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qstandarditemmodel.h \
-		../Queue.h \
+		../Implementation/Queue.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Interobject.h \
+		../Implementation/InterObject.h \
 		../OrderTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QAbstractTableModel \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \

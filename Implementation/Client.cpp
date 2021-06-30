@@ -38,34 +38,33 @@
 #include <ctime>
 #include <fstream>
 #include <cstdint>
-
 #include <QModelIndex>
+
 #include "MainWindow.h"
 
 
 const int       PING_DEADLINE 		=  2; // seconds
 const int       SLEEP_BETWEEN_PINGS = 30; // seconds
-const unsigned 	MAX_ATTEMPTS        =  50  ;
-const unsigned 	SLEEP_TIME          =  10  ;
-const char*     host                =  "127.0.0.1";
-      int       port                =  7497;
-const char*     connectOptions      =  ""  ;
-      int 		clientId            =   0  ;
-      unsigned 	attempt             =   0  ;
+
+extern MainWindow window;
 
 
 //**********************************************************************************************************************
 
 // member funcs
 //! [ socket_init ]
-Client::Client()        :		m_osSignal		( 	2000 										), //2-seconds timeout
-                                m_pClient		(	new EClientSocket( this, &m_osSignal ) 		),
-                                m_state			( 	ST_CONNECT 									),
-                                m_sleepDeadline	( 	0											),
-                                m_orderId		(	0											),
-                                m_extraAuth		(	false										)
+Client::Client(  MainWindow  *win  )    :	m_osSignal		( 	2000 										), //2-seconds timeout
+                                            m_pClient		(	new EClientSocket( this, &m_osSignal ) 		),
+                                            m_state			( 	ST_CONNECT 									),
+                                            m_sleepDeadline	( 	0											),
+                                            m_orderId		(	0											),
+                                            m_extraAuth		(	false										),
+                                            m_window        (   win                                         )
 {
-	// nothing
+
+    pthread_mutex_init(            &m_guiEventQueueMutex,
+                                    NULL                                );
+
 }
 
 //**********************************************************************************************************************
@@ -158,113 +157,6 @@ void Client::setConnectOptions( 	const std::string&  connectOptions	)
 
 //**********************************************************************************************************************
 
-void* Client::setClient( void*  arg )
-{
-
-
-    int 		clientId 	= 0;
-    unsigned 	attempt 	= 0;
-
-    MainWindow *m_win = reinterpret_cast< MainWindow* >( arg );
-
-
-    qInfo(          "Start of C++ Socket Client Test %u\n",
-                    attempt                                             );
-
-    for (;;)
-    {
-
-        ++attempt;
-
-        qInfo(              "Attempt %u of %u \n",
-                            attempt,
-                            MAX_ATTEMPTS                                );
-
-        // Run time error will occur (here) if TestCppClient.exe is compiled in debug mode but TwsSocketClient.dll is compiled in Release mode
-        // TwsSocketClient.dll (in Release Mode) is copied by API installer into SysWOW64 folder within Windows directory
-
-        if( connectOptions )
-        {
-
-            m_win->m_client->setConnectOptions( connectOptions );
-
-        }
-
-        m_win->m_client->connect(               host,
-                                                port,
-                                                clientId                    );
-
-        int trial = 0;
-
-        while( m_win->m_client->isConnected() )
-        {
-
-
-            // stuff goes here !!!!
-
-            if ( trial == 1 )
-            {
-                // contractDetails
-                m_win->m_client->setState(  	ST_CONTRACTOPERATION  		);
-            }
-
-
-            if ( trial == 2 )
-            {
-                // reqMktDepth and reqMktData
-                m_win->m_client->setState(  	ST_REROUTECFD				);
-            }
-
-            if ( trial == 3 )
-            {
-                // reqMktDepth and reqMktData
-                m_win->m_client->setState(  	ST_REQMKTDEPTHEXCHANGES		);
-            }
-
-            if ( trial == 4 )
-            {
-
-                // reqMktDepth and reqMktData
-                m_win->m_client->setState(  	ST_TICKDATAOPERATION		);
-            }
-
-
-            qInfo(          "before processMessages()...\n"                 );
-
-            //****************************************
-            //****************************************
-
-            m_win->m_client->processMessages();
-
-            //****************************************
-            //****************************************
-
-            trial++;
-
-        }
-
-        if( attempt >= MAX_ATTEMPTS )
-        {
-            break;
-        }
-
-
-        qInfo(      "could not connect with TWS...\n"                         );
-        qInfo(      "going to sleep for %u seconds...\n",  SLEEP_TIME         );
-
-        std::this_thread::sleep_for(    std::chrono::seconds( SLEEP_TIME ) 			);
-
-    }
-
-    printf ( "End of C++ Socket Client Test\n" );
-
-
-    return nullptr;
-
-}
-
-//**********************************************************************************************************************
-
 void Client::processMessages()
 {
 
@@ -272,19 +164,17 @@ void Client::processMessages()
 	time_t now = time( NULL );
 
 
+    //********************************
+    //
+    // read messages coming from GUI
+    //
+    //********************************
 
-    //pthread_mutex_lock  (    );
+    getMsgFromQueue();
 
+    //********************************
+    //********************************
 
-
-
-    //pthread_mutex_unlock(  guiEventQueueMutex  );
-
-
-	/*****************************************************************/
-    //  Below are few quick-to-test examples on the IB API functions
-    //  grouped by functionality. Uncomment the relevant methods.
-    /*****************************************************************/
 
 	switch ( m_state ) 
 	{
@@ -642,16 +532,107 @@ void Client::processMessages()
 
 //********************************************************************************************
 
+void Client::insertMsgIntoQueue(    InterObject  *obj    )
+{
+
+    std::this_thread::sleep_for(    std::chrono::milliseconds( 20 )   );
+
+    qInfo( "at the beginning of Queue::insertMsgIntoQueue()" );
+
+
+    //********************************************
+    // Mutual exclusion
+    //********************************************
+
+    pthread_mutex_lock  (  &m_guiEventQueueMutex  );
+
+        m_guiEventQueue.push_back( *obj );
+
+    pthread_mutex_unlock(  &m_guiEventQueueMutex  );
+
+    //********************************************
+    //********************************************
+
+    qInfo( "at the end of Queue::insertMsgIntoQueue()" );
+
+}
+
+//********************************************************************************************
+
+void Client::getMsgFromQueue()
+{
+
+    InterObject  obj;
+
+    // check whether there is any element in the queue
+    if ( m_guiEventQueue.size() == 0 )
+    {
+
+        qInfo( "No element in the queue !!" );
+
+        return;
+
+    }
+
+    std::this_thread::sleep_for(    std::chrono::milliseconds( 300 )   );
+
+    //**************************************
+    //  Mutual exclusion
+    //**************************************
+
+    pthread_mutex_lock(  &m_guiEventQueueMutex  );
+
+        /*
+            std::deque::front()
+            Returns a reference to the first element in the deque
+            Calling this function on an empty container causes undefined behavior
+        */
+
+        obj = m_guiEventQueue.front();
+
+        /*
+            std::deque::pop_front()
+            Removes the first element in the deque container, effectively reducing its size by one.
+            This destroys the removed element.
+        */
+
+        m_guiEventQueue.pop_front();
+
+
+    pthread_mutex_unlock(  &m_guiEventQueueMutex  );
+
+    //**************************************
+    //**************************************
+
+
+    qInfo(     ( obj.symbol          ).toLatin1()      );
+    qInfo(     ( obj.secType         ).toLatin1()      );
+    qInfo(     ( obj.currency        ).toLatin1()      );
+    qInfo(     ( obj.exchange        ).toLatin1()      );
+    qInfo(     ( obj.primaryExchange ).toLatin1()      );
+
+}
+
+//********************************************************************************************
+
+
+
+//********************************************************************************************
+
 State Client::getState()
 {
+
 	return m_state;
+
 } 
 
 //********************************************************************************************
 
 void Client::setState(	State state	 )
 {
+
 	m_state = state;
+
 }
 
 //********************************************************************************************
@@ -2643,7 +2624,7 @@ void Client::error(					int 					id,
 //**********************************************************************************************************************
 
 //! [tickprice]
-void Client::tickPrice( 				TickerId 			tickerId,
+void Client::tickPrice(                     TickerId 			tickerId,
 											TickType 			field, 
 											double 				price, 
 									  const TickAttrib& 		attribs						) 
@@ -2663,9 +2644,9 @@ void Client::tickPrice( 				TickerId 			tickerId,
 //**********************************************************************************************************************
 
 //! [ticksize]
-void Client::tickSize( 				TickerId 	tickerId,
+void Client::tickSize(                      TickerId 	tickerId,
 											TickType 	field, 
-											int 		size				) 
+                                            int 		size                                )
 {
 
 	printf( 								"Tick Size. Ticker Id: %ld, Field: %d, Size: %d\n", 
@@ -2679,7 +2660,7 @@ void Client::tickSize( 				TickerId 	tickerId,
 //**********************************************************************************************************************
 
 //! [tickoptioncomputation]
-void Client::tickOptionComputation( 			TickerId 	tickerId,
+void Client::tickOptionComputation(                 TickerId 	tickerId,
 													TickType 	tickType, 
 													int 		tickAttrib, 
 													double 		impliedVol, 
@@ -2711,7 +2692,7 @@ void Client::tickOptionComputation( 			TickerId 	tickerId,
 //**********************************************************************************************************************
 
 //! [tickgeneric]
-void Client::tickGeneric(			TickerId 	tickerId,
+void Client::tickGeneric(                   TickerId 	tickerId,
 											TickType 	tickType, 
 											double 		value				) 
 {
@@ -2727,7 +2708,7 @@ void Client::tickGeneric(			TickerId 	tickerId,
 //**********************************************************************************************************************
 
 //! [tickstring]
-void Client::tickString(				TickerId 				tickerId,
+void Client::tickString(                    TickerId 				tickerId,
 											TickType 				tickType, 
 											const std::string& 		value					) 
 {
@@ -2735,26 +2716,23 @@ void Client::tickString(				TickerId 				tickerId,
 	printf( 								"Tick String. Ticker Id: %ld, Type: %d, Value: %s\n", 
 											tickerId, 
 											(int)tickType, 
-											value.c_str()									);
+                                            value.c_str()                                       );
 
-   // QModelIndex index1 = window.m
+    QModelIndex idx  =  m_window->m_orderModel->index(              0,
+                                                                    0,
+                                                                    QModelIndex()               );
+
+    m_window->m_orderModel->setData(                   idx,
+                                                        value.c_str(),  //"200",
+                                                        Qt::EditRole                            );
 
 
-    /*
-            m_orderModel->index(               0,
-                                                            0,
-                                                            QModelIndex()                   );
-
-    m_orderModel->setData(                  index1,
-                                            "200",
-                                            Qt::EditRole          );
-        */
 }
 //! [tickstring]
 
 //**********************************************************************************************************************
 
-void Client::tickEFP(				TickerId 				tickerId,
+void Client::tickEFP(                       TickerId 				tickerId,
 											TickType 				tickType, 
 											double 					basisPoints, 
 											const std::string& 		formattedBasisPoints,
@@ -2781,7 +2759,7 @@ void Client::tickEFP(				TickerId 				tickerId,
 //**********************************************************************************************************************
 
 //! [orderstatus]
-void Client::orderStatus(			OrderId 				orderId,
+void Client::orderStatus(                   OrderId 				orderId,
 											const std::string& 		status, 
 											double 					filled,
 											double 					remaining, 
@@ -2812,10 +2790,10 @@ void Client::orderStatus(			OrderId 				orderId,
 //**********************************************************************************************************************
 
 //! [openorder]
-void Client::openOrder( 				OrderId orderId,
-											const Contract& contract, 
-											const Order& order, 
-											const OrderState& orderState					) 
+void Client::openOrder(                           OrderId        orderId,
+                                            const Contract      &contract,
+                                            const Order         &order,
+                                            const OrderState    &orderState					)
 {
 
 	printf( 								"OpenOrder. PermId: %i, ClientId: %ld, OrderId: %ld, Account: %s, Symbol: %s, SecType: %s, Exchange: %s:, Action: %s, OrderType:%s, TotalQty: %g, CashQty: %g, "
@@ -2867,10 +2845,10 @@ void Client::connectionClosed()
 //**********************************************************************************************************************
 
 //! [updateaccountvalue]
-void Client::updateAccountValue(		const std::string& 		key,
-											const std::string& 		val,
-                                       		const std::string& 		currency, 
-											const std::string& 		accountName				) 
+void Client::updateAccountValue(            const std::string       &key,
+                                            const std::string       &val,
+                                            const std::string       &currency,
+                                            const std::string       &accountName				)
 {
 
 	printf(									"UpdateAccountValue. Key: %s, Value: %s, Currency: %s, Account Name: %s\n", 
@@ -2885,14 +2863,14 @@ void Client::updateAccountValue(		const std::string& 		key,
 //**********************************************************************************************************************
 
 //! [updateportfolio]
-void Client::updatePortfolio(		const Contract& 	contract,
-											double 				position,
-                                    		double 				marketPrice, 
-											double 				marketValue, 
-											double 				averageCost,
-                                   		 	double 				unrealizedPNL, 
-											double 				realizedPNL, 
-											const std::string& 	accountName					)
+void Client::updatePortfolio(		  const Contract               &contract,
+                                            double                  position,
+                                            double                  marketPrice,
+                                            double                  marketValue,
+                                            double                  averageCost,
+                                            double                  unrealizedPNL,
+                                            double                  realizedPNL,
+                                            const std::string      &accountName					)
 {
 
 	printf(									"UpdatePortfolio. %s, %s @ %s: Position: %g, MarketPrice: %g, MarketValue: %g, AverageCost: %g, UnrealizedPNL: %g, RealizedPNL: %g, AccountName: %s\n", 
@@ -2913,7 +2891,7 @@ void Client::updatePortfolio(		const Contract& 	contract,
 //**********************************************************************************************************************
 
 //! [updateaccounttime]
-void Client::updateAccountTime(		const std::string& timeStamp		)
+void Client::updateAccountTime(		const std::string  &timeStamp		)
 {
 
 	printf( 								"UpdateAccountTime. Time: %s\n", 
@@ -2925,7 +2903,7 @@ void Client::updateAccountTime(		const std::string& timeStamp		)
 //**********************************************************************************************************************
 
 //! [accountdownloadend]
-void Client::accountDownloadEnd(		const std::string& accountName		)
+void Client::accountDownloadEnd(		const std::string  &accountName		)
 {
 
 	printf( 								"Account download finished: %s\n", 
@@ -2937,8 +2915,8 @@ void Client::accountDownloadEnd(		const std::string& accountName		)
 //**********************************************************************************************************************
 
 //! [contractdetails]
-void Client::contractDetails( 		int 						reqId,
-											const ContractDetails& 		contractDetails			) 
+void Client::contractDetails(                     int                   reqId,
+                                            const ContractDetails      &contractDetails			)
 {
 
 	printf( 								"ContractDetails begin. ReqId: %d\n", 
@@ -2957,8 +2935,8 @@ void Client::contractDetails( 		int 						reqId,
 //**********************************************************************************************************************
 
 //! [bondcontractdetails]
-void Client::bondContractDetails( 	int 						reqId,
-											const ContractDetails& 		contractDetails			) 
+void Client::bondContractDetails(                   int                 reqId,
+                                              const ContractDetails    &contractDetails			)
 {
 
 	printf( 								"BondContractDetails begin. ReqId: %d\n", 
@@ -2974,7 +2952,8 @@ void Client::bondContractDetails( 	int 						reqId,
 
 //**********************************************************************************************************************
 
-void Client::printContractMsg(		const Contract& 	contract	)
+void Client::printContractMsg(		const Contract  &contract	)
+
 {
 	printf(				"\tConId: %ld\n"			, contract.conId);
 	printf(				"\tSymbol: %s\n"			, contract.symbol.c_str()						);
@@ -2988,11 +2967,12 @@ void Client::printContractMsg(		const Contract& 	contract	)
 	printf(				"\tCurrency: %s\n"			, contract.currency.c_str()						);
 	printf(				"\tLocalSymbol: %s\n"		, contract.localSymbol.c_str()					);
 	printf(				"\tTradingClass: %s\n"		, contract.tradingClass.c_str()					);
+
 }
 
 //**********************************************************************************************************************
 
-void Client::printContractDetailsMsg(	const ContractDetails&  contractDetails		)
+void Client::printContractDetailsMsg(	const ContractDetails   &contractDetails		)
 {
 
 	printf(				"\tMarketName: %s\n"		, 	contractDetails.marketName.c_str()			);
@@ -3055,7 +3035,7 @@ void Client::printContractDetailsSecIdList(	const TagValueListSPtr  &secIdList	)
 
 //**********************************************************************************************************************
 
-void Client::printBondContractDetailsMsg(	const ContractDetails& 	contractDetails		)
+void Client::printBondContractDetailsMsg(	const ContractDetails  &contractDetails		)
 {
 
 	printf(				"\tSymbol: %s\n"			, 	contractDetails.contract.symbol.c_str()			);
@@ -3111,9 +3091,9 @@ void Client::contractDetailsEnd( int  reqId )
 //**********************************************************************************************************************
 
 //! [execdetails]
-void Client::execDetails( 			int 				reqId,
-											const Contract& 	contract, 
-											const Execution& 	execution				) 
+void Client::execDetails(               int 			 reqId,
+                                  const Contract        &contract,
+                                  const Execution       &execution				)
 {
 
 	printf( 				"ExecDetails. ReqId: %d - %s, %s, %s - %s, %ld, %g, %d\n", 
@@ -3132,7 +3112,7 @@ void Client::execDetails( 			int 				reqId,
 //**********************************************************************************************************************
 
 //! [execdetailsend]
-void Client::execDetailsEnd( int reqId)
+void Client::execDetailsEnd(  int  reqId  )
 {
 
 	printf( 				"ExecDetailsEnd. %d\n", 
@@ -3145,11 +3125,11 @@ void Client::execDetailsEnd( int reqId)
 
 //! [updatemktdepth]
 void Client::updateMktDepth(					TickerId 		id,
-													int 			position, 
-													int 			operation, 
-													int 			side,
-                                  		 			double 			price, 
-													int 			size						) 
+                                                int 			position,
+                                                int 			operation,
+                                                int 			side,
+                                                double 			price,
+                                                int 			size						)
 {
 
 	printf( 					"UpdateMarketDepth. %ld - Position: %d, Operation: %d, Side: %d, Price: %g, Size: %d\n", 
@@ -3167,13 +3147,13 @@ void Client::updateMktDepth(					TickerId 		id,
 
 //! [updatemktdepthl2]
 void Client::updateMktDepthL2(				TickerId 				id,
-													int 					position, 
-													const std::string& 		marketMaker, 
-													int 					operation,
-                                     				int 					side, 
-													 double 				price, 
-													 int 					size, 
-													 bool 					isSmartDepth				) 
+                                            int 					position,
+                                            const std::string& 		marketMaker,
+                                            int 					operation,
+                                            int 					side,
+                                            double                  price,
+                                            int 					size,
+                                            bool 					isSmartDepth				)
 {
 
 	printf( 					"UpdateMarketDepthL2. %ld - Position: %d, Operation: %d, Side: %d, Price: %g, Size: %d, isSmartDepth: %d\n", 

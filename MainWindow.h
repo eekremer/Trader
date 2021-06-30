@@ -7,7 +7,7 @@
 #include <QStandardItemModel>
 #include <pthread.h>
 
-#include "Queue.h"
+#include "Implementation/Queue.h"
 #include "OrderTableModel.h"
 #include "DataTableModel.h"
 #include "DataViewDelegate.h"
@@ -81,28 +81,22 @@ class MainWindow : public QMainWindow
         void                setMainWindowButtonStyleSheet();
 
 
-    public:
-
-        Client              *m_client; // needs to be a ptr as it's an incomplete type
-        pthread_t           clientThread;
-        pthread_mutex_t     guiEventQueueMutex;
-
-
     private:
 
         Ui::MainWindow     *m_ui;
+
+
+    public:
+
+
         OrderTableModel    *m_orderModel;
         DataTableModel     *m_dataModel;
         DataViewDelegate   *m_dataDelegate;
         OrderViewDelegate  *m_orderDelegate;
-        Queue              *m_guiEventQueue;
 
-
-        void                createExMainThread();
-
-        static void*        executeExMainWork( void*  lpParam );
-
-
+        //Queue              *m_guiEventQueue;
+        //void                createExMainThread();
+        //static void*        executeExMainWork( void*  lpParam );
 
 };
 

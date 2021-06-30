@@ -14,6 +14,8 @@
 #include  "Implementation/Client.h"
 
 
+extern Client g_client;
+
 
 //********************************************************************************************
 
@@ -78,39 +80,6 @@ MainWindow::MainWindow( QWidget  *parent )
 
     //----------------------------------------------------------------
 
-
-
-    //******************************************
-    //
-    // create EClientSocket and EReader objects
-    //
-    //******************************************
-
-    m_client = new Client();
-
-    //******************************************
-    //******************************************
-
-
-
-    //****************************************************************
-    //****************************************************************
-
-    pthread_mutex_init(            &guiEventQueueMutex,
-                                    NULL                            );
-
-    pthread_create(                &clientThread,
-                                    NULL,
-                                   &( m_client->setClient ),
-                                    this                            );
-
-    m_guiEventQueue  =  new Queue(  &guiEventQueueMutex  );
-
-    //****************************************************************
-    //****************************************************************
-
-
-
 /*
 
     pthread_create(                 &tid1,
@@ -118,9 +87,9 @@ MainWindow::MainWindow( QWidget  *parent )
                                     &doSomeThingBigger,
                                     this                                 );
 */
+
     // initialize random seed
     srand( time( NULL ) );
-
 
 }
 
@@ -130,21 +99,10 @@ MainWindow::~MainWindow()
 {
 
     delete  m_ui;
-    delete  m_guiEventQueue;
 
 }
 
 //*********************************************************************************************
-
-Queue* MainWindow::getQueue()
-{
-
-    return m_guiEventQueue;
-
-}
-
-//********************************************************************************************
-
 
 void MainWindow::setMainWindowOrderParams()
 {
@@ -558,7 +516,8 @@ void MainWindow::confirmBuyClicked()
 
     //******************************************
 
-    m_guiEventQueue->insertMsgIntoQueue( &object );
+
+    //client.        m_guiEventQueue->insertMsgIntoQueue( &object );
 
     //******************************************
 
@@ -566,8 +525,8 @@ void MainWindow::confirmBuyClicked()
 
 //**************************************************************************************
 
+/*
 
-// this will be the main...
 void* MainWindow::executeExMainWork( void  *lpParam )
 {
 
@@ -591,19 +550,21 @@ void* MainWindow::executeExMainWork( void  *lpParam )
 
 }
 
+*/
+
 //************************************************************************************
 
 
 void MainWindow::on_pushButton_clicked()
 {
 
-    QModelIndex index1 = m_orderModel->index(            0,
-                                                    0,
-                                                    QModelIndex()           );
+    QModelIndex index1 = m_orderModel->index(               0,
+                                                            0,
+                                                            QModelIndex()           );
 
-    m_orderModel->setData(          index1,
-                                    "200",
-                                    Qt::EditRole          );
+    m_orderModel->setData(              index1,
+                                        "200",
+                                        Qt::EditRole          );
 
 }
 
@@ -643,21 +604,23 @@ void* MainWindow::doSomeThingBigger( void  *arg )
 void MainWindow::symbolComboBoxTextChanged( const QString&  symbol )
 {
 
+
     InterObject marketDataToRequest;
 
     // populate obj
-    marketDataToRequest.typeOfMessage   =  1;       // market data request
-    marketDataToRequest.symbol          =  symbol;
-    marketDataToRequest.secType         =  m_ui->securityTypeComboBox->currentText();
-    marketDataToRequest.currency        =  m_ui->currencyComboBox->currentText();
-    marketDataToRequest.exchange        =  m_ui->exchangeComboBox->currentText();
-    marketDataToRequest.primaryExchange =  m_ui->primaryExchangeComboBox->currentText();
+    marketDataToRequest.typeOfMessage    =  1;       // market data request
+    marketDataToRequest.symbol           =  symbol;
+    marketDataToRequest.secType          =  m_ui->securityTypeComboBox->currentText();
+    marketDataToRequest.currency         =  m_ui->currencyComboBox->currentText();
+    marketDataToRequest.exchange         =  m_ui->exchangeComboBox->currentText();
+    marketDataToRequest.primaryExchange  =  m_ui->primaryExchangeComboBox->currentText();
 
     // insert obj into the queue
-    this->m_guiEventQueue->insertMsgIntoQueue( &marketDataToRequest );
+    g_client.insertMsgIntoQueue(    &marketDataToRequest   );
 
     // hack
     int index = m_ui->securityTypeComboBox->currentIndex();
+
     qInfo( "index: %d", index );
 
 }

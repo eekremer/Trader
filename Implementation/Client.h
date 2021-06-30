@@ -13,6 +13,7 @@
 
 #include <memory>
 #include <vector>
+#include <QObject>
 
 
 
@@ -122,11 +123,13 @@ class Client : public EWrapper
 {
 
 
+
 //! [ ewrapperimpl ]
 public:
 
-    Client();
+    Client( MainWindow *win );
    ~Client();
+
 
 	void 	setConnectOptions	( 		const std::string&				);
 	void 	processMessages		(										);
@@ -196,8 +199,11 @@ public:
 	// events
     #include "IB/EWrapper_prototypes.h"
 
-    static
-    void*   setClient                       (         void*                  arg                    );
+    Queue*  getQueue                        ();
+    void    readMessagesFromQueue           ();
+
+    void    insertMsgIntoQueue              (         InterObject           *obj                    );
+    void    getMsgFromQueue                 ();
 
 private:
 
@@ -222,8 +228,12 @@ private:
     bool 							m_extraAuth;
 	std::string 					m_bboExchange;
 
- //   static
- //   MainWindow                      m_win;
+    MainWindow                     *m_window;
+
+public:
+
+    std::deque< InterObject >       m_guiEventQueue;
+    pthread_mutex_t                 m_guiEventQueueMutex;
 
 };
 
