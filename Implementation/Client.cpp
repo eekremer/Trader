@@ -62,9 +62,10 @@ Client::Client(  MainWindow  *win  )    :	m_osSignal		( 	2000 										), //2-s
                                             m_window        (   win                                         )
 {
 
-    pthread_mutex_init(            &m_guiEventQueueMutex,
-                                    NULL                                );
-
+    /*
+        pthread_mutex_init(            &m_guiEventQueueMutex,
+                                        NULL                                );
+    */
 }
 
 //**********************************************************************************************************************
@@ -532,7 +533,9 @@ void Client::processMessages()
 
 //********************************************************************************************
 
-void Client::insertMsgIntoQueue(    InterObject  *obj    )
+/*
+
+void Client::insertMsgIntoQueue(    InterObject  msg    )
 {
 
     std::this_thread::sleep_for(    std::chrono::milliseconds( 20 )   );
@@ -544,11 +547,11 @@ void Client::insertMsgIntoQueue(    InterObject  *obj    )
     // Mutual exclusion
     //********************************************
 
-    pthread_mutex_lock  (  &m_guiEventQueueMutex  );
+    //pthread_mutex_lock  (  &m_guiEventQueueMutex  );
 
-        m_guiEventQueue.push_back( *obj );
+        m_guiEventQueue.push_back(  msg  );
 
-    pthread_mutex_unlock(  &m_guiEventQueueMutex  );
+    //pthread_mutex_unlock(  &m_guiEventQueueMutex  );
 
     //********************************************
     //********************************************
@@ -557,15 +560,19 @@ void Client::insertMsgIntoQueue(    InterObject  *obj    )
 
 }
 
+*/
+
 //********************************************************************************************
+
+
 
 void Client::getMsgFromQueue()
 {
 
-    InterObject  obj;
+    InterObject  msg;
 
     // check whether there is any element in the queue
-    if ( m_guiEventQueue.size() == 0 )
+    if ( m_window->m_guiEventQueue.size() == 0 )
     {
 
         qInfo( "No element in the queue !!" );
@@ -574,44 +581,48 @@ void Client::getMsgFromQueue()
 
     }
 
-    std::this_thread::sleep_for(    std::chrono::milliseconds( 300 )   );
+    std::this_thread::sleep_for(    std::chrono::milliseconds( 30 )   );
 
     //**************************************
     //  Mutual exclusion
     //**************************************
 
-    pthread_mutex_lock(  &m_guiEventQueueMutex  );
-
-        /*
-            std::deque::front()
-            Returns a reference to the first element in the deque
-            Calling this function on an empty container causes undefined behavior
-        */
-
-        obj = m_guiEventQueue.front();
-
-        /*
-            std::deque::pop_front()
-            Removes the first element in the deque container, effectively reducing its size by one.
-            This destroys the removed element.
-        */
-
-        m_guiEventQueue.pop_front();
+    pthread_mutex_lock(  &( m_window->m_guiEventQueueMutex )  );
 
 
-    pthread_mutex_unlock(  &m_guiEventQueueMutex  );
+        //    std::deque::front()
+        //    Returns a reference to the first element in the deque
+        //    Calling this function on an empty container causes undefined behavior
+
+
+        msg = m_window->m_guiEventQueue.front();
+
+
+        //    std::deque::pop_front()
+        //    Removes the first element in the deque container, effectively reducing its size by one.
+        //    This destroys the removed element.
+
+
+        m_window->m_guiEventQueue.pop_front();
+
+
+    pthread_mutex_unlock(  &( m_window->m_guiEventQueueMutex )  );
 
     //**************************************
     //**************************************
 
 
-    qInfo(     ( obj.symbol          ).toLatin1()      );
-    qInfo(     ( obj.secType         ).toLatin1()      );
-    qInfo(     ( obj.currency        ).toLatin1()      );
-    qInfo(     ( obj.exchange        ).toLatin1()      );
-    qInfo(     ( obj.primaryExchange ).toLatin1()      );
+    qInfo(     ( msg.symbol          ).toLatin1()      );
+    qInfo(     ( msg.secType         ).toLatin1()      );
+    qInfo(     ( msg.currency        ).toLatin1()      );
+    qInfo(     ( msg.exchange        ).toLatin1()      );
+    qInfo(     ( msg.primaryExchange ).toLatin1()      );
+
+
 
 }
+
+
 
 //********************************************************************************************
 

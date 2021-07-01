@@ -19,7 +19,7 @@ extern Client g_client;
 
 //********************************************************************************************
 
-MainWindow::MainWindow( QWidget  *parent )
+MainWindow::MainWindow(  QWidget  *parent  )
     : QMainWindow( parent )
     , m_ui( new Ui::MainWindow )
 {
@@ -80,16 +80,10 @@ MainWindow::MainWindow( QWidget  *parent )
 
     //----------------------------------------------------------------
 
-/*
 
-    pthread_create(                 &tid1,
-                                     NULL,
-                                    &doSomeThingBigger,
-                                    this                                 );
-*/
+    pthread_mutex_init(            &m_guiEventQueueMutex,
+                                    NULL                                );
 
-    // initialize random seed
-    srand( time( NULL ) );
 
 }
 
@@ -495,7 +489,7 @@ void MainWindow::goToBuySellDialog()
 void MainWindow::confirmBuyClicked()
 {
 
-
+/*
     qInfo( "confirmBuy button clicked" );
 
     InterObject  object;
@@ -512,7 +506,7 @@ void MainWindow::confirmBuyClicked()
     object.currency                 =   "EUR";
     object.exchange                 =   "SMART";
     object.primaryExchange          =   "HEX";
-
+*/
 
     //******************************************
 
@@ -616,7 +610,7 @@ void MainWindow::symbolComboBoxTextChanged( const QString&  symbol )
     marketDataToRequest.primaryExchange  =  m_ui->primaryExchangeComboBox->currentText();
 
     // insert obj into the queue
-    g_client.insertMsgIntoQueue(    &marketDataToRequest   );
+    insertMsgIntoQueue(    marketDataToRequest   );
 
     // hack
     int index = m_ui->securityTypeComboBox->currentIndex();
@@ -627,4 +621,27 @@ void MainWindow::symbolComboBoxTextChanged( const QString&  symbol )
 
 //***************************************************************************************
 
+void MainWindow::insertMsgIntoQueue(    InterObject  msg    )
+{
 
+    std::this_thread::sleep_for(    std::chrono::milliseconds( 20 )   );
+
+    qInfo( "at the beginning of Queue::insertMsgIntoQueue()" );
+
+
+    //********************************************
+    // Mutual exclusion
+    //********************************************
+
+    pthread_mutex_lock  (  &m_guiEventQueueMutex  );
+
+        m_guiEventQueue.push_back(  msg  );
+
+    pthread_mutex_unlock(  &m_guiEventQueueMutex  );
+
+    //********************************************
+    //********************************************
+
+    qInfo( "at the end of Queue::insertMsgIntoQueue()" );
+
+}

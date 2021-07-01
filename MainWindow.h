@@ -7,7 +7,6 @@
 #include <QStandardItemModel>
 #include <pthread.h>
 
-#include "Implementation/Queue.h"
 #include "OrderTableModel.h"
 #include "DataTableModel.h"
 #include "DataViewDelegate.h"
@@ -26,6 +25,32 @@ namespace Ui
 }
 
 QT_END_NAMESPACE
+
+//***********************************************************************************
+
+struct InterObject
+{
+
+    int         typeOfMessage;  // 1: market data;  2: order; 3: account information
+
+    // Order
+    QString     action;
+    double      quantity;
+    double      limitPrice;
+    double      takeProfitLimitPrice;
+    double      stopLossPrice;
+    QString     orderType;  // "LMT"
+
+    // Contract
+    QString     symbol;
+    QString     secType;
+    QString     currency;
+    QString     exchange;
+    QString     primaryExchange;
+
+};
+
+//***********************************************************************************
 
 
 // forward declaration
@@ -67,8 +92,6 @@ class MainWindow : public QMainWindow
 
     public:
 
-        Queue*              getQueue();
-
         static void*        doSomeThingBigger            (  void*    arg  );
 
         void                setMainWindowOrderParams     ();
@@ -79,6 +102,7 @@ class MainWindow : public QMainWindow
 
         void                setMainWindowButtonConnection();
         void                setMainWindowButtonStyleSheet();
+        void                insertMsgIntoQueue           (    InterObject  msg      );
 
 
     private:
@@ -94,9 +118,9 @@ class MainWindow : public QMainWindow
         DataViewDelegate   *m_dataDelegate;
         OrderViewDelegate  *m_orderDelegate;
 
-        //Queue              *m_guiEventQueue;
-        //void                createExMainThread();
-        //static void*        executeExMainWork( void*  lpParam );
+        std::deque<InterObject>         m_guiEventQueue;
+        pthread_mutex_t                 m_guiEventQueueMutex;
+
 
 };
 

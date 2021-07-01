@@ -18,13 +18,6 @@ class Queue
        ~Queue(  void             );
 
 
-        void  insertMsgIntoQueue(   InterObject*  );
-        void  getMsgFromQueue   ();
-
-
-    private:
-
-        std::deque< InterObject >    m_interThreadQueue;
 
 };
 

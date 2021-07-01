@@ -8,7 +8,6 @@
 #include "IB/EWrapper.h"
 #include "IB/EReaderOSSignal.h"
 #include "IB/EReader.h"
-
 #include "../MainWindow.h"
 
 #include <memory>
@@ -116,6 +115,8 @@ enum State
 };
 
 
+
+
 //******************************************************************************************
 
 //! [ ewrapperimpl ]
@@ -199,10 +200,10 @@ public:
 	// events
     #include "IB/EWrapper_prototypes.h"
 
-    Queue*  getQueue                        ();
+
     void    readMessagesFromQueue           ();
 
-    void    insertMsgIntoQueue              (         InterObject           *obj                    );
+    //void    insertMsgIntoQueue              (         InterObject           obj                    );
     void    getMsgFromQueue                 ();
 
 private:
@@ -232,8 +233,8 @@ private:
 
 public:
 
-    std::deque< InterObject >       m_guiEventQueue;
-    pthread_mutex_t                 m_guiEventQueueMutex;
+    //std::deque<InterObject>         m_guiEventQueue;
+    //pthread_mutex_t                 m_guiEventQueueMutex;
 
 };
 

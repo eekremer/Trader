@@ -62,7 +62,6 @@ SOURCES       = ../AccountTableModel.cpp \
 		../OrderDbManager.cpp \
 		../OrderTableModel.cpp \
 		../OrderViewDelegate.cpp \
-		../Implementation/Queue.cpp \
 		../IB/ContractCondition.cpp \
 		../IB/DefaultEWrapper.cpp \
 		../IB/EClient.cpp \
@@ -103,7 +102,6 @@ OBJECTS       = AccountTableModel.o \
 		OrderDbManager.o \
 		OrderTableModel.o \
 		OrderViewDelegate.o \
-		Queue.o \
 		ContractCondition.o \
 		DefaultEWrapper.o \
 		EClient.o \
@@ -318,13 +316,11 @@ DIST          = ../../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../DataDbManager.h \
 		../DataTableModel.h \
 		../DataViewDelegate.h \
-		../Implementation/InterObject.h \
 		../MainWindow.h \
 		../Order.h \
 		../OrderDbManager.h \
 		../OrderTableModel.h \
 		../OrderViewDelegate.h \
-		../Implementation/Queue.h \
 		../IB/bar.h \
 		../IB/CommissionReport.h \
 		../IB/CommonDefs.h \
@@ -393,7 +389,6 @@ DIST          = ../../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../OrderDbManager.cpp \
 		../OrderTableModel.cpp \
 		../OrderViewDelegate.cpp \
-		../Implementation/Queue.cpp \
 		../IB/ContractCondition.cpp \
 		../IB/DefaultEWrapper.cpp \
 		../IB/EClient.cpp \
@@ -805,8 +800,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../Data.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../Implementation/InterObject.h ../MainWindow.h ../Order.h ../OrderDbManager.h ../OrderTableModel.h ../OrderViewDelegate.h ../Implementation/Queue.h ../IB/bar.h ../IB/CommissionReport.h ../IB/CommonDefs.h ../IB/Contract.h ../IB/ContractCondition.h ../IB/DefaultEWrapper.h ../IB/DepthMktDataDescription.h ../IB/EClient.h ../IB/EClientException.h ../IB/EClientMsgSink.h ../IB/EClientSocket.h ../IB/EDecoder.h ../IB/EMessage.h ../IB/EMutex.h ../IB/EOrderDecoder.h ../IB/EPosixClientSocketPlatform.h ../IB/EReader.h ../IB/EReaderOSSignal.h ../IB/ESocket.h ../IB/ETransport.h ../IB/EWrapper.h ../IB/EWrapper_prototypes.h ../IB/Execution.h ../IB/executioncondition.h ../IB/FamilyCode.h ../IB/HistogramEntry.h ../IB/HistoricalTick.h ../IB/HistoricalTickBidAsk.h ../IB/HistoricalTickLast.h ../IB/IExternalizable.h ../IB/MarginCondition.h ../IB/NewsProvider.h ../IB/OperatorCondition.h ../IB/Order.h ../IB/OrderCondition.h ../IB/OrderState.h ../IB/PercentChangeCondition.h ../IB/platformspecific.h ../IB/PriceCondition.h ../IB/PriceIncrement.h ../IB/resource.h ../IB/ScannerSubscription.h ../IB/SoftDollarTier.h ../IB/TagValue.h ../IB/TickAttrib.h ../IB/TickAttribBidAsk.h ../IB/TickAttribLast.h ../IB/TimeCondition.h ../IB/TwsSocketClientErrors.h ../IB/VolumeCondition.h ../Implementation/AccountSummaryTags.h ../Implementation/AvailableAlgoParams.h ../Implementation/ContractSamples.h ../Implementation/FAMethodSamples.h ../Implementation/OrderSamples.h ../Implementation/ScannerSubscriptionSamples.h ../Implementation/StdAfx.h ../Implementation/Client.h ../Implementation/Utils.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../AccountTableModel.cpp ../BuySellDialog.cpp ../DataDbManager.cpp ../DataTableModel.cpp ../DataViewDelegate.cpp ../Main.cpp ../MainWindow.cpp ../OrderDbManager.cpp ../OrderTableModel.cpp ../OrderViewDelegate.cpp ../Implementation/Queue.cpp ../IB/ContractCondition.cpp ../IB/DefaultEWrapper.cpp ../IB/EClient.cpp ../IB/EClientSocket.cpp ../IB/EDecoder.cpp ../IB/EMessage.cpp ../IB/EMutex.cpp ../IB/EOrderDecoder.cpp ../IB/EReader.cpp ../IB/EReaderOSSignal.cpp ../IB/ESocket.cpp ../IB/executioncondition.cpp ../IB/MarginCondition.cpp ../IB/OperatorCondition.cpp ../IB/OrderCondition.cpp ../IB/PercentChangeCondition.cpp ../IB/PriceCondition.cpp ../IB/SoftDollarTier.cpp ../IB/TimeCondition.cpp ../IB/VolumeCondition.cpp ../Implementation/AccountSummaryTags.cpp ../Implementation/AvailableAlgoParams.cpp ../Implementation/ContractSamples.cpp ../Implementation/OrderSamples.cpp ../Implementation/ScannerSubscriptionSamples.cpp ../Implementation/StdAfx.cpp ../Implementation/Client.cpp ../Implementation/Utils.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../Data.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../MainWindow.h ../Order.h ../OrderDbManager.h ../OrderTableModel.h ../OrderViewDelegate.h ../IB/bar.h ../IB/CommissionReport.h ../IB/CommonDefs.h ../IB/Contract.h ../IB/ContractCondition.h ../IB/DefaultEWrapper.h ../IB/DepthMktDataDescription.h ../IB/EClient.h ../IB/EClientException.h ../IB/EClientMsgSink.h ../IB/EClientSocket.h ../IB/EDecoder.h ../IB/EMessage.h ../IB/EMutex.h ../IB/EOrderDecoder.h ../IB/EPosixClientSocketPlatform.h ../IB/EReader.h ../IB/EReaderOSSignal.h ../IB/ESocket.h ../IB/ETransport.h ../IB/EWrapper.h ../IB/EWrapper_prototypes.h ../IB/Execution.h ../IB/executioncondition.h ../IB/FamilyCode.h ../IB/HistogramEntry.h ../IB/HistoricalTick.h ../IB/HistoricalTickBidAsk.h ../IB/HistoricalTickLast.h ../IB/IExternalizable.h ../IB/MarginCondition.h ../IB/NewsProvider.h ../IB/OperatorCondition.h ../IB/Order.h ../IB/OrderCondition.h ../IB/OrderState.h ../IB/PercentChangeCondition.h ../IB/platformspecific.h ../IB/PriceCondition.h ../IB/PriceIncrement.h ../IB/resource.h ../IB/ScannerSubscription.h ../IB/SoftDollarTier.h ../IB/TagValue.h ../IB/TickAttrib.h ../IB/TickAttribBidAsk.h ../IB/TickAttribLast.h ../IB/TimeCondition.h ../IB/TwsSocketClientErrors.h ../IB/VolumeCondition.h ../Implementation/AccountSummaryTags.h ../Implementation/AvailableAlgoParams.h ../Implementation/ContractSamples.h ../Implementation/FAMethodSamples.h ../Implementation/OrderSamples.h ../Implementation/ScannerSubscriptionSamples.h ../Implementation/StdAfx.h ../Implementation/Client.h ../Implementation/Utils.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../AccountTableModel.cpp ../BuySellDialog.cpp ../DataDbManager.cpp ../DataTableModel.cpp ../DataViewDelegate.cpp ../Main.cpp ../MainWindow.cpp ../OrderDbManager.cpp ../OrderTableModel.cpp ../OrderViewDelegate.cpp ../IB/ContractCondition.cpp ../IB/DefaultEWrapper.cpp ../IB/EClient.cpp ../IB/EClientSocket.cpp ../IB/EDecoder.cpp ../IB/EMessage.cpp ../IB/EMutex.cpp ../IB/EOrderDecoder.cpp ../IB/EReader.cpp ../IB/EReaderOSSignal.cpp ../IB/ESocket.cpp ../IB/executioncondition.cpp ../IB/MarginCondition.cpp ../IB/OperatorCondition.cpp ../IB/OrderCondition.cpp ../IB/PercentChangeCondition.cpp ../IB/PriceCondition.cpp ../IB/SoftDollarTier.cpp ../IB/TimeCondition.cpp ../IB/VolumeCondition.cpp ../Implementation/AccountSummaryTags.cpp ../Implementation/AvailableAlgoParams.cpp ../Implementation/ContractSamples.cpp ../Implementation/OrderSamples.cpp ../Implementation/ScannerSubscriptionSamples.cpp ../Implementation/StdAfx.cpp ../Implementation/Client.cpp ../Implementation/Utils.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../BuySellDialog.ui ../MainWindow.ui $(DISTDIR)/
 
 
@@ -1080,16 +1075,13 @@ moc_MainWindow.cpp: ../MainWindow.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qitemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/QStandardItemModel \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qstandarditemmodel.h \
-		../Implementation/Queue.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Implementation/InterObject.h \
 		../OrderTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QAbstractTableModel \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
 		../DataTableModel.h \
 		../DataViewDelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyledItemDelegate \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleditemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
@@ -1698,16 +1690,13 @@ Main.o: ../Main.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qitemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/QStandardItemModel \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qstandarditemmodel.h \
-		../Implementation/Queue.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Implementation/InterObject.h \
 		../OrderTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QAbstractTableModel \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
 		../DataTableModel.h \
 		../DataViewDelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyledItemDelegate \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleditemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
@@ -1881,16 +1870,13 @@ MainWindow.o: ../MainWindow.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QTab
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qitemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/QStandardItemModel \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qstandarditemmodel.h \
-		../Implementation/Queue.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Implementation/InterObject.h \
 		../OrderTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QAbstractTableModel \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
 		../DataTableModel.h \
 		../DataViewDelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyledItemDelegate \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleditemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
@@ -2079,120 +2065,6 @@ OrderTableModel.o: ../OrderTableModel.cpp ../OrderTableModel.h \
 
 OrderViewDelegate.o: ../OrderViewDelegate.cpp ../OrderViewDelegate.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o OrderViewDelegate.o ../OrderViewDelegate.cpp
-
-Queue.o: ../Implementation/Queue.cpp ../../../Qt/5.15.2/gcc_64/include/QtCore/QTextStream \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qtextstream.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qiodevice.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qglobal.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qconfig.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qtcore-config.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qsystemdetection.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qprocessordetection.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qtypeinfo.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qsysinfo.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qlogging.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qflags.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qbasicatomic.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qgenericatomic.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qglobalstatic.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qmutex.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qnumeric.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qversiontagging.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qobject.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qnamespace.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qstring.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qchar.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qrefcount.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringliteral.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringalgorithms.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringview.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringbuilder.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qlist.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qiterator.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qhashfunctions.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qpair.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qvector.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qcontainertools_impl.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qpoint.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qbytearraylist.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringlist.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qregexp.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qstringmatcher.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreevent.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qscopedpointer.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qmetatype.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qobject_impl.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qlocale.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qvariant.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qmap.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qhash.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qset.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qshareddata.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/QDebug \
-		../Implementation/Queue.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QMainWindow \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmainwindow.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qtguiglobal.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qtgui-config.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qwidget.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs_win.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qmargins.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qpaintdevice.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qrect.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qsize.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qpalette.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qcolor.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qrgb.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qrgba64.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qbrush.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qmatrix.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qpolygon.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qregion.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qdatastream.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qline.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qtransform.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qimage.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qpixelformat.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qpixmap.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qfont.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qfontmetrics.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qfontinfo.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qsizepolicy.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qcursor.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qkeysequence.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qevent.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qurl.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qurlquery.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qfile.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/qfiledevice.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qtouchdevice.h \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtabwidget.h \
-		../../../Qt/5.15.2/gcc_64/include/QtGui/qicon.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Implementation/InterObject.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Queue.o ../Implementation/Queue.cpp
 
 ContractCondition.o: ../IB/ContractCondition.cpp ../Implementation/StdAfx.h \
 		../IB/ContractCondition.h \
@@ -2733,16 +2605,13 @@ Client.o: ../Implementation/Client.cpp ../Implementation/StdAfx.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qitemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/QStandardItemModel \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qstandarditemmodel.h \
-		../Implementation/Queue.h \
-		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
-		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
-		../Implementation/InterObject.h \
 		../OrderTableModel.h \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QAbstractTableModel \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QStringList \
 		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
 		../DataTableModel.h \
 		../DataViewDelegate.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyledItemDelegate \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstyleditemdelegate.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStyleOptionViewItem \
