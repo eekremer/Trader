@@ -17,14 +17,17 @@
 class TWSAPIDLLEXP EMessage
 {
 
-    std::vector< char > data;
+    public:
 
-public:
+        std::vector< char > data;
 
-    EMessage( const std::vector< char > &data );
 
-    const char*     begin( void ) const;
-    const char*     end  ( void ) const;
+    //public:
+
+        EMessage( const std::vector< char > &data );
+
+        const char*     begin( void ) const;
+        const char*     end  ( void ) const;
 
 };
 

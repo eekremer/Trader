@@ -10,7 +10,7 @@
 DataViewDelegate::DataViewDelegate( QObject  *parent )
     :  QStyledItemDelegate( parent )
 {
-
+    // nothing
 }
 
 //******************************************************************************************
@@ -25,12 +25,11 @@ QWidget* DataViewDelegate::createEditor(            QWidget                 *par
 
     QSpinBox *editor = new QSpinBox( parent );
 
-    // If enabled (the default) the spin box draws itself inside a frame,
-    // otherwise the spin box draws itself without any frame.
+/*
     editor->setFrame    (  true );
-
     editor->setMinimum  (     0 );
     editor->setMaximum  (   100 );
+*/
 
     return editor;
 
@@ -83,15 +82,15 @@ void DataViewDelegate::setModelData(            QWidget                 *editor,
 
 //******************************************************************************************
 
+/*
+
 QSize  DataViewDelegate::sizeHint(     const QStyleOptionViewItem    &option,
                                        const QModelIndex             &index        ) const
 {
 
-
-
-
-
 }
+
+*/
 
 //******************************************************************************************
 

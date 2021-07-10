@@ -25,7 +25,8 @@ MainWindow::MainWindow(  QWidget  *parent  )
 {
 
 
-    m_ui->setupUi( this );
+    m_ui->setupUi(  this  );
+
 
     //----------------------------------------------------------------
 
@@ -519,35 +520,6 @@ void MainWindow::confirmBuyClicked()
 
 //**************************************************************************************
 
-/*
-
-void* MainWindow::executeExMainWork( void  *lpParam )
-{
-
-    while( 1 )
-    {
-
-        std::this_thread::sleep_for(    std::chrono::seconds( 1 )   );
-
-        qInfo( "pthread worker !!" );
-
-        // here we are casting to Queue* from void*
-        Queue *pThis = reinterpret_cast< Queue* >( lpParam );
-
-        // we check whether there is any object in the queue
-        pThis->getMsgFromQueue();
-
-
-    }
-
-    return 0;
-
-}
-
-*/
-
-//************************************************************************************
-
 
 void MainWindow::on_pushButton_clicked()
 {
@@ -562,37 +534,7 @@ void MainWindow::on_pushButton_clicked()
 
 }
 
-//***************************************************************************************
-
-void* MainWindow::doSomeThingBigger( void  *arg )
-{
-
-    while( 1 )
-    {
-
-        MainWindow *win = reinterpret_cast< MainWindow* >( arg );
-
-        QModelIndex l_index = win->m_orderModel->index(         0,
-                                                                0,
-                                                                QModelIndex()       );
-        // hack
-        static int counter = 100;
-
-        win->m_orderModel->setData(             l_index,
-                                                counter,
-                                                Qt::EditRole                        );
-
-        std::this_thread::sleep_for(            std::chrono::seconds( 1 )           );
-
-        qInfo( "second thread !!" );
-
-        counter++;
-
-    }
-
-}
-
-//***************************************************************************************
+//****************************************************************************************
 
 
 void MainWindow::symbolComboBoxTextChanged( const QString&  symbol )

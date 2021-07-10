@@ -28,7 +28,7 @@ DataTableModel::DataTableModel(         int         rows,
 
     for ( int column = 0; column < qMax( 1, columns ); ++column )
     {
-        list.append( "100" );
+        list.append( "NA" );
     }
 
     for ( int row = 0; row < qMax( 1, rows ); ++row )
@@ -88,7 +88,7 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
     int col = index.column();
 
     // generate a log message when this method gets called
-    qDebug() << QString( "row %1, col%2, role %3" ).arg( row ).arg( col ).arg( role );
+    //qDebug() << QString( "row %1, col%2, role %3" ).arg( row ).arg( col ).arg( role );
 
 
     if ( !index.isValid() )
@@ -102,7 +102,15 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
 
         case Qt::DisplayRole:
 
-            return (   m_rowList[ index.row() ][ index.column() ].toInt()   );
+            //return (   m_rowList[ index.row() ][ index.column() ].toInt()   );
+
+            if ( index.row() == 0 && index.column() == 0 )
+            {
+                qInfo(          "within ...DataTableModel::data() \n"              );
+                qStdout() <<  m_rowList[ index.row() ][ index.column() ] << Qt::endl;
+            }
+
+            return (     m_rowList[ index.row() ][ index.column() ]     );
 
         //-----------------------------------------------
 
@@ -127,7 +135,6 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
             {
 
                 return QBrush( Qt::black );
-
 
 
             }
@@ -277,6 +284,10 @@ bool DataTableModel::setData(       const QModelIndex   &index,
         return false;
 
     m_rowList[ index.row() ][ index.column() ] = value.toString();
+
+
+    qInfo(          "within ...DataTableModel::setData() \n"            );
+    qStdout() <<  m_rowList[ index.row() ][ index.column() ] << Qt::endl;
 
     // signal for its connected views to update their displays
     emit dataChanged( index, index );

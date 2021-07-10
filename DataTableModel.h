@@ -2,6 +2,7 @@
 #define DATATABLEMODEL_H
 
 #include <QAbstractTableModel>
+#include <QTextStream>
 
 
 
@@ -57,6 +58,14 @@ class DataTableModel :  public QAbstractTableModel
         bool            removeColumns(          int               position,
                                                 int               columns,
                                           const QModelIndex       &parent = QModelIndex()       );
+
+
+        inline
+        QTextStream&    qStdout() const
+        {
+            static QTextStream r{stdout};
+            return r;
+        }
 
 
     private:

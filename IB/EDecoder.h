@@ -386,9 +386,9 @@ public:
 //******************************************************************************************
 
 
-#define DECODE_FIELD(x) if (!EDecoder::DecodeField(x, ptr, endPtr)) return 0;
-#define DECODE_FIELD_TIME(x) if (!EDecoder::DecodeFieldTime(x, ptr, endPtr)) return 0;
-#define DECODE_FIELD_MAX(x) if (!EDecoder::DecodeFieldMax(x, ptr, endPtr)) return 0;
+#define DECODE_FIELD(x)      if(!EDecoder::DecodeField(x,ptr,endPtr)) return 0;
+#define DECODE_FIELD_TIME(x) if(!EDecoder::DecodeFieldTime(x,ptr,endPtr)) return 0;
+#define DECODE_FIELD_MAX(x)  if(!EDecoder::DecodeFieldMax(x,ptr,endPtr)) return 0;
 
 
 #endif

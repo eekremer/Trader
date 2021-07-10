@@ -107,7 +107,7 @@ virtual void 		execDetailsEnd				( 			int 				reqId				) EWRAPPER_VIRTUAL_IMPL;
 
 virtual void 		error						(			int 				id, 
 															int 				errorCode, 
-															const std::string& 	errorString			) EWRAPPER_VIRTUAL_IMPL;
+                                                      const std::string&        errorString			) EWRAPPER_VIRTUAL_IMPL;
 
 virtual void 		updateMktDepth				(			TickerId 			id, 
 															int 				position, 

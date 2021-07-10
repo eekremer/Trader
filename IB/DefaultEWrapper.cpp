@@ -690,53 +690,53 @@ void 		DefaultEWrapper::pnlSingle				(		int 			reqId,
 
 //*******************************************************************************************************************
 
-void 		DefaultEWrapper::historicalTicks		(		int 									reqId, 
+void 		DefaultEWrapper::historicalTicks		(		      int                               reqId,
 															const std::vector<HistoricalTick>& 		ticks, 
-															bool 									done		) 
+                                                                  bool 								done            )
 { 
 
 }
 
 //*******************************************************************************************************************
 
-void 		DefaultEWrapper::historicalTicksBidAsk	(		int 										reqId, 
-															const std::vector<HistoricalTickBidAsk>& 	ticks, 
-															bool 										done		) 
+void 		DefaultEWrapper::historicalTicksBidAsk	(               int 								  reqId,
+                                                              const std::vector<HistoricalTickBidAsk>&    ticks,
+                                                                    bool                                  done      )
 { 
 
 }
 
 //*******************************************************************************************************************
 
-void 		DefaultEWrapper::historicalTicksLast	(		int 										reqId, 
-															const std::vector<HistoricalTickLast>& 		ticks, 
-															bool 										done		) 
+void 		DefaultEWrapper::historicalTicksLast	(               int 								reqId,
+                                                              const std::vector<HistoricalTickLast>    &ticks,
+                                                                    bool 								done		)
 { 
 
 }
 
 //*******************************************************************************************************************
 
-void 		DefaultEWrapper::tickByTickAllLast		(		int 						reqId, 
-															int 						tickType, 
-															time_t 						time, 
-															double 						price, 
-															int 						size, 
-															const TickAttribLast& 		tickAttribLast, 
-															const std::string& 			exchange, 
-															const std::string& 			specialConditions		) 
+void 		DefaultEWrapper::tickByTickAllLast		(               int 				reqId,
+                                                                    int 				tickType,
+                                                                    time_t              time,
+                                                                    double              price,
+                                                                    int                 size,
+                                                              const TickAttribLast& 	tickAttribLast,
+                                                              const std::string& 		exchange,
+                                                              const std::string& 		specialConditions		)
 { 
 
 }
 
 //*******************************************************************************************************************
 
-void 		DefaultEWrapper::tickByTickBidAsk		(		int 						reqId, 
-															time_t 						time, 
-															double 						bidPrice, 
-															double 						askPrice, 
-															int 						bidSize, 
-															int 						askSize, 
+void 		DefaultEWrapper::tickByTickBidAsk		(             int 					reqId,
+                                                                  time_t 				time,
+                                                                  double 				bidPrice,
+                                                                  double 				askPrice,
+                                                                  int 					bidSize,
+                                                                  int 					askSize,
 															const TickAttribBidAsk& 	tickAttribBidAsk		) 
 { 
 
@@ -778,7 +778,7 @@ void 		DefaultEWrapper::completedOrdersEnd		()
 
 //*******************************************************************************************************************
 
-void 		DefaultEWrapper::replaceFAEnd			(		int 					reqId, 
+void 		DefaultEWrapper::replaceFAEnd			(		      int               reqId,
 															const std::string& 		text		) 
 { 
 

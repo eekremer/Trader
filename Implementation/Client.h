@@ -203,7 +203,6 @@ public:
 
     void    readMessagesFromQueue           ();
 
-    //void    insertMsgIntoQueue              (         InterObject           obj                    );
     void    getMsgFromQueue                 ();
 
 private:
@@ -212,6 +211,7 @@ private:
 	void 	printContractDetailsMsg			(	const ContractDetails		&contractDetails		);
 	void 	printContractDetailsSecIdList	(	const TagValueListSPtr 		&secIdList				);
 	void 	printBondContractDetailsMsg		(	const ContractDetails		&contractDetails		);
+
 
 
 private:

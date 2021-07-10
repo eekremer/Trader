@@ -5,6 +5,7 @@
 #include <QTableView>
 #include <QItemDelegate>
 #include <QStandardItemModel>
+#include <QSystemTrayIcon>
 #include <pthread.h>
 
 #include "OrderTableModel.h"
@@ -92,7 +93,6 @@ class MainWindow : public QMainWindow
 
     public:
 
-        static void*        doSomeThingBigger            (  void*    arg  );
 
         void                setMainWindowOrderParams     ();
         void                setMainWindowContractParams  ();

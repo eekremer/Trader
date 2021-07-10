@@ -18,6 +18,8 @@
 #include <assert.h>
 #include <ostream>
 
+#include <QDebug>
+
 
 const int MIN_SERVER_VER_SUPPORTED    = 38; //all supported server versions are defined in EDecoder.h
 
@@ -229,6 +231,8 @@ bool EClientSocket::eConnectImpl(			int 			clientId,
 		getWrapper()->error( 				NO_VALID_ID, 
 											FAIL_CREATE_SOCK.code(), 
 											FAIL_CREATE_SOCK.msg()					);
+
+        qInfo(   "it's the fucking socket"                                          );
 		
 		return false;
 	
@@ -516,7 +520,7 @@ void EClientSocket::prepareBuffer( std::ostream&  buf ) const
 
 //*******************************************************************************************************************
 
-void EClientSocket::eDisconnect(bool resetState)
+void EClientSocket::eDisconnect(  bool  resetState  )
 {
 
 	if ( m_fd >= 0 )
@@ -587,10 +591,13 @@ int EClientSocket::receive(			char* 		buf,
 										sz, 
 										0					);
 
+    //qInfo( "BEFORE: fuck, I am wihin ::recv error...");
 
 	if( nResult == -1 && !handleSocketError() ) 
 	{
 		return -1;
+
+        qInfo( "fuck, I am wihin ::recv error...");
 	}
 	
 	if( nResult == 0 ) 
@@ -694,9 +701,16 @@ void EClientSocket::redirect( 		  const char 	*host,
 bool EClientSocket::handleSocketError()
 {
 
+
+    qInfo(       "errno:  ",    errno               );
+
 	// no error
 	if( errno == 0 )
+    {
 		return true;
+        qInfo(       "within errno == 0"               );
+    }
+
 
 	// Socket is already connected
 	if( errno == EISCONN ) 
@@ -721,11 +735,15 @@ bool EClientSocket::handleSocketError()
 		getWrapper()->error( 				NO_VALID_ID, 
 											SOCKET_EXCEPTION.code(),
 											SOCKET_EXCEPTION.msg() + strerror( errno )		);
+
+        qInfo(       "within else..."               );
 	
 	}
 	
 	// reset errno
 	errno = 0;
+
+    qInfo(       "errno reset to 0: %u ", errno               );
 
 	eDisconnect();
 	

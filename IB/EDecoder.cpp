@@ -23,6 +23,9 @@
 #include <string>
 #include <bitset>
 
+#include <QtGlobal>
+
+//static int counter = 0;
 
 
 
@@ -342,6 +345,7 @@ const char* EDecoder::processTickGenericMsg(				const char* 	ptr,
 const char* EDecoder::processTickStringMsg(				const char* 	ptr, 
 														const char* 	endPtr				) 
 {
+
 
     int             version;
     int             tickerId;
@@ -3467,7 +3471,7 @@ const char* EDecoder::decodeTick(			HistoricalTickLast& 	tick,
 //**************************************************************************************************************
 
 void EDecoder::callEWrapperCallBack(			int 									reqId, 
-												const std::vector<HistoricalTickLast> 	&ticks, 
+                                          const std::vector<HistoricalTickLast> 	   &ticks,
 												bool 									done			) 
 {
 
@@ -3519,9 +3523,9 @@ const char* EDecoder::processTickByTickDataMsg(				const char* 	ptr,
 															const char* 	endPtr			) 
 {
 
-    int reqId;
-    int tickType = 0;
-	time_t time;
+    int    reqId;
+    int    tickType = 0;
+    time_t time;
 
     DECODE_FIELD(			reqId				);
     DECODE_FIELD(			tickType			);
@@ -3531,101 +3535,113 @@ const char* EDecoder::processTickByTickDataMsg(				const char* 	ptr,
     if ( tickType == 1 || tickType == 2 ) // Last/AllLast
 	{ 
 
-            double 	price;
-            int 	size;
-            int 	attrMask;
-            
-			TickAttribLast tickAttribLast = {};
-            
-			std::string exchange;
-            std::string specialConditions;
+        double 	price;
+        int 	size;
+        int 	attrMask;
 
-            DECODE_FIELD(			price						);
-            DECODE_FIELD(			size						);
-            DECODE_FIELD(			attrMask					);
+        TickAttribLast tickAttribLast = {};
 
-            std::bitset<32> mask( attrMask );
+        std::string exchange;
+        std::string specialConditions;
 
-            tickAttribLast.pastLimit  = mask[ 0 ];
-            tickAttribLast.unreported = mask[ 1 ];
+        DECODE_FIELD(			price						);
+        DECODE_FIELD(			size						);
+        DECODE_FIELD(			attrMask					);
 
-            DECODE_FIELD(			exchange					);
-            DECODE_FIELD(			specialConditions			);
+        std::bitset<32> mask( attrMask );
 
-			//************************************************************************
-			// callback
-			//************************************************************************
+        tickAttribLast.pastLimit  = mask[ 0 ];
+        tickAttribLast.unreported = mask[ 1 ];
 
-            m_pEWrapper->tickByTickAllLast(				reqId, 
-														tickType, 
-														time, 
-														price, 
-														size, 
-														tickAttribLast, 
-														exchange, 
-														specialConditions			);
+        DECODE_FIELD(			exchange					);
+        DECODE_FIELD(			specialConditions			);
 
-			//************************************************************************
+
+        //************************************************************************
+        // callback
+        //************************************************************************
+
+        m_pEWrapper->tickByTickAllLast(				reqId,
+                                                    tickType,
+                                                    time,
+                                                    price,
+                                                    size,
+                                                    tickAttribLast,
+                                                    exchange,
+                                                    specialConditions			);
+
+        //************************************************************************
 
     } 
 	else if ( tickType == 3 ) // BidAsk
 	{ 
 
-            double 	bidPrice;
-            double 	askPrice;
-            int 	bidSize;
-            int 	askSize;
-            int 	attrMask;
+        double 	bidPrice;
+        double 	askPrice;
+        int 	bidSize;
+        int 	askSize;
+        int 	attrMask;
 
-            DECODE_FIELD(			bidPrice				);
-            DECODE_FIELD(			askPrice				);
-            DECODE_FIELD(			bidSize					);
-            DECODE_FIELD(			askSize					);
-            DECODE_FIELD(			attrMask				);
+        DECODE_FIELD(			bidPrice				);
+
+        qInfo( "just after DECODE_FIELD in EDecoder::processTickByTickDataMsg()" );
+        qInfo( "bidPrice: %f", bidPrice );
+
+        DECODE_FIELD(			askPrice				);
+        DECODE_FIELD(			bidSize					);
+        DECODE_FIELD(			askSize					);
+        DECODE_FIELD(			attrMask				);
 
 
-            TickAttribBidAsk tickAttribBidAsk = {};
-            
-			std::bitset<32> mask( attrMask );
+        TickAttribBidAsk tickAttribBidAsk = {};
 
-            tickAttribBidAsk.bidPastLow  = mask[ 0 ];
-            tickAttribBidAsk.askPastHigh = mask[ 1 ];
+        std::bitset<32> mask( attrMask );
 
-			//************************************************************************
-			// callback
-			//************************************************************************
+        tickAttribBidAsk.bidPastLow  = mask[ 0 ];
+        tickAttribBidAsk.askPastHigh = mask[ 1 ];
 
-            m_pEWrapper->tickByTickBidAsk(				reqId, 
-														time, 
-														bidPrice, 
-														askPrice, 
-														bidSize, 
-														askSize, 
-														tickAttribBidAsk			);
+        //************************************************************************
+        // callback
+        //************************************************************************
 
-			//************************************************************************
+        m_pEWrapper->tickByTickBidAsk(				reqId,
+                                                    time,
+                                                    bidPrice,
+                                                    askPrice,
+                                                    bidSize,
+                                                    askSize,
+                                                    tickAttribBidAsk			);
+
+        //************************************************************************
+
+        qInfo( "within EDecoder::processTickByTickDataMsg()" );
+        qInfo( "bidPrice: %f", bidPrice );
+
+        //printf( "counter:" , counter );
+
     
 	} 
 	else if ( tickType == 4 ) // MidPoint
 	{ 
 
-            double midPoint;
+        double midPoint;
 
-            DECODE_FIELD(			midPoint			);
+        DECODE_FIELD(			midPoint			);
 
-			//********************************************************************
-			// callback
-			//********************************************************************
 
-            m_pEWrapper->tickByTickMidPoint(			reqId, 	
-														time, 
-														midPoint				);
-    
-			//********************************************************************
+        //********************************************************************
+        // callback
+        //********************************************************************
+
+        m_pEWrapper->tickByTickMidPoint(			reqId,
+                                                    time,
+                                                    midPoint				);
+
+        //********************************************************************
 
 	}
 
-    return ptr;
+     return ptr;
 
 }
 
@@ -3850,13 +3866,9 @@ int EDecoder::parseAndProcessMsg(			const char*& 	beginPtr,
 				ptr = processTickGenericMsg( ptr, endPtr );
 				break;
 
-            //********************************************
-
 			case TICK_STRING:
 				ptr = processTickStringMsg( ptr, endPtr );
 				break;
-
-            //********************************************
 
 			case TICK_EFP:
 				ptr = processTickEfpMsg( ptr, endPtr );
@@ -4130,9 +4142,13 @@ int EDecoder::parseAndProcessMsg(			const char*& 	beginPtr,
 				ptr = processHistoricalTicksLast( ptr, endPtr );
 				break;
 
+            //************************************************
+
 			case TICK_BY_TICK:
 				ptr = processTickByTickDataMsg( ptr, endPtr );
 				break;
+
+            //************************************************
 
 			case ORDER_BOUND:
 				ptr = processOrderBoundMsg( ptr, endPtr );
@@ -4362,11 +4378,24 @@ bool EDecoder::DecodeField(				double& 		doubleValue,
 	
 	const char* fieldBeg = ptr;
 	const char* fieldEnd = FindFieldEnd( fieldBeg, endPtr );
-	
+
 	if( !fieldEnd )
 		return false;
 
-	doubleValue = atof( fieldBeg );
+    //********************************************************************
+
+    printf(     "just before atof: %s", fieldBeg                );
+
+    //********************************************************************
+
+    doubleValue = atof( fieldBeg );   // Convert string to double
+
+    //********************************************************************
+
+    printf(     "\n"                                            );
+    printf(     "just after atof:  %f \n",  doubleValue         );
+
+    //********************************************************************
 	
 	ptr = ++fieldEnd;
 

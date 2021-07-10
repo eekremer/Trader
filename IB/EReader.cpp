@@ -202,10 +202,21 @@ bool EReader::putMessageToQueue()
 
 		//************************************************************
 		//************************************************************
-	
+
+
+        printf(     "\n"                                                    );
+        printf(     "just after inserting msg into the queue...\n"          );
+
+        // Hack for printing content out of a vector
+        for (  std::vector<char>::const_iterator i = msg->data.begin(); i != msg->data.end(); ++i  )
+            if ( *i == '\0' )
+                std::cout << ' ';
+            else
+                std::cout << *i << ' ';
+
 	}
 
-	m_pEReaderSignal->issueSignal();
+    m_pEReaderSignal->issueSignal();
 
 	return true;
 
@@ -511,10 +522,25 @@ EMessage*  EReader::readSingleMsg()
 
 		std::vector< char > buf = std::vector< char >( msgSize );
 
+
+        //***********************************************************
+        //***********************************************************
+        //
+        //  Here we read the msg from the socket buffer !!!
+        //
+        //***********************************************************
+        //***********************************************************
+
+
 		if ( !bufferedRead( 	buf.data(), 	buf.size() 		) 	)
 			return 0;
 
-		return new EMessage( buf );
+
+        //***********************************************************
+        //***********************************************************
+
+
+        return new EMessage( buf );
 	
 	}
 	else 
@@ -568,7 +594,9 @@ EMessage*  EReader::readSingleMsg()
 std::shared_ptr<EMessage> EReader::getMsg( void ) 
 {
 
-	EMutexGuard lock( m_csMsgQueue );
+
+    EMutexGuard lock( m_csMsgQueue );
+
 
 	// checks whether there is any element in the queue
 	if ( m_msgQueue.size() == 0 )  
@@ -592,7 +620,17 @@ std::shared_ptr<EMessage> EReader::getMsg( void )
 	//**************************************************
 
 
-	return msg;
+    printf(     "\n"                                                     );
+    printf(     "just after extracting msg from the queue...\n"          );
+
+    // Hack for printing out content of a vector
+    for (  std::vector<char>::const_iterator i = msg->data.begin(); i != msg->data.end(); ++i  )
+        if ( *i == '\0' )
+            std::cout << ' ';
+        else
+            std::cout << *i << ' ';
+
+    return msg;
 
 }
 
@@ -615,8 +653,10 @@ void EReader::processMsgs( void )
 
 
 	//*****************************************
+    //
 	// get the first message from the queue 
-	//*****************************************
+    //
+    //*****************************************
 
 	std::shared_ptr< EMessage > msg = getMsg();
 
@@ -631,15 +671,19 @@ void EReader::processMsgs( void )
 
 
 	//*****************************************
-	// loop goes processing messages one by one
-	//*****************************************
+    //
+    // processing messages one by one
+    //
+    //*****************************************
 
 	while ( processMsgsDecoder_.parseAndProcessMsg(  pBegin,  msg->end()  ) > 0 ) 
 	{
 
 
 		//**********************************
+        //
 		// get the next message in the queue
+        //
 		//**********************************
 
 		msg = getMsg();

@@ -39,12 +39,17 @@
 #include <fstream>
 #include <cstdint>
 #include <QModelIndex>
+#include <iostream>
+#include <string.h>
 
 #include "MainWindow.h"
 
 
 const int       PING_DEADLINE 		=  2; // seconds
 const int       SLEEP_BETWEEN_PINGS = 30; // seconds
+
+static int counter = 0;
+
 
 extern MainWindow window;
 
@@ -84,7 +89,7 @@ Client::~Client()
 
 //**********************************************************************************************************************
 
-bool Client::connect(			const char 	   *host,
+bool Client::connect(			const char             *host,
 										int 			port, 
 										int 			clientId			)
 {
@@ -325,16 +330,16 @@ void Client::processMessages()
 		case ST_CONDITIONSAMPLES_ACK:
 			break;
 
-		//*************************************************
+        //*******************************
 		// Bracket order
-		//*************************************************
+        //*******************************
 		
 		case ST_BRACKETSAMPLES:
 			bracketSample();
 			break;
 		
-		//*************************************************
-		//*************************************************
+        //*******************************
+        //*******************************
 
 		case ST_BRACKETSAMPLES_ACK:
 			break;
@@ -456,16 +461,30 @@ void Client::processMessages()
 			continuousFuturesOperations();
 			break;
 
+        //*******************************
+        //*******************************
+
         case ST_REQHISTORICALTICKS:
             reqHistoricalTicks();
             break;
 
+        //*******************************
+        //*******************************
+
+
         case ST_REQHISTORICALTICKS_ACK:
             break;
+
+
+        //*******************************
+        //*******************************
 
 		case ST_REQTICKBYTICKDATA:
 			reqTickByTickData();
 			break;
+
+        //*******************************
+        //*******************************
 
 		case ST_REQTICKBYTICKDATA_ACK:
 			break;
@@ -507,9 +526,11 @@ void Client::processMessages()
 
 
 	//*****************************************
-	// wait for a signal from the READER thread 
-	// (for 2 sec) for writing to the Socket 
-	//*****************************************
+    //
+    //  wait either for 2sec or a signal from
+    //  the READER thread
+    //
+    //*****************************************
 
 	m_osSignal.waitForSignal();
 
@@ -520,50 +541,18 @@ void Client::processMessages()
 	errno = 0;
 	
 
-	//*************************************************
+    //*****************************************
 	// read 
-	//*************************************************
+    //*****************************************
 	
 	m_pReader->processMsgs();
 
-	//*************************************************
-	//*************************************************
+    //*****************************************
+    //*****************************************
 
 }
 
 //********************************************************************************************
-
-/*
-
-void Client::insertMsgIntoQueue(    InterObject  msg    )
-{
-
-    std::this_thread::sleep_for(    std::chrono::milliseconds( 20 )   );
-
-    qInfo( "at the beginning of Queue::insertMsgIntoQueue()" );
-
-
-    //********************************************
-    // Mutual exclusion
-    //********************************************
-
-    //pthread_mutex_lock  (  &m_guiEventQueueMutex  );
-
-        m_guiEventQueue.push_back(  msg  );
-
-    //pthread_mutex_unlock(  &m_guiEventQueueMutex  );
-
-    //********************************************
-    //********************************************
-
-    qInfo( "at the end of Queue::insertMsgIntoQueue()" );
-
-}
-
-*/
-
-//********************************************************************************************
-
 
 
 void Client::getMsgFromQueue()
@@ -575,7 +564,7 @@ void Client::getMsgFromQueue()
     if ( m_window->m_guiEventQueue.size() == 0 )
     {
 
-        qInfo( "No element in the queue !!" );
+        //qInfo( "No element in the queue !!" );
 
         return;
 
@@ -774,7 +763,7 @@ void Client::tickDataOperation()
 	//! [reqmktdata_genticks]
 
 	//! [reqmktdata_contractnews]
-	// Without the API news subscription this will generate an "invalid tick type" error
+    // Without the API news subscription this will generate an "invalid tick type" error
 
 /* 	m_pClient->reqMktData(				1005, 	
 										ContractSamples::USStock(), 	
@@ -1181,7 +1170,7 @@ void Client::contractOperations()
 	m_pClient->reqContractDetails(			1, 
 											contract2			);
 
-
+    std::this_thread::sleep_for(					std::chrono::seconds( 2 )							);
 
 	//************************************************************
 
@@ -1190,7 +1179,7 @@ void Client::contractOperations()
 	m_pClient->reqContractDetails(					209, 
 													ContractSamples::EurGbpFx()							);
 	
-	std::this_thread::sleep_for(					std::chrono::seconds( 2 )							);
+
 	
 	//! [reqcontractdetails]
 	m_pClient->reqContractDetails(					210, 
@@ -2404,19 +2393,21 @@ void Client::continuousFuturesOperations()
 void Client::reqHistoricalTicks()
 {
 
+
 	//! [reqhistoricalticks]
     m_pClient->reqHistoricalTicks(			19001, 
-											ContractSamples::IBMUSStockAtSmart(), 
-											"20170621 09:38:33", 
-											"", 
-											10, 
+                                            ContractSamples::USStock(),
+                                            "", // "20210701 09:30:00",
+                                            "", // "20210702 16:00:00",
+                                            10000,
 											"BID_ASK", 
 											1, 
 											true, 
 											TagValueListSPtr()							);
-    
-	m_pClient->reqHistoricalTicks(			19002, 
-											ContractSamples::IBMUSStockAtSmart(), 
+
+
+    m_pClient->reqHistoricalTicks(			19002,
+                                            ContractSamples::USStock(),
 											"20170621 09:38:33", 
 											"", 
 											10, 
@@ -2426,7 +2417,7 @@ void Client::reqHistoricalTicks()
 											TagValueListSPtr()							);
     
 	m_pClient->reqHistoricalTicks(			19003, 
-											ContractSamples::IBMUSStockAtSmart(), 
+                                            ContractSamples::USStock(),
 											"20170621 09:38:33", 
 											"", 
 											10, 
@@ -2434,7 +2425,8 @@ void Client::reqHistoricalTicks()
 											1, 
 											true, 
 											TagValueListSPtr()							);
-    
+
+
 	//! [reqhistoricalticks]
     m_state = ST_REQHISTORICALTICKS_ACK;
 
@@ -2445,28 +2437,30 @@ void Client::reqHistoricalTicks()
 void Client::reqTickByTickData()
 {
 
+
     /*** Requesting tick-by-tick data (only refresh) ***/
+
     
     m_pClient->reqTickByTickData(			20001, 
-											ContractSamples::EuropeanStock(), 
+                                            ContractSamples::USStock(),
 											"Last", 
 											0, 
 											false										);
     
 	m_pClient->reqTickByTickData(			20002, 
-											ContractSamples::EuropeanStock(), 
+                                            ContractSamples::USStock(),
 											"AllLast", 
 											0, 
 											false										);
     
 	m_pClient->reqTickByTickData(			20003, 
-											ContractSamples::EuropeanStock(), 
-											"BidAsk", 
+                                            ContractSamples::USStock(),
+                                            "BidAsk",
 											0, 
 											true										);
     
 	m_pClient->reqTickByTickData(			20004, 
-											ContractSamples::EurGbpFx(), 
+                                            ContractSamples::USStock(),
 											"MidPoint", 
 											0, 
 											false										);
@@ -2474,36 +2468,38 @@ void Client::reqTickByTickData()
     std::this_thread::sleep_for(			std::chrono::seconds( 10 )					);
 
 	//! [canceltickbytick]
+ /*
     m_pClient->cancelTickByTickData( 		20001										);
     m_pClient->cancelTickByTickData(		20002										);
     m_pClient->cancelTickByTickData(		20003										);
     m_pClient->cancelTickByTickData(		20004										);
+ */
     //! [canceltickbytick]
 	
     /*** Requesting tick-by-tick data (historical + refresh) ***/
     //! [reqtickbytick]
     m_pClient->reqTickByTickData(			20005, 
-											ContractSamples::EuropeanStock(), 
+                                            ContractSamples::USStock(),
 											"Last", 
 											10, 
 											false										);
     
 	m_pClient->reqTickByTickData(			20006, 
-											ContractSamples::EuropeanStock(), 
+                                            ContractSamples::USStock(),
 											"AllLast", 
 											10, 
 											false										);
     
 	m_pClient->reqTickByTickData(			20007, 
-											ContractSamples::EuropeanStock(), 
+                                            ContractSamples::USStock(),
 											"BidAsk", 
-											10, 
+                                            20, // 10
 											false										);
     
 	m_pClient->reqTickByTickData(			20008, 
-											ContractSamples::EurGbpFx(), 
+                                            ContractSamples::USStock(),
 											"MidPoint", 
-											10, 
+                                            20, // 10
 											true										);
 	//! [reqtickbytick]
 	
@@ -2729,13 +2725,7 @@ void Client::tickString(                    TickerId 				tickerId,
 											(int)tickType, 
                                             value.c_str()                                       );
 
-    QModelIndex idx  =  m_window->m_orderModel->index(              0,
-                                                                    0,
-                                                                    QModelIndex()               );
 
-    m_window->m_orderModel->setData(                   idx,
-                                                        value.c_str(),  //"200",
-                                                        Qt::EditRole                            );
 
 
 }
@@ -4075,31 +4065,32 @@ void Client::pnlSingle(				int 		reqId,
 //**********************************************************************************************************************
 
 //! [historicalticks]
-void Client::historicalTicks(			int 									reqId,
-												const std::vector<HistoricalTick>& 		ticks, 
-												bool 									done				) 
+void Client::historicalTicks(			int 								reqId,
+                                  const std::vector<HistoricalTick>& 		ticks,
+                                        bool 								done		)
 {
-
+/*
     for ( HistoricalTick tick : ticks ) 
 	{
+
 
 		std::time_t t = tick.time;
         
 		std::cout << "Historical tick. ReqId: " << reqId << ", time: " << ctime(&t) << ", price: "<< tick.price << ", size: " << tick.size << std::endl;
     
 	}
-
+*/
 }
 //! [historicalticks]
 
 //**********************************************************************************************************************
 
 //! [historicalticksbidask]
-void Client::historicalTicksBidAsk(				int 										reqId,
-														const std::vector<HistoricalTickBidAsk>& 	ticks, 
-														bool 										done				) 
+void Client::historicalTicksBidAsk(				int 									reqId,
+                                          const std::vector<HistoricalTickBidAsk>&      ticks,
+                                                bool                                    done            )
 {
-
+/*
     for ( HistoricalTickBidAsk tick : ticks ) 
 	{
 
@@ -4110,16 +4101,16 @@ void Client::historicalTicksBidAsk(				int 										reqId,
             ", bidPastLow: " << tick.tickAttribBidAsk.bidPastLow << ", askPastHigh: " << tick.tickAttribBidAsk.askPastHigh << std::endl;
     
 	}
-
+*/
 }
 //! [historicalticksbidask]
 
 //**********************************************************************************************************************
 
 //! [historicaltickslast]
-void Client::historicalTicksLast(				int 										reqId,
-														const std::vector<HistoricalTickLast>&  	ticks, 
-														bool 										done			) 
+void Client::historicalTicksLast(                       int 									reqId,
+                                                  const std::vector<HistoricalTickLast>        &ticks,
+                                                        bool 									done			)
 {
 
     for ( HistoricalTickLast tick : ticks ) 
@@ -4140,15 +4131,16 @@ void Client::historicalTicksLast(				int 										reqId,
 
 //! [tickbytickalllast]
 void Client::tickByTickAllLast(				int 					reqId,
-													int 					tickType, 
-													time_t 					time, 
-													double 					price, 
-													int 					size, 
-													const TickAttribLast& 	tickAttribLast, 
-													const std::string& 		exchange, 
-													const std::string& 		specialConditions			) 
+                                            int 					tickType,
+                                            time_t 					time,
+                                            double 					price,
+                                            int 					size,
+                                      const TickAttribLast&         tickAttribLast,
+                                      const std::string&            exchange,
+                                      const std::string&            specialConditions			)
 {
-    
+
+
 	printf(					"Tick-By-Tick. ReqId: %d, TickType: %s, Time: %s, Price: %g, Size: %d, PastLimit: %d, Unreported: %d, Exchange: %s, SpecialConditions:%s\n", 
         					reqId, 
 							( tickType == 1 ? "Last" : "AllLast" ), 
@@ -4160,6 +4152,11 @@ void Client::tickByTickAllLast(				int 					reqId,
 							exchange.c_str(), 
 							specialConditions.c_str()								);
 
+    // here...
+
+
+
+
 }
 //! [tickbytickalllast]
 
@@ -4167,15 +4164,16 @@ void Client::tickByTickAllLast(				int 					reqId,
 
 //! [tickbytickbidask]
 void Client::tickByTickBidAsk(				int 						reqId,
-													time_t 						time, 
-													double 						bidPrice, 
-													double 						askPrice, 
-													int 						bidSize, 
-													int 						askSize, 
-													const TickAttribBidAsk& 	tickAttribBidAsk				) 
+                                            time_t 						time,
+                                            double 						bidPrice,
+                                            double 						askPrice,
+                                            int 						bidSize,
+                                            int 						askSize,
+                                      const TickAttribBidAsk&           tickAttribBidAsk				)
 {
 
-    printf(					"Tick-By-Tick. ReqId: %d, TickType: BidAsk, Time: %s, BidPrice: %g, AskPrice: %g, BidSize: %d, AskSize: %d, BidPastLow: %d, AskPastHigh: %d\n", 
+/*
+    printf(					"I AM MOTHER FUCKER   Tick-By-Tick. ReqId: %d, TickType: BidAsk, Time: %s, BidPrice: %g, AskPrice: %g, BidSize: %d, AskSize: %d, BidPastLow: %d, AskPastHigh: %d\n",
         					reqId, 
 							ctime( &time ), 
 							bidPrice, 
@@ -4184,6 +4182,41 @@ void Client::tickByTickBidAsk(				int 						reqId,
 							askSize, 
 							tickAttribBidAsk.bidPastLow, 
 							tickAttribBidAsk.askPastHigh									);
+*/
+
+    //-----------------------------------------------------------------------------------------------
+
+    QModelIndex bidIndex  =  m_window->m_dataModel->index(              0,
+                                                                        0,
+                                                                        QModelIndex()               );
+
+    m_window->m_dataModel->setData(                     bidIndex,
+                                                        QString::number( bidPrice, 'f', 2 ),
+                                                        Qt::EditRole                                );
+
+    qInfo(          "within ...Client::tickByTickBidAsk() \n"           );
+    qInfo(          "%f \n",   bidPrice                                 );
+
+
+
+    //-----------------------------------------------------------------------------------------------
+
+    QModelIndex askIndex  =  m_window->m_dataModel->index(              0,
+                                                                        1,
+                                                                        QModelIndex()               );
+
+    m_window->m_dataModel->setData(                     askIndex,
+                                                        QString::number( askPrice, 'f', 2 ),
+                                                        Qt::EditRole                                );
+
+    //-----------------------------------------------------------------------------------------------
+
+
+    printf( 				"Counter %d\n",
+                            counter													);
+
+    counter++;
+
 
 }
 //! [tickbytickbidask]
@@ -4192,24 +4225,26 @@ void Client::tickByTickBidAsk(				int 						reqId,
 
 //! [tickbytickmidpoint]
 void Client::tickByTickMidPoint(			int 		reqId,
-												time_t 		time, 
-												double 		midPoint		) 
+                                            time_t 		time,
+                                            double 		midPoint		)
 {
-
+/*
     printf(					"Tick-By-Tick. ReqId: %d, TickType: MidPoint, Time: %s, MidPoint: %g\n", 
 							reqId, 
 							ctime( &time ), 
 							midPoint										);
 
+    // here
+*/
 }
 //! [tickbytickmidpoint]
 
 //**********************************************************************************************************************
 
 //! [orderbound]
-void Client::orderBound(					long long 		orderId,
-												int 			apiClientId, 
-												int 			apiOrderId					) 
+void Client::orderBound(            long long 		orderId,
+                                    int 			apiClientId,
+                                    int 			apiOrderId					)
 {
 
     printf(					"Order bound. OrderId: %lld, ApiClientId: %d, ApiOrderId: %d\n", 
@@ -4224,12 +4259,12 @@ void Client::orderBound(					long long 		orderId,
 
 //! [completedorder]
 void Client::completedOrder(				const Contract& 	contract,
-												const Order& 		order, 
-												const OrderState& 	orderState				) 
+                                            const Order& 		order,
+                                            const OrderState& 	orderState				)
 {
 
 	printf( 				"CompletedOrder. PermId: %i, ParentPermId: %lld, Account: %s, Symbol: %s, SecType: %s, Exchange: %s:, Action: %s, OrderType: %s, TotalQty: %g, CashQty: %g, FilledQty: %g, "
-		"LmtPrice: %g, AuxPrice: %g, Status: %s, CompletedTime: %s, CompletedStatus: %s\n", 
+                            "LmtPrice: %g, AuxPrice: %g, Status: %s, CompletedTime: %s, CompletedStatus: %s\n",
 							order.permId, 
 							order.parentPermId == UNSET_LONG ? 0 : order.parentPermId, 
 							order.account.c_str(), 

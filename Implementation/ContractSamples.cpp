@@ -211,18 +211,16 @@ Contract ContractSamples::OptionAtIse()
 
 //******************************************************************************************
 
-Contract ContractSamples:: USStock()
+Contract ContractSamples::USStock()
 {
 
 	//! [stkcontract]
 	Contract contract;
 
-	contract.symbol 	= "IBKR";
+    contract.symbol 	= "TSLA";
 	contract.secType 	= "STK";
 	contract.currency 	= "USD";
-
-	//In the API side, NASDAQ is always defined as ISLAND
-	contract.exchange 	= "ISLAND";
+    contract.exchange 	= "ISLAND";	// NASDAQ always defined as ISLAND
 
 	//! [stkcontract]
 	return contract;

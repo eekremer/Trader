@@ -24,8 +24,11 @@ class DataViewDelegate  :  public QStyledItemDelegate
 
     public:
 
-        explicit DataViewDelegate( QObject *parent = nullptr );
+        //------------------------------------------------------------------------------------------
 
+        explicit    DataViewDelegate        (           QObject                 *parent = nullptr );
+
+        //------------------------------------------------------------------------------------------
 
         QWidget*    createEditor            (           QWidget                 *parent,
                                                   const QStyleOptionViewItem    &option,
@@ -42,10 +45,10 @@ class DataViewDelegate  :  public QStyledItemDelegate
         void        setModelData            (           QWidget                 *editor,
                                                         QAbstractItemModel      *model,
                                                   const QModelIndex             &index      ) const override;
-
+/*
         QSize       sizeHint                (     const QStyleOptionViewItem    &option,
                                                   const QModelIndex             &index      ) const override;
-/*
+
         void        updateEditorGeometry    (           QWidget                 *editor,
                                                   const QStyleOptionViewItem    &option,
                                                   const QModelIndex             &index      ) const override;

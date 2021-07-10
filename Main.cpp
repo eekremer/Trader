@@ -22,7 +22,7 @@ extern MainWindow window;
 const unsigned 	MAX_ATTEMPTS        =  50           ;
 const unsigned 	SLEEP_TIME          =  10           ;
 const char*     host                =  "127.0.0.1"  ;
-      int       port                =  7497         ;
+      int       port                =  7496         ;
 const char*     connectOptions      =  ""           ;
       int 		clientId            =   0           ;
       unsigned 	attempt             =   0           ;
@@ -37,6 +37,8 @@ int main( int argc, char *argv[] )
 {
 
     QApplication app( argc, argv );
+
+    app.setWindowIcon(  QIcon( ":/rocket.png" )  );
 
     MainWindow *window = new MainWindow();
 
@@ -73,6 +75,7 @@ void* launchClientThread( void*  arg )
     int 		clientId 	= 0;
     unsigned 	attempt 	= 0;
 
+
     Client *l_client = reinterpret_cast< Client* >( arg );
 
 
@@ -90,17 +93,19 @@ void* launchClientThread( void*  arg )
 
         // Run time error will occur (here) if TestCppClient.exe is compiled in debug mode but TwsSocketClient.dll is compiled in Release mode
         // TwsSocketClient.dll (in Release Mode) is copied by API installer into SysWOW64 folder within Windows directory
-/*
+
         if( connectOptions )
         {
 
             l_client->setConnectOptions( connectOptions );
 
         }
-*/
+
        l_client->connect(                   host,
                                             port,
                                             clientId                        );
+
+
 
         int trial = 0;
 
@@ -108,34 +113,21 @@ void* launchClientThread( void*  arg )
         {
 
 
-            // stuff goes here !!!!
-
-            if ( trial == 1 )
-            {
-                // contractDetails
-                l_client->setState(  	ST_CONTRACTOPERATION  		);
-            }
-
-            if ( trial == 2 )
-            {
-                // reqMktDepth and reqMktData
-                l_client->setState(  	ST_REROUTECFD				);
-            }
-
-            if ( trial == 3 )
-            {
-                // reqMktDepth and reqMktData
-                l_client->setState(  	ST_REQMKTDEPTHEXCHANGES		);
-            }
-
-            if ( trial == 4 )
+            if ( trial == 10 ) // if trial = 0  => runtime error (socket) when you get it ran
             {
 
-                // reqMktDepth and reqMktData
-                l_client->setState(  	ST_TICKDATAOPERATION		);
+                l_client->setState(  	ST_REQTICKBYTICKDATA  		);
+                //l_client->setState(  	ST_REQHISTORICALTICKS 		);
+                //l_client->setState(  	ST_CONTRACTOPERATION  		);
+                //l_client->setState(  	ST_REROUTECFD				);
+                //l_client->setState(  	ST_REQMKTDEPTHEXCHANGES		);
+                //l_client->setState(  	ST_TICKDATAOPERATION		);
+
             }
+
 
             qInfo(          "before processMessages()...\n"                 );
+
 
             //****************************************
             //****************************************
