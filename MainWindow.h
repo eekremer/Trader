@@ -84,7 +84,6 @@ class MainWindow : public QMainWindow
         void                sellButtonClicked();
         void                setupButtonClicked();
         void                confirmBuyClicked();
-        void                on_pushButton_clicked();
         void                confirmButtonClicked();
 
         void                goToBuySellDialog();

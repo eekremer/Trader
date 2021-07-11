@@ -521,22 +521,6 @@ void MainWindow::confirmBuyClicked()
 //**************************************************************************************
 
 
-void MainWindow::on_pushButton_clicked()
-{
-
-    QModelIndex index1 = m_orderModel->index(               0,
-                                                            0,
-                                                            QModelIndex()           );
-
-    m_orderModel->setData(              index1,
-                                        "200",
-                                        Qt::EditRole          );
-
-}
-
-//****************************************************************************************
-
-
 void MainWindow::symbolComboBoxTextChanged( const QString&  symbol )
 {
 

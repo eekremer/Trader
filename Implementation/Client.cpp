@@ -4069,17 +4069,16 @@ void Client::historicalTicks(			int 								reqId,
                                   const std::vector<HistoricalTick>& 		ticks,
                                         bool 								done		)
 {
-/*
+
     for ( HistoricalTick tick : ticks ) 
 	{
-
 
 		std::time_t t = tick.time;
         
 		std::cout << "Historical tick. ReqId: " << reqId << ", time: " << ctime(&t) << ", price: "<< tick.price << ", size: " << tick.size << std::endl;
     
 	}
-*/
+
 }
 //! [historicalticks]
 
@@ -4090,7 +4089,7 @@ void Client::historicalTicksBidAsk(				int 									reqId,
                                           const std::vector<HistoricalTickBidAsk>&      ticks,
                                                 bool                                    done            )
 {
-/*
+
     for ( HistoricalTickBidAsk tick : ticks ) 
 	{
 
@@ -4101,7 +4100,7 @@ void Client::historicalTicksBidAsk(				int 									reqId,
             ", bidPastLow: " << tick.tickAttribBidAsk.bidPastLow << ", askPastHigh: " << tick.tickAttribBidAsk.askPastHigh << std::endl;
     
 	}
-*/
+
 }
 //! [historicalticksbidask]
 
@@ -4172,7 +4171,7 @@ void Client::tickByTickBidAsk(				int 						reqId,
                                       const TickAttribBidAsk&           tickAttribBidAsk				)
 {
 
-/*
+
     printf(					"I AM MOTHER FUCKER   Tick-By-Tick. ReqId: %d, TickType: BidAsk, Time: %s, BidPrice: %g, AskPrice: %g, BidSize: %d, AskSize: %d, BidPastLow: %d, AskPastHigh: %d\n",
         					reqId, 
 							ctime( &time ), 
@@ -4182,7 +4181,7 @@ void Client::tickByTickBidAsk(				int 						reqId,
 							askSize, 
 							tickAttribBidAsk.bidPastLow, 
 							tickAttribBidAsk.askPastHigh									);
-*/
+
 
     //-----------------------------------------------------------------------------------------------
 
@@ -4228,14 +4227,14 @@ void Client::tickByTickMidPoint(			int 		reqId,
                                             time_t 		time,
                                             double 		midPoint		)
 {
-/*
+
     printf(					"Tick-By-Tick. ReqId: %d, TickType: MidPoint, Time: %s, MidPoint: %g\n", 
 							reqId, 
 							ctime( &time ), 
 							midPoint										);
 
     // here
-*/
+
 }
 //! [tickbytickmidpoint]
 

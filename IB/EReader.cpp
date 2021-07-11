@@ -203,7 +203,6 @@ bool EReader::putMessageToQueue()
 		//************************************************************
 		//************************************************************
 
-
         printf(     "\n"                                                    );
         printf(     "just after inserting msg into the queue...\n"          );
 
@@ -218,7 +217,7 @@ bool EReader::putMessageToQueue()
 
     m_pEReaderSignal->issueSignal();
 
-	return true;
+    return true;
 
 }
 

@@ -3,15 +3,18 @@
 #include <chrono>
 #include <thread>
 #include <QDebug>
+#include <locale>
+#include <clocale>
+#include <iostream>
 
 #include "MainWindow.h"
 #include "OrderDbManager.h"
 
 
 // prototypes
-void* createClientThread(  void*  arg );
-void* launchClientThread(  void*  arg );
-
+void* createClientThread        (  void*  arg   );
+void* launchClientThread        (  void*  arg   );
+void  setLocaleForEntireProgram (  void         );
 
 // global var
 Client         *g_client;
@@ -36,6 +39,8 @@ static const QString   path         =  "example.db" ;
 int main( int argc, char *argv[] )
 {
 
+
+
     QApplication app( argc, argv );
 
     app.setWindowIcon(  QIcon( ":/rocket.png" )  );
@@ -43,6 +48,8 @@ int main( int argc, char *argv[] )
     MainWindow *window = new MainWindow();
 
     g_client = new Client( window );
+
+    setLocaleForEntireProgram();
 
     createClientThread( g_client );
 
@@ -161,6 +168,36 @@ void* launchClientThread( void*  arg )
 }
 
 //****************************************************************************
+
+void setLocaleForEntireProgram( void )
+{
+
+
+    //********************************************
+    //
+    //  set locale across the entire program
+    //
+    //********************************************
+
+
+    // for C and C++ where synced with stdio
+    std::setlocale(  LC_ALL,  "C"  );
+
+    // for C++
+    std::locale::global(  std::locale(  "C"  )  );
+
+    //std::cout.imbue( std::locale() );
+    // cerr, clog, wcout, wcerr, wclog as needed
+
+
+    //********************************************
+    //********************************************
+
+
+}
+
+//****************************************************************************
+
 
 
 // code that shall go on main()

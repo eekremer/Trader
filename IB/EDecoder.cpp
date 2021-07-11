@@ -4373,6 +4373,7 @@ bool EDecoder::DecodeField(				double& 		doubleValue,
 										const char* 	endPtr				)
 {
 
+
 	if( !CheckOffset( ptr, endPtr ) )
 		return false;
 	
@@ -4384,16 +4385,20 @@ bool EDecoder::DecodeField(				double& 		doubleValue,
 
     //********************************************************************
 
-    printf(     "just before atof: %s", fieldBeg                );
+    printf(         "just before atof: %s", fieldBeg                );
 
     //********************************************************************
 
-    doubleValue = atof( fieldBeg );   // Convert string to double
+//    setlocale(          LC_ALL,
+//                        "C"                                          );
+
+    doubleValue = atof(  fieldBeg  );   // Convert string to double
+
 
     //********************************************************************
 
-    printf(     "\n"                                            );
-    printf(     "just after atof:  %f \n",  doubleValue         );
+    printf(         "\n"                                            );
+    printf(         "just after atof:  %f \n",  doubleValue         );
 
     //********************************************************************
 	

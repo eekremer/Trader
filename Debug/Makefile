@@ -89,7 +89,8 @@ SOURCES       = ../AccountTableModel.cpp \
 		../Implementation/OrderSamples.cpp \
 		../Implementation/ScannerSubscriptionSamples.cpp \
 		../Implementation/StdAfx.cpp \
-		../Implementation/Utils.cpp moc_BuySellDialog.cpp \
+		../Implementation/Utils.cpp qrc_Res.cpp \
+		moc_BuySellDialog.cpp \
 		moc_MainWindow.cpp \
 		moc_OrderTableModel.cpp
 OBJECTS       = AccountTableModel.o \
@@ -130,6 +131,7 @@ OBJECTS       = AccountTableModel.o \
 		ScannerSubscriptionSamples.o \
 		StdAfx.o \
 		Utils.o \
+		qrc_Res.o \
 		moc_BuySellDialog.o \
 		moc_MainWindow.o \
 		moc_OrderTableModel.o
@@ -321,8 +323,8 @@ DIST          = ../../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../OrderDbManager.h \
 		../OrderTableModel.h \
 		../OrderViewDelegate.h \
-		Debug/ui_BuySellDialog.h \
-		Debug/ui_MainWindow.h \
+		ui_BuySellDialog.h \
+		ui_MainWindow.h \
 		../IB/bar.h \
 		../IB/CommissionReport.h \
 		../IB/CommonDefs.h \
@@ -385,8 +387,8 @@ DIST          = ../../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../Implementation/Utils.h \
 		../Profile/ui_BuySellDialog.h \
 		../Profile/ui_MainWindow.h \
-		Release/ui_BuySellDialog.h \
-		Release/ui_MainWindow.h ../AccountTableModel.cpp \
+		../Release/ui_BuySellDialog.h \
+		../Release/ui_MainWindow.h ../AccountTableModel.cpp \
 		../BuySellDialog.cpp \
 		../DataDbManager.cpp \
 		../DataTableModel.cpp \
@@ -612,7 +614,8 @@ Makefile: ../Trader.pro ../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf 
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/exceptions.prf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt/5.15.2/gcc_64/mkspecs/features/lex.prf \
-		../Trader.pro
+		../Trader.pro \
+		../Res.qrc
 	$(QMAKE) -o Makefile ../Trader.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 ../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf:
 ../../../Qt/5.15.2/gcc_64/mkspecs/common/unix.conf:
@@ -792,6 +795,7 @@ Makefile: ../Trader.pro ../../../Qt/5.15.2/gcc_64/mkspecs/features/spec_pre.prf 
 ../../../Qt/5.15.2/gcc_64/mkspecs/features/yacc.prf:
 ../../../Qt/5.15.2/gcc_64/mkspecs/features/lex.prf:
 ../Trader.pro:
+../Res.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../Trader.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 
@@ -806,8 +810,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../Res.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/5.15.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../Data.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../MainWindow.h ../Order.h ../OrderDbManager.h ../OrderTableModel.h ../OrderViewDelegate.h Debug/ui_BuySellDialog.h Debug/ui_MainWindow.h ../IB/bar.h ../IB/CommissionReport.h ../IB/CommonDefs.h ../IB/Contract.h ../IB/ContractCondition.h ../IB/DefaultEWrapper.h ../IB/DepthMktDataDescription.h ../IB/EClient.h ../IB/EClientException.h ../IB/EClientMsgSink.h ../IB/EClientSocket.h ../IB/EDecoder.h ../IB/EMessage.h ../IB/EMutex.h ../IB/EOrderDecoder.h ../IB/EPosixClientSocketPlatform.h ../IB/EReader.h ../IB/EReaderOSSignal.h ../IB/EReaderSignal.h ../IB/ESocket.h ../IB/ETransport.h ../IB/EWrapper.h ../IB/EWrapper_prototypes.h ../IB/Execution.h ../IB/executioncondition.h ../IB/FamilyCode.h ../IB/HistogramEntry.h ../IB/HistoricalTick.h ../IB/HistoricalTickBidAsk.h ../IB/HistoricalTickLast.h ../IB/IExternalizable.h ../IB/MarginCondition.h ../IB/NewsProvider.h ../IB/OperatorCondition.h ../IB/Order.h ../IB/OrderCondition.h ../IB/OrderState.h ../IB/PercentChangeCondition.h ../IB/platformspecific.h ../IB/PriceCondition.h ../IB/PriceIncrement.h ../IB/resource.h ../IB/ScannerSubscription.h ../IB/SoftDollarTier.h ../IB/TagValue.h ../IB/TickAttrib.h ../IB/TickAttribBidAsk.h ../IB/TickAttribLast.h ../IB/TimeCondition.h ../IB/TwsSocketClientErrors.h ../IB/VolumeCondition.h ../Implementation/AccountSummaryTags.h ../Implementation/AvailableAlgoParams.h ../Implementation/Client.h ../Implementation/ContractSamples.h ../Implementation/FAMethodSamples.h ../Implementation/OrderSamples.h ../Implementation/ScannerSubscriptionSamples.h ../Implementation/StdAfx.h ../Implementation/Utils.h ../Profile/ui_BuySellDialog.h ../Profile/ui_MainWindow.h Release/ui_BuySellDialog.h Release/ui_MainWindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../AccountTableModel.h ../BuySellDialog.h ../Data.h ../DataDbManager.h ../DataTableModel.h ../DataViewDelegate.h ../MainWindow.h ../Order.h ../OrderDbManager.h ../OrderTableModel.h ../OrderViewDelegate.h ui_BuySellDialog.h ui_MainWindow.h ../IB/bar.h ../IB/CommissionReport.h ../IB/CommonDefs.h ../IB/Contract.h ../IB/ContractCondition.h ../IB/DefaultEWrapper.h ../IB/DepthMktDataDescription.h ../IB/EClient.h ../IB/EClientException.h ../IB/EClientMsgSink.h ../IB/EClientSocket.h ../IB/EDecoder.h ../IB/EMessage.h ../IB/EMutex.h ../IB/EOrderDecoder.h ../IB/EPosixClientSocketPlatform.h ../IB/EReader.h ../IB/EReaderOSSignal.h ../IB/EReaderSignal.h ../IB/ESocket.h ../IB/ETransport.h ../IB/EWrapper.h ../IB/EWrapper_prototypes.h ../IB/Execution.h ../IB/executioncondition.h ../IB/FamilyCode.h ../IB/HistogramEntry.h ../IB/HistoricalTick.h ../IB/HistoricalTickBidAsk.h ../IB/HistoricalTickLast.h ../IB/IExternalizable.h ../IB/MarginCondition.h ../IB/NewsProvider.h ../IB/OperatorCondition.h ../IB/Order.h ../IB/OrderCondition.h ../IB/OrderState.h ../IB/PercentChangeCondition.h ../IB/platformspecific.h ../IB/PriceCondition.h ../IB/PriceIncrement.h ../IB/resource.h ../IB/ScannerSubscription.h ../IB/SoftDollarTier.h ../IB/TagValue.h ../IB/TickAttrib.h ../IB/TickAttribBidAsk.h ../IB/TickAttribLast.h ../IB/TimeCondition.h ../IB/TwsSocketClientErrors.h ../IB/VolumeCondition.h ../Implementation/AccountSummaryTags.h ../Implementation/AvailableAlgoParams.h ../Implementation/Client.h ../Implementation/ContractSamples.h ../Implementation/FAMethodSamples.h ../Implementation/OrderSamples.h ../Implementation/ScannerSubscriptionSamples.h ../Implementation/StdAfx.h ../Implementation/Utils.h ../Profile/ui_BuySellDialog.h ../Profile/ui_MainWindow.h ../Release/ui_BuySellDialog.h ../Release/ui_MainWindow.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../AccountTableModel.cpp ../BuySellDialog.cpp ../DataDbManager.cpp ../DataTableModel.cpp ../DataViewDelegate.cpp ../Main.cpp ../MainWindow.cpp ../OrderDbManager.cpp ../OrderTableModel.cpp ../OrderViewDelegate.cpp ../IB/ContractCondition.cpp ../IB/DefaultEWrapper.cpp ../IB/EClient.cpp ../IB/EClientSocket.cpp ../IB/EDecoder.cpp ../IB/EMessage.cpp ../IB/EMutex.cpp ../IB/EOrderDecoder.cpp ../IB/EReader.cpp ../IB/EReaderOSSignal.cpp ../IB/ESocket.cpp ../IB/executioncondition.cpp ../IB/MarginCondition.cpp ../IB/OperatorCondition.cpp ../IB/OrderCondition.cpp ../IB/PercentChangeCondition.cpp ../IB/PriceCondition.cpp ../IB/SoftDollarTier.cpp ../IB/TimeCondition.cpp ../IB/VolumeCondition.cpp ../Implementation/AccountSummaryTags.cpp ../Implementation/AvailableAlgoParams.cpp ../Implementation/Client.cpp ../Implementation/ContractSamples.cpp ../Implementation/OrderSamples.cpp ../Implementation/ScannerSubscriptionSamples.cpp ../Implementation/StdAfx.cpp ../Implementation/Utils.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../BuySellDialog.ui ../MainWindow.ui $(DISTDIR)/
 
@@ -833,8 +838,14 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_Res.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_Res.cpp
+qrc_Res.cpp: ../Res.qrc \
+		../../../Qt/5.15.2/gcc_64/bin/rcc \
+		../rocket.png
+	/home/ed/Qt/5.15.2/gcc_64/bin/rcc -name Res ../Res.qrc -o qrc_Res.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -950,6 +961,20 @@ moc_BuySellDialog.cpp: ../BuySellDialog.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qtouchdevice.h \
 		ui_BuySellDialog.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QCheckBox \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcheckbox.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
 		moc_predefs.h \
 		../../../Qt/5.15.2/gcc_64/bin/moc
 	/home/ed/Qt/5.15.2/gcc_64/bin/moc $(DEFINES) --include '/home/ed/Qt projects/Trader/Debug/moc_predefs.h' -I/home/ed/Qt/5.15.2/gcc_64/mkspecs/linux-g++ -I'/home/ed/Qt projects/Trader' -I'/home/ed/Qt projects/Trader' -I/home/ed/Qt/5.15.2/gcc_64/include -I/home/ed/Qt/5.15.2/gcc_64/include/QtWidgets -I/home/ed/Qt/5.15.2/gcc_64/include/QtGui -I/home/ed/Qt/5.15.2/gcc_64/include/QtSql -I/home/ed/Qt/5.15.2/gcc_64/include/QtCore -I. -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../BuySellDialog.h -o moc_BuySellDialog.cpp
@@ -1220,7 +1245,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -1333,6 +1358,20 @@ BuySellDialog.o: ../BuySellDialog.cpp ../BuySellDialog.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.15.2/gcc_64/include/QtGui/qtouchdevice.h \
 		ui_BuySellDialog.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QCheckBox \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcheckbox.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o BuySellDialog.o ../BuySellDialog.cpp
 
@@ -1924,10 +1963,49 @@ MainWindow.o: ../MainWindow.cpp ../../../Qt/5.15.2/gcc_64/include/QtWidgets/QTab
 		../IB/TagValue.h \
 		../IB/EMutex.h \
 		ui_MainWindow.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qinputmethod.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QComboBox \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcombobox.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QHBoxLayout \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qboxlayout.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlayout.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlayoutitem.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qgridlayout.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QHeaderView \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qheaderview.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QLabel \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlabel.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QLineEdit \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qlineedit.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtextcursor.h \
+		../../../Qt/5.15.2/gcc_64/include/QtGui/qtextformat.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QMenuBar \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmenubar.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qmenu.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qaction.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qactiongroup.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QSpacerItem \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QStatusBar \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qstatusbar.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QToolBar \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qtoolbar.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QVBoxLayout \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
 		../BuySellDialog.h \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qdialog.h \
-		ui_BuySellDialog.h
+		ui_BuySellDialog.h \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/QCheckBox \
+		../../../Qt/5.15.2/gcc_64/include/QtWidgets/qcheckbox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainWindow.o ../MainWindow.cpp
 
 OrderDbManager.o: ../OrderDbManager.cpp ../../../Qt/5.15.2/gcc_64/include/QtSql/QSqlQuery \
@@ -2758,6 +2836,9 @@ Utils.o: ../Implementation/Utils.cpp ../Implementation/StdAfx.h \
 		../Implementation/Utils.h \
 		../IB/platformspecific.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Utils.o ../Implementation/Utils.cpp
+
+qrc_Res.o: qrc_Res.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_Res.o qrc_Res.cpp
 
 moc_BuySellDialog.o: moc_BuySellDialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_BuySellDialog.o moc_BuySellDialog.cpp
