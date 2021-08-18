@@ -1,24 +1,23 @@
-#ifndef DATATABLEMODEL_H
-#define DATATABLEMODEL_H
+#ifndef BRACKETTABLEMODEL_H
+#define BRACKETTABLEMODEL_H
 
 #include <QAbstractTableModel>
 #include <QTextStream>
 
 
 
-//*************************************************************************************
+//**************************************************************************************************
 
-
-class DataTableModel    :   public  QAbstractTableModel
+class BracketTableModel  :  public QAbstractTableModel
 {
 
-    //Q_OBJECT
+    Q_OBJECT
 
     public:
 
         //----------------------------------------------------------------------------
 
-        DataTableModel               (          int               rows    = 1,
+        BracketTableModel            (          int               rows    = 1,
                                                 int               columns = 1,
                                                 QObject          *parent  = 0                   );
 
@@ -74,6 +73,6 @@ class DataTableModel    :   public  QAbstractTableModel
 
 };
 
-//*************************************************************************************
+//**************************************************************************************************
 
-#endif // DATATABLEMODEL_H
+#endif // BRACKETTABLEMODEL_H

@@ -40,7 +40,6 @@ int main( int argc, char *argv[] )
 {
 
 
-
     QApplication app( argc, argv );
 
     app.setWindowIcon(  QIcon( ":/rocket.png" )  );
@@ -54,6 +53,8 @@ int main( int argc, char *argv[] )
     createClientThread( g_client );
 
     window->show();
+
+    window->setInitialSymbol();
 
     return app.exec();
 
@@ -123,12 +124,12 @@ void* launchClientThread( void*  arg )
             if ( trial == 10 ) // if trial = 0  => runtime error (socket) when you get it ran
             {
 
-                l_client->setState(  	ST_REQTICKBYTICKDATA  		);
-                //l_client->setState(  	ST_REQHISTORICALTICKS 		);
-                //l_client->setState(  	ST_CONTRACTOPERATION  		);
-                //l_client->setState(  	ST_REROUTECFD				);
-                //l_client->setState(  	ST_REQMKTDEPTHEXCHANGES		);
-                //l_client->setState(  	ST_TICKDATAOPERATION		);
+                //l_client->setState(       ST_REQTICKBYTICKDATA            );
+                //l_client->setState(       ST_REQHISTORICALTICKS           );
+                //l_client->setState(       ST_CONTRACTOPERATION            );
+                //l_client->setState(       ST_REROUTECFD                   );
+                //l_client->setState(       ST_REQMKTDEPTHEXCHANGES         );
+                //l_client->setState(       ST_TICKDATAOPERATION            );
 
             }
 

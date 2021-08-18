@@ -6,7 +6,9 @@
 #define TWS_API_SAMPLES_TESTCPPCLIENT_CONTRACTSAMPLES_H
 
 struct Contract;
+//struct InterObject;
 
+#include "InterObject.h"
 
 
 //******************************************************************************************
@@ -30,6 +32,13 @@ public:
 	static Contract 	USStock						();
 	static Contract 	etf							();
 	static Contract 	USStockAtSmart				();
+
+    //*************************************************
+
+    static Contract     USStockAtSmart2             (  InterObject*  msg  );
+
+    //*************************************************
+
 	static Contract 	IBMUSStockAtSmart			();
 	static Contract 	USStockWithPrimaryExch		();
 	static Contract 	BondWithCusip				();

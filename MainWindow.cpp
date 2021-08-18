@@ -56,6 +56,21 @@ MainWindow::MainWindow(  QWidget  *parent  )
 
     //----------------------------------------------------------------
 
+    // Bracket Table & View
+
+    m_bracketModel = new BracketTableModel(  2,  5, nullptr  );
+
+    m_ui->bracketTableView->setModel(  m_bracketModel  );
+
+    //setDataTableViewColumnWidth();
+    //setDataTableViewHeaderSize ();
+
+    //m_dataDelegate = new DataViewDelegate( this );
+    //m_ui->dataTableView->setItemDelegate( m_dataDelegate );
+
+
+    //----------------------------------------------------------------
+
     // Order params: symbol, security type, currency...
     setMainWindowOrderParams();
 
@@ -81,9 +96,9 @@ MainWindow::MainWindow(  QWidget  *parent  )
 
     //----------------------------------------------------------------
 
-
     pthread_mutex_init(            &m_guiEventQueueMutex,
                                     NULL                                );
+
 
 
 }
@@ -122,7 +137,7 @@ void MainWindow::setMainWindowOrderParams()
     // ComboBox - Security Types
     QStringList secTypes;
 
-    secTypes << "STK" << "HOLA" << "CHAO";
+    secTypes << "STK" ;
 
     m_ui->securityTypeComboBox->addItems( secTypes );
 
@@ -135,7 +150,7 @@ void MainWindow::setMainWindowOrderParams()
     // ComboBox - Currencies
     QStringList currencies;
 
-    currencies << "USD" << "EUR";
+    currencies << "USD" ;  // << "EUR"
 
     m_ui->currencyComboBox->addItems( currencies );
 
@@ -178,46 +193,63 @@ void MainWindow::setMainWindowOrderParams()
 void MainWindow::setMainWindowContractParams()
 {
 
+
     //----------------------------------------------
 
     // Label - Take Profit price
 
-    m_ui->takeProfitPriceLabel->setStyleSheet(  "QLabel {  color: white;  }"  );
-    m_ui->takeProfitLabel->setStyleSheet     (  "QLabel {  color: white;  }"  );
+    m_ui->takeProfitPriceLabel->setStyleSheet(      "QLabel {  color: white;  }"    );
+    m_ui->takeProfitLabel->setStyleSheet     (      "QLabel {  color: white;  }"    );
 
     //----------------------------------------------
 
     // Label - Stop Loss price
 
-    m_ui->stopLossPriceLabel->setStyleSheet  (  "QLabel {  color: white;  }"  );
-    m_ui->stopLossLabel->setStyleSheet       (  "QLabel {  color: white;  }"  );
+    m_ui->stopLossPriceLabel->setStyleSheet  (      "QLabel {  color: white;  }"    );
+    m_ui->stopLossLabel->setStyleSheet       (      "QLabel {  color: white;  }"    );
 
 
     //----------------------------------------------
 
-    // Label - Action
+    // Label - Action ( BUY or SELL )
 
-    m_ui->actionLabel_2->setStyleSheet       (  "QLabel {  color: white;  }"  );
-    m_ui->actionLabel->setStyleSheet         (  "QLabel {  color: white;  }"  );
+    m_ui->actionLabel_2->setStyleSheet       (      "QLabel {  color: white;  }"    );
+    m_ui->actionLabel->setStyleSheet         (      "QLabel {  color: white;  }"    );
 
     //----------------------------------------------
 
     // LineEdit - Quantity
 
-    m_ui->quantityLabel->setStyleSheet       (  "QLabel {  color: white;  }"  );
+    m_ui->quantityLabel->setStyleSheet       (      "QLabel {  color: white;  }"    );
 
     //----------------------------------------------
 
     // ComboBox - Order Type
     QStringList orderTypes;
 
-    orderTypes << "LMT" << "MKT";
+    orderTypes << "LMT" ;  // << "MKT"
 
     m_ui->orderTypeComboBox->addItems( orderTypes );
 
-    m_ui->orderTypeLabel->setStyleSheet(  "QLabel {  color: white;  }"  );
+    m_ui->orderTypeLabel->setStyleSheet     (       "QLabel {  color: white;  }"    );
 
     //----------------------------------------------
+
+
+    // Label - Order
+
+    m_ui->orderTypeLabel_2->setStyleSheet    (      "QLabel {  color: white;  }"    );
+
+
+    //----------------------------------------------
+
+    QStringList orderType;
+
+    orderType << "BRACKET" ; // << "TRAIL STOP"
+
+    m_ui->orderComboBox->addItems( orderType );
+
+    m_ui->orderTypeLabel_2->setStyleSheet    (      "QLabel {  color: white;  }"    );
 
 
 }
@@ -308,25 +340,25 @@ void MainWindow::setMainWindowButtonConnection()
                             this,
                             SLOT(sellButtonClicked())                           );
 
-
+/*
     // Setup button
     connect(                m_ui->setupButton,
                             SIGNAL(clicked()),
                             this,
                             SLOT(setupButtonClicked())                          );
-
+*/
 
     // Confirm buy button
     connect(                m_ui->confirmButton,
                             SIGNAL(clicked()),
                             this,
                             SLOT(confirmButtonClicked())                        );
-
+/*
     connect(                m_ui->pushButton,
                             SIGNAL( clicked() ),
                             this,
                             SLOT(on_pushButton_clicked())                       );
-
+*/
 
     connect(                m_ui->symbolComboBox,
                             SIGNAL(currentTextChanged(QString)),
@@ -360,10 +392,11 @@ void  MainWindow::setMainWindowButtonStyleSheet()
 
                                     );
 
+/*
     m_ui->setupButton->setStyleSheet(           "QPushButton{"
                                                 "background-color: #2ECC71;"
                                                 "}"                                     );
-
+*/
 
 }
 
@@ -528,20 +561,39 @@ void MainWindow::symbolComboBoxTextChanged( const QString&  symbol )
     InterObject marketDataToRequest;
 
     // populate obj
-    marketDataToRequest.typeOfMessage    =  1;       // market data request
-    marketDataToRequest.symbol           =  symbol;
-    marketDataToRequest.secType          =  m_ui->securityTypeComboBox->currentText();
-    marketDataToRequest.currency         =  m_ui->currencyComboBox->currentText();
-    marketDataToRequest.exchange         =  m_ui->exchangeComboBox->currentText();
-    marketDataToRequest.primaryExchange  =  m_ui->primaryExchangeComboBox->currentText();
+    marketDataToRequest.typeOfMessage        =  1;       // market data request
+
+
+    /*
+         How to convert QString to std::string ?
+
+        QString qs;
+
+        // Either this if you use UTF-8 anywhere
+        std::string utf8_text = qs.toUtf8().constData();
+
+    */
+
+    marketDataToRequest.symbol               =  symbol.toUtf8().constData();;
+    marketDataToRequest.secType              =  m_ui->securityTypeComboBox->currentText().toUtf8().constData();
+    marketDataToRequest.currency             =  m_ui->currencyComboBox->currentText().toUtf8().constData();
+    marketDataToRequest.exchange             =  m_ui->exchangeComboBox->currentText().toUtf8().constData();
+    marketDataToRequest.primaryExchange      =  m_ui->primaryExchangeComboBox->currentText().toUtf8().constData();
+
+    marketDataToRequest.action               =  "";
+    marketDataToRequest.quantity             =   0;
+    marketDataToRequest.limitPrice           =   0;
+    marketDataToRequest.takeProfitLimitPrice =   0;
+    marketDataToRequest.stopLossPrice        =   0;
+    marketDataToRequest.orderType            =  "";
+
 
     // insert obj into the queue
     insertMsgIntoQueue(    marketDataToRequest   );
 
     // hack
     int index = m_ui->securityTypeComboBox->currentIndex();
-
-    qInfo( "index: %d", index );
+    qInfo(  "index: %d", index  );
 
 }
 
@@ -550,7 +602,7 @@ void MainWindow::symbolComboBoxTextChanged( const QString&  symbol )
 void MainWindow::insertMsgIntoQueue(    InterObject  msg    )
 {
 
-    std::this_thread::sleep_for(    std::chrono::milliseconds( 20 )   );
+    //std::this_thread::sleep_for(    std::chrono::milliseconds( 20 )   );
 
     qInfo( "at the beginning of Queue::insertMsgIntoQueue()" );
 
@@ -569,5 +621,28 @@ void MainWindow::insertMsgIntoQueue(    InterObject  msg    )
     //********************************************
 
     qInfo( "at the end of Queue::insertMsgIntoQueue()" );
+
+}
+
+//***************************************************************************************
+
+void MainWindow::convertQstringToString()
+{
+
+
+
+}
+
+//***************************************************************************************
+
+void MainWindow::setInitialSymbol()
+{
+
+    //set initial symbol in QComboBox
+    m_ui->symbolComboBox->setCurrentIndex(  3  );  //  0: AAPL
+                                                   //  1: AMZN
+                                                   //  2: TSLA
+                                                   //  3: MSFT
+
 
 }

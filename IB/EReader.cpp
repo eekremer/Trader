@@ -17,6 +17,8 @@
 
 #define IN_BUF_SIZE_DEFAULT 8192
 
+static int counter3 = 0;
+
 static DefaultEWrapper defaultWrapper;
 
 
@@ -152,6 +154,8 @@ void EReader::readToQueue()
 	while ( m_isAlive )  // true as long as it's not invoked EReader::~EReader
 	{
 
+        counter3++;
+        printf( "counter3: %d\n", counter3 );
 
 		// STEP I:
 		// read a message from Socket
@@ -513,6 +517,15 @@ EMessage*  EReader::readSingleMsg()
 
 		if ( !bufferedRead( 	(char*)&msgSize, 	sizeof( msgSize ) 	) )
 			return 0;
+
+        /*
+
+            uint32_t ntohl( uint32_t netlong )
+
+            The ntohl() function converts the unsigned integer netlong from network
+            byte order to host byte order.
+
+        */
 
 		msgSize = ntohl( msgSize );
 

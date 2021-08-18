@@ -21,18 +21,20 @@ CONFIG += c++11
 
 # Input
 HEADERS += AccountTableModel.h \
+           BracketTableModel.h \
            BuySellDialog.h \
            Data.h \
            DataDbManager.h \
            DataTableModel.h \
            DataViewDelegate.h \
+           InterObject.h \
            MainWindow.h \
            Order.h \
            OrderDbManager.h \
            OrderTableModel.h \
            OrderViewDelegate.h \
-           Debug/ui_BuySellDialog.h \
-           Debug/ui_MainWindow.h \
+           #Debug/ui_BuySellDialog.h \
+           #Debug/ui_MainWindow.h \
            IB/bar.h \
            IB/CommissionReport.h \
            IB/CommonDefs.h \
@@ -93,14 +95,15 @@ HEADERS += AccountTableModel.h \
            Implementation/ScannerSubscriptionSamples.h \
            Implementation/StdAfx.h \
            Implementation/Utils.h \
-           Profile/ui_BuySellDialog.h \
-           Profile/ui_MainWindow.h \
-           Release/ui_BuySellDialog.h \
-           Release/ui_MainWindow.h
+           #Profile/ui_BuySellDialog.h \
+           #Profile/ui_MainWindow.h \
+           #Release/ui_BuySellDialog.h \
+           #Release/ui_MainWindow.h
 
 FORMS += BuySellDialog.ui MainWindow.ui
 
 SOURCES += AccountTableModel.cpp \
+           BracketTableModel.cpp \
            BuySellDialog.cpp \
            DataDbManager.cpp \
            DataTableModel.cpp \

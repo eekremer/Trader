@@ -48,7 +48,11 @@
 const int       PING_DEADLINE 		=  2; // seconds
 const int       SLEEP_BETWEEN_PINGS = 30; // seconds
 
-static int counter = 0;
+#define myqDebug() qDebug() << fixed << qSetRealNumberPrecision(2)
+
+
+static int counter  = 0;
+static int counter2 = 0;
 
 
 extern MainWindow window;
@@ -176,14 +180,23 @@ void Client::processMessages()
     //
     //********************************
 
+
     getMsgFromQueue();
+
 
     //********************************
     //********************************
+
+
+
+    counter++;
+
+    printf( "counter: %d \n", counter );
+
 
 
 	switch ( m_state ) 
-	{
+    {
 
 		case ST_PNLSINGLE:
 			pnlSingleOperation();
@@ -269,15 +282,9 @@ void Client::processMessages()
 		case ST_CONTRACTOPERATION_ACK:
 			break;
 
-		//*************************************************
-		//*************************************************	
-
 		case ST_MARKETSCANNERS:
 			marketScanners();
 			break;
-
-		//*************************************************
-		//*************************************************
 
 		case ST_MARKETSCANNERS_ACK:
 			break;
@@ -461,16 +468,9 @@ void Client::processMessages()
 			continuousFuturesOperations();
 			break;
 
-        //*******************************
-        //*******************************
-
         case ST_REQHISTORICALTICKS:
             reqHistoricalTicks();
             break;
-
-        //*******************************
-        //*******************************
-
 
         case ST_REQHISTORICALTICKS_ACK:
             break;
@@ -558,7 +558,6 @@ void Client::processMessages()
 void Client::getMsgFromQueue()
 {
 
-    InterObject  msg;
 
     // check whether there is any element in the queue
     if ( m_window->m_guiEventQueue.size() == 0 )
@@ -570,7 +569,7 @@ void Client::getMsgFromQueue()
 
     }
 
-    std::this_thread::sleep_for(    std::chrono::milliseconds( 30 )   );
+    //std::this_thread::sleep_for(    std::chrono::milliseconds( 20 )   );
 
     //**************************************
     //  Mutual exclusion
@@ -584,7 +583,7 @@ void Client::getMsgFromQueue()
         //    Calling this function on an empty container causes undefined behavior
 
 
-        msg = m_window->m_guiEventQueue.front();
+        m_msg = m_window->m_guiEventQueue.front();
 
 
         //    std::deque::pop_front()
@@ -601,21 +600,54 @@ void Client::getMsgFromQueue()
     //**************************************
 
 
-    qInfo(     ( msg.symbol          ).toLatin1()      );
-    qInfo(     ( msg.secType         ).toLatin1()      );
-    qInfo(     ( msg.currency        ).toLatin1()      );
-    qInfo(     ( msg.exchange        ).toLatin1()      );
-    qInfo(     ( msg.primaryExchange ).toLatin1()      );
+    qDebug(     "%d",      m_msg.typeOfMessage                    );
+
+/*  qInfo(     ( m_msg.symbol                 ).toLatin1()        );
+    qInfo(     ( m_msg.secType                ).toLatin1()        );
+    qInfo(     ( m_msg.currency               ).toLatin1()        );
+    qInfo(     ( m_msg.exchange               ).toLatin1()        );
+    qInfo(     ( m_msg.primaryExchange        ).toLatin1()        );
+    qInfo(     ( m_msg.action                 ).toLatin1()        );
+*/
+    qDebug(     "%f",   m_msg.quantity                            );
+    qDebug(     "%f",   m_msg.limitPrice                          );
+    qDebug(     "%f",   m_msg.takeProfitLimitPrice                );
+    qDebug(     "%f",   m_msg.stopLossPrice                       );
+
+    //qInfo(     ( m_msg.orderType              ).toLatin1()        );
 
 
+    //**********************
+    //**********************
+
+    defineState(  m_msg  );
+
+    //**********************
+    //**********************
 
 }
 
-
-
 //********************************************************************************************
 
+void Client::defineState( const InterObject&  message )
+{
 
+    if ( message.typeOfMessage == 1 )
+    {
+
+        m_state = ST_TICKDATAOPERATION;   // ST_REQTICKBYTICKDATA;
+
+    }
+    else if ( message.typeOfMessage == 2 )
+    {
+        //m_state = ;
+    }
+    else if ( message.typeOfMessage == 3 )
+    {
+        //m_state = ;
+    }
+
+}
 
 //********************************************************************************************
 
@@ -713,7 +745,9 @@ void Client::tickDataOperation()
 {
 
 
-	m_pClient->reqMarketDataType( 4 );
+    m_pClient->reqMarketDataType        (      4    );
+
+    m_pClient->cancelMktData            (	1004	);
 
 	/*** Requesting real time market data ***/
     std::this_thread::sleep_for( 		std::chrono::seconds( 1 ) 								);
@@ -754,9 +788,19 @@ void Client::tickDataOperation()
 
 	//! [reqmktdata_genticks]
 	//Requesting RTVolume (Time & Sales) and shortable generic ticks
-	m_pClient->reqMktData(				1004, 
-										ContractSamples::USStockAtSmart(), 
-										"233,236", 
+
+    /*
+
+        233 - RTVolume (last trade price, last trade size, last trade time, total volume, VWAP, single trade flag)
+        236 - Shortable
+
+        reqMktData's callbacks: tickSize, tickPrice, tickString, tickOptionComputation, tickEFP, tickGeneric
+
+    */
+
+    m_pClient->reqMktData(				1004,
+                                        ContractSamples::USStockAtSmart2( &m_msg ),
+                                        "233,236",
 										false, 
 										false, 
 										TagValueListSPtr()										);
@@ -849,12 +893,12 @@ void Client::tickDataOperation()
 
 	//! [reqavgoptvolume]
 	//Requesting data for a stock will return the average option volume
-	m_pClient->reqMktData(				1016, 	
+/*	m_pClient->reqMktData(				1016,
 										ContractSamples::USStockAtSmart(), 
 										"mdoff,105", 
 										false, 
 										false, 
-										TagValueListSPtr()										);
+                                        TagValueListSPtr()										); */
 	//! [reqavgoptvolume]
 
 	//! [reqetfticks]
@@ -2438,34 +2482,41 @@ void Client::reqTickByTickData()
 {
 
 
-    /*** Requesting tick-by-tick data (only refresh) ***/
+    /*** Requesting tick-by-tick data ( only refresh ) ***/
 
-    
+    m_pClient->cancelTickByTickData( 		20001										);
+    m_pClient->cancelTickByTickData(		20002										);
+    m_pClient->cancelTickByTickData(		20003										);
+    m_pClient->cancelTickByTickData(		20004										);
+
+    std::this_thread::sleep_for(			std::chrono::seconds(  1   /* 10 */  )		);
+
+
     m_pClient->reqTickByTickData(			20001, 
-                                            ContractSamples::USStock(),
+                                            ContractSamples::USStockAtSmart2( &m_msg ), // ContractSamples::USStock(),
 											"Last", 
 											0, 
 											false										);
     
 	m_pClient->reqTickByTickData(			20002, 
-                                            ContractSamples::USStock(),
+                                            ContractSamples::USStockAtSmart2( &m_msg ), // ContractSamples::USStock(),
 											"AllLast", 
 											0, 
 											false										);
     
 	m_pClient->reqTickByTickData(			20003, 
-                                            ContractSamples::USStock(),
+                                            ContractSamples::USStockAtSmart2( &m_msg ), // ContractSamples::USStock(),
                                             "BidAsk",
 											0, 
 											true										);
     
 	m_pClient->reqTickByTickData(			20004, 
-                                            ContractSamples::USStock(),
+                                            ContractSamples::USStockAtSmart2( &m_msg ), // ContractSamples::USStock(),
 											"MidPoint", 
 											0, 
 											false										);
 
-    std::this_thread::sleep_for(			std::chrono::seconds( 10 )					);
+    std::this_thread::sleep_for(			std::chrono::seconds(  1   /* 10 */  )		);
 
 	//! [canceltickbytick]
  /*
@@ -2478,7 +2529,7 @@ void Client::reqTickByTickData()
 	
     /*** Requesting tick-by-tick data (historical + refresh) ***/
     //! [reqtickbytick]
-    m_pClient->reqTickByTickData(			20005, 
+ /*   m_pClient->reqTickByTickData(			20005,
                                             ContractSamples::USStock(),
 											"Last", 
 											10, 
@@ -2509,6 +2560,7 @@ void Client::reqTickByTickData()
     m_pClient->cancelTickByTickData(		20006										);
     m_pClient->cancelTickByTickData(		20007										);
     m_pClient->cancelTickByTickData(		20008										);
+*/
 
     m_state = ST_REQTICKBYTICKDATA_ACK;
 
@@ -2644,6 +2696,38 @@ void Client::tickPrice(                     TickerId 			tickerId,
 											attribs.canAutoExecute, 
 											attribs.pastLimit, 
 											attribs.preOpen									);
+
+
+    if ( field == BID )
+    {
+
+        QModelIndex bidIndex  =  m_window->m_dataModel->index(              0,
+                                                                            0,
+                                                                            QModelIndex()               );
+
+        m_window->m_dataModel->setData(                     bidIndex,
+                                                            QString::number( price, 'f', 2 ),
+                                                            Qt::EditRole                                );
+
+        qInfo(          "within ...Client::tickByTickBidAsk() \n"           );
+        qInfo(          "%f \n",    price                                   );
+
+    }
+
+    //-----------------------------------------------------------------------------------------------
+
+
+    if ( field == ASK )
+    {
+
+        QModelIndex askIndex  =  m_window->m_dataModel->index(              0,
+                                                                            1,
+                                                                            QModelIndex()               );
+
+        m_window->m_dataModel->setData(                     askIndex,
+                                                            QString::number( price, 'f', 2 ),
+                                                            Qt::EditRole                                );
+    }
 
 }
 //! [tickprice]
@@ -4211,10 +4295,10 @@ void Client::tickByTickBidAsk(				int 						reqId,
     //-----------------------------------------------------------------------------------------------
 
 
-    printf( 				"Counter %d\n",
-                            counter													);
+    printf( 				"counter2: %d\n",
+                            counter2                                                                );
 
-    counter++;
+    counter2++;
 
 
 }

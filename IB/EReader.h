@@ -56,7 +56,7 @@ class TWSAPIDLLEXP EReader
 #endif
 
 
-	unsigned int m_nMaxBufSize;
+    unsigned int  m_nMaxBufSize;
 
 
 	void                            onReceive               ();

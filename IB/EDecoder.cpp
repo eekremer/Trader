@@ -4385,7 +4385,7 @@ bool EDecoder::DecodeField(				double& 		doubleValue,
 
     //********************************************************************
 
-    printf(         "just before atof: %s", fieldBeg                );
+    printf(         "just before atof: %s \n", fieldBeg                );
 
     //********************************************************************
 
@@ -4399,6 +4399,7 @@ bool EDecoder::DecodeField(				double& 		doubleValue,
 
     printf(         "\n"                                            );
     printf(         "just after atof:  %f \n",  doubleValue         );
+
 
     //********************************************************************
 	
@@ -4498,7 +4499,7 @@ bool EDecoder::DecodeFieldMax(			long& 			longValue,
 
 //**************************************************************************************************************
 
-bool EDecoder::DecodeFieldMax(			double& 			doubleValue, 
+bool EDecoder::DecodeFieldMax(			double& 			doubleValue,
 										const char*& 		ptr, 
 										const char* 		endPtr				)
 {

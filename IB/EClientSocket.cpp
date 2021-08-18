@@ -591,13 +591,17 @@ int EClientSocket::receive(			char* 		buf,
 										sz, 
 										0					);
 
-    //qInfo( "BEFORE: fuck, I am wihin ::recv error...");
+    qInfo( "sz after reading from socket: %lu \n ",  sz  );
+
+    for ( unsigned int i = 0; i < sz; i++ )
+        std::cout << buf[ i ] ;
+
 
 	if( nResult == -1 && !handleSocketError() ) 
 	{
 		return -1;
 
-        qInfo( "fuck, I am wihin ::recv error...");
+        qInfo( "fuck, I am wihin ::recv error...\n ");
 	}
 	
 	if( nResult == 0 ) 

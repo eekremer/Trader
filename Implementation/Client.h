@@ -15,7 +15,6 @@
 #include <QObject>
 
 
-
 class EClientSocket;
 class MainWindow;
 
@@ -204,6 +203,7 @@ public:
     void    readMessagesFromQueue           ();
 
     void    getMsgFromQueue                 ();
+    void    defineState                     (   const InterObject           &message                );
 
 private:
 
@@ -223,6 +223,7 @@ private:
 	//! [ socket_declare ]
 	State 							m_state;
 	time_t 							m_sleepDeadline;
+    InterObject                     m_msg;
 
 	OrderId 						m_orderId;
 	std::unique_ptr< EReader > 		m_pReader;

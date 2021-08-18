@@ -8,6 +8,7 @@
 #include "IB/Contract.h"
 
 
+
 	/*
      * Contracts can be defined in multiple ways. The TWS/IB Gateway will always perform a query on the available contracts
      * and find which one is the best candidate:
@@ -250,13 +251,31 @@ Contract ContractSamples::USStockAtSmart()
 
 	Contract contract;
 
-	contract.symbol 		 =  "TSLA";
+    contract.symbol 		 =  "TSLA";
 	contract.secType 		 =  "STK";
 	contract.currency 		 =  "USD";
 	contract.exchange 		 =  "SMART";
 	contract.primaryExchange =  "ISLAND";
 
 	return contract;
+
+}
+
+//******************************************************************************************
+
+Contract ContractSamples::USStockAtSmart2(  InterObject*  msg )
+{
+
+    Contract contract;
+
+    contract.symbol 		 =  msg->symbol;
+    contract.secType 		 =  msg->secType;
+    contract.currency 		 =  msg->currency;
+    contract.exchange 		 =  msg->exchange;
+    contract.primaryExchange =  msg->primaryExchange;
+
+    return contract;
+
 }
 
 //******************************************************************************************
