@@ -15,8 +15,11 @@
 
 #include "DataViewDelegate.h"
 #include "OrderViewDelegate.h"
+
 #include "InterObject.h"
 #include "Implementation/Client.h"
+#include "Implementation/LiveObject.h"
+
 
 // forward declaration
 class Client;
@@ -65,35 +68,36 @@ class MainWindow : public QMainWindow
         void                confirmButtonClicked            ();
 
         void                goToBuySellDialog               ();
-        void                symbolComboBoxTextChanged       ( const QString&  symbol );
+        void                symbolComboBoxTextChanged       (   const QString&  symbol      );
+        void                sliderChanged                   (       int       value         );
 
 
     public:
-
 
         void                setMainWindowOrderParams        ();
         void                setMainWindowContractParams     ();
         void                setOrderTableViewColumnWidth    ();
         void                setDataTableViewColumnWidth     ();
         void                setDataTableViewHeaderSize      ();
-
+        void                setBracketTableViewColumnWidth  ();
+        void                setBracketTableViewHeaderSize   ();
         void                setMainWindowButtonConnection   ();
         void                setMainWindowButtonStyleSheet   ();
-        void                insertMsgIntoQueue              (    InterObject   msg     );
-
+        void                insertMsgIntoQueue              (    InterObject   msg          );
         void                convertQstringToString          ();
-
         void                setInitialSymbol                ();
-
         void                initialSetUp                    ();
+        void                setPriceSlider                  ();
+
+        void                updateText                      (   const QString&  newText     );
+
 
     private:
 
-        Ui::MainWindow     *m_ui;
+        Ui::MainWindow                  *m_ui;
 
 
     public:
-
 
         OrderTableModel                 *m_orderModel   ;
         DataTableModel                  *m_dataModel    ;
@@ -101,9 +105,10 @@ class MainWindow : public QMainWindow
         DataViewDelegate                *m_dataDelegate ;
         OrderViewDelegate               *m_orderDelegate;
 
-        std::deque<InterObject>         m_guiEventQueue;
-        pthread_mutex_t                 m_guiEventQueueMutex;
+        std::deque<InterObject>          m_guiEventQueue;
+        pthread_mutex_t                  m_guiEventQueueMutex;
 
+        LiveObject                       m_liveObject;
 
 };
 

@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[11];
-    char stringdata0[178];
+    QByteArrayData data[12];
+    char stringdata0[176];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,18 +38,19 @@ QT_MOC_LITERAL(2, 28, 0), // ""
 QT_MOC_LITERAL(3, 29, 17), // "sellButtonClicked"
 QT_MOC_LITERAL(4, 47, 18), // "setupButtonClicked"
 QT_MOC_LITERAL(5, 66, 17), // "confirmBuyClicked"
-QT_MOC_LITERAL(6, 84, 21), // "on_pushButton_clicked"
-QT_MOC_LITERAL(7, 106, 20), // "confirmButtonClicked"
-QT_MOC_LITERAL(8, 127, 17), // "goToBuySellDialog"
-QT_MOC_LITERAL(9, 145, 25), // "symbolComboBoxTextChanged"
-QT_MOC_LITERAL(10, 171, 6) // "symbol"
+QT_MOC_LITERAL(6, 84, 20), // "confirmButtonClicked"
+QT_MOC_LITERAL(7, 105, 17), // "goToBuySellDialog"
+QT_MOC_LITERAL(8, 123, 25), // "symbolComboBoxTextChanged"
+QT_MOC_LITERAL(9, 149, 6), // "symbol"
+QT_MOC_LITERAL(10, 156, 13), // "sliderChanged"
+QT_MOC_LITERAL(11, 170, 5) // "value"
 
     },
     "MainWindow\0buyButtonClicked\0\0"
     "sellButtonClicked\0setupButtonClicked\0"
-    "confirmBuyClicked\0on_pushButton_clicked\0"
-    "confirmButtonClicked\0goToBuySellDialog\0"
-    "symbolComboBoxTextChanged\0symbol"
+    "confirmBuyClicked\0confirmButtonClicked\0"
+    "goToBuySellDialog\0symbolComboBoxTextChanged\0"
+    "symbol\0sliderChanged\0value"
 };
 #undef QT_MOC_LITERAL
 
@@ -73,8 +74,8 @@ static const uint qt_meta_data_MainWindow[] = {
        5,    0,   57,    2, 0x08 /* Private */,
        6,    0,   58,    2, 0x08 /* Private */,
        7,    0,   59,    2, 0x08 /* Private */,
-       8,    0,   60,    2, 0x08 /* Private */,
-       9,    1,   61,    2, 0x08 /* Private */,
+       8,    1,   60,    2, 0x08 /* Private */,
+      10,    1,   63,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -83,8 +84,8 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   10,
+    QMetaType::Void, QMetaType::QString,    9,
+    QMetaType::Void, QMetaType::Int,   11,
 
        0        // eod
 };
@@ -99,10 +100,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 1: _t->sellButtonClicked(); break;
         case 2: _t->setupButtonClicked(); break;
         case 3: _t->confirmBuyClicked(); break;
-        case 4: _t->on_pushButton_clicked(); break;
-        case 5: _t->confirmButtonClicked(); break;
-        case 6: _t->goToBuySellDialog(); break;
-        case 7: _t->symbolComboBoxTextChanged((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 4: _t->confirmButtonClicked(); break;
+        case 5: _t->goToBuySellDialog(); break;
+        case 6: _t->symbolComboBoxTextChanged((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 7: _t->sliderChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }

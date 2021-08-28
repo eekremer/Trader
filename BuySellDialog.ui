@@ -22,8 +22,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>870</x>
-     <y>370</y>
+     <x>100</x>
+     <y>80</y>
      <width>201</width>
      <height>71</height>
     </rect>
@@ -43,8 +43,8 @@
   <widget class="QCheckBox" name="checkBox">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>140</y>
+     <x>360</x>
+     <y>250</y>
      <width>131</width>
      <height>61</height>
     </rect>

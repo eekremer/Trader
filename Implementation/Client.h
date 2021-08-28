@@ -9,6 +9,7 @@
 #include "IB/EReaderOSSignal.h"
 #include "IB/EReader.h"
 #include "../MainWindow.h"
+#include "LiveObject.h"
 
 #include <memory>
 #include <vector>
@@ -131,67 +132,67 @@ public:
    ~Client();
 
 
-	void 	setConnectOptions	( 		const std::string&				);
-	void 	processMessages		(										);
+    void        setConnectOptions	( 		const std::string&                  );
+    void        processMessages		(                                           );
 
 
 public:
 
-	bool 	connect				(     const char* 		host, 
-											int 		port, 
-											int 		clientId = 0		);
+    bool        connect				(       const char*     host,
+                                                  int 		port,
+                                                  int 		clientId = 0		);
 
-	void 	disconnect			(											) const;
-	bool 	isConnected 		(											) const;
+    void        disconnect			(											) const;
+    bool        isConnected 		(											) const;
 
-	State 	getState			(											);
-	void	setState			(			State  		state				); 
+    State       getState			(											);
+    void        setState			(			State  		state				);
 
 
 private:
 
-    void 	pnlOperation					();
-    void 	pnlSingleOperation				();
-	void 	tickDataOperation				();
-	void 	tickOptionComputationOperation	();
-	void 	delayedTickDataOperation		();
-	void 	marketDepthOperations			();
-	void 	realTimeBars					();
-	void 	marketDataType					();
-	void 	historicalDataRequests			();
-	void 	optionsOperations				();
-	void 	accountOperations				();
-	void 	orderOperations					();
-	void 	ocaSamples						();
-	void 	conditionSamples				();
-	void 	bracketSample					();
-	void 	hedgeSample						();
-	void 	contractOperations				();
-	void 	marketScanners					();
-	void 	fundamentals					();
-	void 	bulletins						();
-	void 	testAlgoSamples					();
-	void 	financialAdvisorOrderSamples	();
-	void 	financialAdvisorOperations		();
-	void 	testDisplayGroups				();
-	void 	miscelaneous					();
-	void 	reqFamilyCodes					();
-	void 	reqMatchingSymbols				();
-	void 	reqMktDepthExchanges			();
-	void 	reqNewsTicks					();
-	void 	reqSmartComponents				();
-	void 	reqNewsProviders				();
-	void 	reqNewsArticle					();
-	void 	reqHistoricalNews				();
-	void 	reqHeadTimestamp				();
-	void 	reqHistogramData				();
-	void 	rerouteCFDOperations			();
-	void 	marketRuleOperations			();
-	void 	continuousFuturesOperations		();
-    void 	reqHistoricalTicks				();
-    void 	reqTickByTickData				();
-	void 	whatIfSamples					();
-	void 	reqCurrentTime					();
+    void        pnlOperation					();
+    void        pnlSingleOperation				();
+    void        tickDataOperation				();
+    void        tickOptionComputationOperation	();
+    void        delayedTickDataOperation		();
+    void        marketDepthOperations			();
+    void        realTimeBars					();
+    void        marketDataType					();
+    void        historicalDataRequests			();
+    void        optionsOperations				();
+    void        accountOperations				();
+    void        orderOperations					();
+    void        ocaSamples						();
+    void        conditionSamples				();
+    void        bracketSample					();
+    void        hedgeSample						();
+    void        contractOperations				();
+    void        marketScanners					();
+    void        fundamentals					();
+    void        bulletins						();
+    void        testAlgoSamples					();
+    void        financialAdvisorOrderSamples	();
+    void        financialAdvisorOperations		();
+    void        testDisplayGroups				();
+    void        miscelaneous					();
+    void        reqFamilyCodes					();
+    void        reqMatchingSymbols				();
+    void        reqMktDepthExchanges			();
+    void        reqNewsTicks					();
+    void        reqSmartComponents				();
+    void        reqNewsProviders				();
+    void        reqNewsArticle					();
+    void        reqHistoricalNews				();
+    void        reqHeadTimestamp				();
+    void        reqHistogramData				();
+    void        rerouteCFDOperations			();
+    void        marketRuleOperations			();
+    void        continuousFuturesOperations		();
+    void        reqHistoricalTicks				();
+    void        reqTickByTickData				();
+    void        whatIfSamples					();
+    void        reqCurrentTime					();
 
 
 public:
@@ -200,17 +201,21 @@ public:
     #include "IB/EWrapper_prototypes.h"
 
 
-    void    readMessagesFromQueue           ();
+    void        readMessagesFromQueue           ();
 
-    void    getMsgFromQueue                 ();
-    void    defineState                     (   const InterObject           &message                );
+    void        getMsgFromQueue                 ();
+    void        defineState                     (   const InterObject           &message                );
+
+    //static
+    LiveObject  liveObject                      ();
+
 
 private:
 
-	void 	printContractMsg				(	const Contract				&contract				);
-	void 	printContractDetailsMsg			(	const ContractDetails		&contractDetails		);
-	void 	printContractDetailsSecIdList	(	const TagValueListSPtr 		&secIdList				);
-	void 	printBondContractDetailsMsg		(	const ContractDetails		&contractDetails		);
+    void        printContractMsg				(	const Contract				&contract				);
+    void        printContractDetailsMsg			(	const ContractDetails		&contractDetails		);
+    void        printContractDetailsSecIdList	(	const TagValueListSPtr 		&secIdList				);
+    void        printBondContractDetailsMsg		(	const ContractDetails		&contractDetails		);
 
 
 
@@ -232,10 +237,8 @@ private:
 
     MainWindow                     *m_window;
 
-public:
-
-    //std::deque<InterObject>         m_guiEventQueue;
-    //pthread_mutex_t                 m_guiEventQueueMutex;
+    //static
+    //LiveObject                      m_liveObject;
 
 };
 

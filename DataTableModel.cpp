@@ -24,6 +24,7 @@ DataTableModel::DataTableModel(         int         rows,
 
 {
 
+
     QStringList list;
 
     for ( int column = 0; column < qMax( 1, columns ); ++column )
@@ -88,7 +89,7 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
     int col = index.column();
 
     // generate a log message when this method gets called
-    //qDebug() << QString( "row %1, col%2, role %3" ).arg( row ).arg( col ).arg( role );
+    // qDebug() << QString( "row %1, col%2, role %3" ).arg( row ).arg( col ).arg( role );
 
 
     if ( !index.isValid() )
@@ -106,8 +107,10 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
 
             if ( index.row() == 0 && index.column() == 0 )
             {
+
                 qInfo(          "within ...DataTableModel::data() \n"              );
                 qStdout() <<  m_rowList[ index.row() ][ index.column() ] << Qt::endl;
+
             }
 
             return (     m_rowList[ index.row() ][ index.column() ]     );
@@ -177,7 +180,7 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
         break;
 
         //-----------------------------------------------
-
+/*
         case Qt::CheckStateRole:
 
             if ( row == 0 && col == 0 )     // add a checkbox to cell( 0, 0 )
@@ -186,7 +189,7 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
             }
 
         break;
-
+*/
         //-----------------------------------------------
 
     }

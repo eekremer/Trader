@@ -19,6 +19,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTableView>
@@ -68,8 +69,11 @@ public:
     QComboBox *primaryExchangeComboBox;
     QTableView *orderTableView;
     QPushButton *confirmButton;
-    QPushButton *setupButton;
-    QPushButton *pushButton;
+    QLabel *orderTypeLabel_2;
+    QComboBox *orderComboBox;
+    QSlider *horizontalSlider;
+    QTableView *bracketTableView;
+    QLabel *priceLabel;
     QMenuBar *menubar;
     QStatusBar *statusbar;
     QToolBar *toolBar;
@@ -91,10 +95,10 @@ public:
         centralwidget->setSizePolicy(sizePolicy);
         dataTableView = new QTableView(centralwidget);
         dataTableView->setObjectName(QString::fromUtf8("dataTableView"));
-        dataTableView->setGeometry(QRect(580, 30, 611, 51));
+        dataTableView->setGeometry(QRect(40, 30, 661, 71));
         layoutWidget = new QWidget(centralwidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(470, 110, 391, 51));
+        layoutWidget->setGeometry(QRect(50, 250, 261, 47));
         horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -134,7 +138,7 @@ public:
 
         verticalLayoutWidget_3 = new QWidget(centralwidget);
         verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(890, 130, 128, 251));
+        verticalLayoutWidget_3->setGeometry(QRect(980, 240, 128, 251));
         verticalLayout_3 = new QVBoxLayout(verticalLayoutWidget_3);
         verticalLayout_3->setSpacing(6);
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
@@ -180,7 +184,7 @@ public:
 
         verticalLayoutWidget_4 = new QWidget(centralwidget);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(1030, 130, 160, 251));
+        verticalLayoutWidget_4->setGeometry(QRect(1120, 240, 160, 251));
         verticalLayout_4 = new QVBoxLayout(verticalLayoutWidget_4);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         verticalLayout_4->setContentsMargins(0, 0, 0, 0);
@@ -217,7 +221,7 @@ public:
 
         verticalLayoutWidget_2 = new QWidget(centralwidget);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(90, 140, 131, 241));
+        verticalLayoutWidget_2->setGeometry(QRect(40, 330, 131, 241));
         verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
@@ -263,7 +267,7 @@ public:
 
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(230, 140, 161, 241));
+        verticalLayoutWidget->setGeometry(QRect(190, 330, 161, 241));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -294,21 +298,36 @@ public:
 
         orderTableView = new QTableView(centralwidget);
         orderTableView->setObjectName(QString::fromUtf8("orderTableView"));
-        orderTableView->setGeometry(QRect(30, 580, 1181, 201));
+        orderTableView->setGeometry(QRect(40, 610, 1241, 201));
         confirmButton = new QPushButton(centralwidget);
         confirmButton->setObjectName(QString::fromUtf8("confirmButton"));
-        confirmButton->setGeometry(QRect(890, 420, 291, 61));
+        confirmButton->setGeometry(QRect(980, 520, 301, 61));
         QFont font3;
         font3.setPointSize(19);
         font3.setBold(true);
         font3.setWeight(75);
         confirmButton->setFont(font3);
-        setupButton = new QPushButton(centralwidget);
-        setupButton->setObjectName(QString::fromUtf8("setupButton"));
-        setupButton->setGeometry(QRect(530, 450, 91, 31));
-        pushButton = new QPushButton(centralwidget);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(310, 460, 89, 25));
+        orderTypeLabel_2 = new QLabel(centralwidget);
+        orderTypeLabel_2->setObjectName(QString::fromUtf8("orderTypeLabel_2"));
+        orderTypeLabel_2->setGeometry(QRect(390, 210, 61, 17));
+        sizePolicy2.setHeightForWidth(orderTypeLabel_2->sizePolicy().hasHeightForWidth());
+        orderTypeLabel_2->setSizePolicy(sizePolicy2);
+        orderComboBox = new QComboBox(centralwidget);
+        orderComboBox->setObjectName(QString::fromUtf8("orderComboBox"));
+        orderComboBox->setGeometry(QRect(450, 200, 159, 25));
+        horizontalSlider = new QSlider(centralwidget);
+        horizontalSlider->setObjectName(QString::fromUtf8("horizontalSlider"));
+        horizontalSlider->setGeometry(QRect(60, 160, 211, 16));
+        horizontalSlider->setOrientation(Qt::Horizontal);
+        bracketTableView = new QTableView(centralwidget);
+        bracketTableView->setObjectName(QString::fromUtf8("bracketTableView"));
+        bracketTableView->setGeometry(QRect(390, 250, 531, 121));
+        priceLabel = new QLabel(centralwidget);
+        priceLabel->setObjectName(QString::fromUtf8("priceLabel"));
+        priceLabel->setGeometry(QRect(120, 120, 101, 31));
+        QFont font4;
+        font4.setPointSize(16);
+        priceLabel->setFont(font4);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -348,8 +367,8 @@ public:
         exchangeLabel->setText(QCoreApplication::translate("MainWindow", "Exchange", nullptr));
         primaryExchangeLabel->setText(QCoreApplication::translate("MainWindow", "Primary Exchange", nullptr));
         confirmButton->setText(QCoreApplication::translate("MainWindow", "SUBMIT", nullptr));
-        setupButton->setText(QCoreApplication::translate("MainWindow", "SetUp", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
+        orderTypeLabel_2->setText(QCoreApplication::translate("MainWindow", "ORDER", nullptr));
+        priceLabel->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
         toolBar->setWindowTitle(QCoreApplication::translate("MainWindow", "toolBar", nullptr));
         toolBar_2->setWindowTitle(QCoreApplication::translate("MainWindow", "toolBar_2", nullptr));
     } // retranslateUi

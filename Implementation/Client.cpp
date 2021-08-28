@@ -68,13 +68,12 @@ Client::Client(  MainWindow  *win  )    :	m_osSignal		( 	2000 										), //2-s
                                             m_sleepDeadline	( 	0											),
                                             m_orderId		(	0											),
                                             m_extraAuth		(	false										),
-                                            m_window        (   win                                         )
+                                            m_window        (   win                                         ) //,
+                                            //m_liveObject    (                                               )
 {
 
-    /*
-        pthread_mutex_init(            &m_guiEventQueueMutex,
-                                        NULL                                );
-    */
+    // nothing yet
+
 }
 
 //**********************************************************************************************************************
@@ -93,7 +92,7 @@ Client::~Client()
 
 //**********************************************************************************************************************
 
-bool Client::connect(			const char             *host,
+bool Client::connect(			  const char           *host,
 										int 			port, 
 										int 			clientId			)
 {
@@ -2689,6 +2688,7 @@ void Client::tickPrice(                     TickerId 			tickerId,
 									  const TickAttrib& 		attribs						) 
 {
 
+
 	printf( 								"Tick Price. Ticker Id: %ld, Field: %d, Price: %g, CanAutoExecute: %d, PastLimit: %d, PreOpen: %d\n", 
 											tickerId, 
 									   (int)field, 
@@ -2697,20 +2697,31 @@ void Client::tickPrice(                     TickerId 			tickerId,
 											attribs.pastLimit, 
 											attribs.preOpen									);
 
+    //-----------------------------------------------------------------------------------------------
 
     if ( field == BID )
     {
 
+
+
         QModelIndex bidIndex  =  m_window->m_dataModel->index(              0,
                                                                             0,
-                                                                            QModelIndex()               );
+                                                                            QModelIndex()       );
 
         m_window->m_dataModel->setData(                     bidIndex,
                                                             QString::number( price, 'f', 2 ),
-                                                            Qt::EditRole                                );
+                                                            Qt::EditRole                        );
+        m_window->m_liveObject.bidPrice(  price  );
+        m_window->m_liveObject.computePrice();
+      //m_window->
+
 
         qInfo(          "within ...Client::tickByTickBidAsk() \n"           );
         qInfo(          "%f \n",    price                                   );
+
+        m_window->m_bracketModel->setData(                  bidIndex,
+                                                            QString::number( price, 'f', 2 ),
+                                                            Qt::EditRole                        );
 
     }
 
@@ -2727,7 +2738,12 @@ void Client::tickPrice(                     TickerId 			tickerId,
         m_window->m_dataModel->setData(                     askIndex,
                                                             QString::number( price, 'f', 2 ),
                                                             Qt::EditRole                                );
+
+        m_window->m_liveObject.askPrice( price );
+
     }
+
+    //-----------------------------------------------------------------------------------------------
 
 }
 //! [tickprice]
@@ -4394,3 +4410,5 @@ void Client::replaceFAEnd(			int 					reqId,
 //! [replacefaend]
 
 //**********************************************************************************************************************
+
+

@@ -9,34 +9,39 @@
 
 DataViewDelegate::DataViewDelegate( QObject  *parent )
     :  QStyledItemDelegate( parent )
+
 {
+
     // nothing
+
 }
 
 //******************************************************************************************
 
-//
+/*
 
 QWidget* DataViewDelegate::createEditor(            QWidget                 *parent,
-                                              const QStyleOptionViewItem&   /* option */,
-                                              const QModelIndex&            /* index */     ) const
+                                              const QStyleOptionViewItem&   ,
+                                              const QModelIndex&                ) const
 
 {
 
     QSpinBox *editor = new QSpinBox( parent );
 
-/*
     editor->setFrame    (  true );
     editor->setMinimum  (     0 );
     editor->setMaximum  (   100 );
-*/
 
     return editor;
 
 }
 
+*/
+
 //******************************************************************************************
+
 /*
+
 void  DataViewDelegate::paint(          QPainter                *painter,
                                   const QStyleOptionViewItem    &option,
                                   const QModelIndex             &index          ) const
@@ -44,14 +49,19 @@ void  DataViewDelegate::paint(          QPainter                *painter,
 
 
 }
+
 */
+
 //******************************************************************************************
 
 // current data in that cell
 
+/*
+
 void DataViewDelegate::setEditorData(           QWidget                 *editor,
                                           const QModelIndex             &index          ) const
 {
+
 
     int value = index.model()->data( index, Qt::EditRole ).toInt();
 
@@ -61,14 +71,18 @@ void DataViewDelegate::setEditorData(           QWidget                 *editor,
 
 }
 
+*/
+
 //******************************************************************************************
 
 // when you're done modifying data, this function is called to return data back in the model
-
+/*
 void DataViewDelegate::setModelData(            QWidget                 *editor,
                                                 QAbstractItemModel      *model,
                                           const QModelIndex             &index          ) const
 {
+
+
 
     QSpinBox *spinBox = static_cast< QSpinBox* >( editor );
 
@@ -78,8 +92,10 @@ void DataViewDelegate::setModelData(            QWidget                 *editor,
 
     model->setData( index, value, Qt::EditRole );
 
-}
 
+
+}
+*/
 //******************************************************************************************
 
 /*
@@ -96,16 +112,19 @@ QSize  DataViewDelegate::sizeHint(     const QStyleOptionViewItem    &option,
 
 // it allows you to set where the obj (spinbox) will be displayed in the cell
 
-
-//void  DataViewDelegate::updateEditorGeometry(            QWidget                  *editor,
-//                                                  const QStyleOptionViewItem     &option,
-//                                                  const QModelIndex&    /* index */         ) const
-
 /*
+
+void  DataViewDelegate::updateEditorGeometry(            QWidget                  *editor,
+                                                  const QStyleOptionViewItem     &option,
+                                                  const QModelIndex&                     ) const
+
+
 {
 
     editor->setGeometry( option.rect );
 
 }
+
 */
+
 //******************************************************************************************

@@ -14,6 +14,7 @@
 #include  "Implementation/Client.h"
 
 
+
 extern Client g_client;
 
 
@@ -22,11 +23,29 @@ extern Client g_client;
 MainWindow::MainWindow(  QWidget  *parent  )
     : QMainWindow( parent )
     , m_ui( new Ui::MainWindow )
+    , m_liveObject()
 {
+
+    /*
+
+        Ui::MainWindow                  *m_ui;
+
+        OrderTableModel                 *m_orderModel   ;
+        DataTableModel                  *m_dataModel    ;
+        BracketTableModel               *m_bracketModel ;
+        DataViewDelegate                *m_dataDelegate ;
+        OrderViewDelegate               *m_orderDelegate;
+
+        std::deque<InterObject>          m_guiEventQueue;
+        pthread_mutex_t                  m_guiEventQueueMutex;
+
+        LiveObject                       m_liveObject;
+
+
+     */
 
 
     m_ui->setupUi(  this  );
-
 
     //----------------------------------------------------------------
 
@@ -58,16 +77,22 @@ MainWindow::MainWindow(  QWidget  *parent  )
 
     // Bracket Table & View
 
-    m_bracketModel = new BracketTableModel(  2,  5, nullptr  );
+    m_bracketModel = new BracketTableModel(  2,  3, nullptr  );
 
-    m_ui->bracketTableView->setModel(  m_bracketModel  );
+    m_ui->bracketTableView->setModel(   m_bracketModel  );
 
-    //setDataTableViewColumnWidth();
-    //setDataTableViewHeaderSize ();
+    setBracketTableViewColumnWidth();
+    setBracketTableViewHeaderSize ();
 
     //m_dataDelegate = new DataViewDelegate( this );
     //m_ui->dataTableView->setItemDelegate( m_dataDelegate );
 
+    m_ui->bracketTableView->setStyleSheet(  "QHeaderView::section {     color:white;"
+                                                                        "background-color:grey;"
+                                                                  "}"               );
+
+
+    //background-color:grey
 
     //----------------------------------------------------------------
 
@@ -96,9 +121,19 @@ MainWindow::MainWindow(  QWidget  *parent  )
 
     //----------------------------------------------------------------
 
+    setPriceSlider();
+
+    //----------------------------------------------------------------
+
+    // Hack to access UI from other classes
+    connect(        &m_liveObject,
+                    SIGNAL(sendText(const QString&)),
+                    this,
+                    SLOT(updateText(const QString&))       );
+
+
     pthread_mutex_init(            &m_guiEventQueueMutex,
                                     NULL                                );
-
 
 
 }
@@ -325,6 +360,72 @@ void  MainWindow::setDataTableViewHeaderSize()
 
 //*****************************************************************************************
 
+void  MainWindow::setBracketTableViewColumnWidth()
+{
+
+    QVector< int > columnWidths     {      100,     // diff. USD/stock
+                                           100,     // diff. %
+                                           100,     // increm. P&L
+                                    };
+
+
+    // set qtableview's column width
+
+    for ( int i = 0; i < columnWidths.size(); i++ )
+        m_ui->bracketTableView->setColumnWidth(  i, columnWidths[ i ] );
+}
+
+//****************************************************************************************
+
+void  MainWindow::setPriceSlider()
+{
+
+    m_ui->horizontalSlider->setMinimum     ( 0 );
+    m_ui->horizontalSlider->setMaximum     ( 6 );
+    m_ui->horizontalSlider->setSingleStep  ( 1 );
+    m_ui->horizontalSlider->setValue       ( 6 );
+    //m_ui->horizontalSlider->setTickInterval( 1 );
+    m_ui->horizontalSlider->setTickPosition( QSlider::TicksBothSides );
+    m_ui->horizontalSlider->setFocusPolicy ( Qt::StrongFocus     );
+
+    connect(            m_ui->horizontalSlider,
+                        SIGNAL(valueChanged(int)),
+                        this,
+                        SLOT(sliderChanged(int))                     );
+
+}
+
+//****************************************************************************************
+
+
+void  MainWindow::sliderChanged(  int  value  )
+{
+
+    qInfo(      "slider value: %d\n", value        );
+
+    if (  ( m_liveObject.bidPrice() != -1 ) && ( m_liveObject.askPrice() != -1 ) )
+    {
+
+        this->m_liveObject.sliderValue (  value );
+
+        this->m_liveObject.computePrice();
+
+        m_ui->priceLabel->setText( QString::number( m_liveObject.priceToOffer(), 'f', 2) );
+
+    }
+
+}
+
+
+//****************************************************************************************
+
+void  MainWindow::setBracketTableViewHeaderSize()
+{
+
+}
+
+//****************************************************************************************
+
 void MainWindow::setMainWindowButtonConnection()
 {
 
@@ -363,7 +464,10 @@ void MainWindow::setMainWindowButtonConnection()
     connect(                m_ui->symbolComboBox,
                             SIGNAL(currentTextChanged(QString)),
                             this,
-                            SLOT(symbolComboBoxTextChanged(QString))                                 );
+                            SLOT(symbolComboBoxTextChanged(QString))            );
+
+
+
 
 }
 
@@ -646,3 +750,15 @@ void MainWindow::setInitialSymbol()
 
 
 }
+
+//***************************************************************************************
+
+// Hack to access UI from other classes
+void  MainWindow::updateText( const QString& newText )
+{
+
+    m_ui->priceLabel->setText( newText );
+
+}
+
+//***************************************************************************************

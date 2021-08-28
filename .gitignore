@@ -1,4 +1,4 @@
-Debug/
-Release/
-Profile/
+Debug/*.*
+Release/*.*
+Profile/*.*
 *.o

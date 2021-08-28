@@ -139,7 +139,7 @@ bool EClientSocket::eConnect(			const char*		host,
 
 //*******************************************************************************************************************
 
-bool EClientSocket::eConnect(				const char*		host, 
+bool EClientSocket::eConnect(		  const char           *host,
 											unsigned int 	port, 
 											int 			clientId				) 
 {

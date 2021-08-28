@@ -8,6 +8,7 @@
 #include <QDebug>
 
 
+
 //******************************************************************************************
 
 BracketTableModel::BracketTableModel(       int          rows,
@@ -15,6 +16,7 @@ BracketTableModel::BracketTableModel(       int          rows,
                                             QObject     *parent                   )
 
     :   QAbstractTableModel( parent )
+
 {
 
     QStringList list;
@@ -73,8 +75,8 @@ QVariant  BracketTableModel::data(        const QModelIndex     &index,
                                                 int              role       ) const
 {
 
-    // in addition to controlling what text the view displays, the model
-    // also controls the text's appearance
+    // in addition to controlling what text the view displays,
+    // the model also controls the text's appearance
 
 
     int row = index.row();
@@ -128,7 +130,7 @@ QVariant  BracketTableModel::data(        const QModelIndex     &index,
 
         case Qt::BackgroundRole:
 
-            if ( row == 0 && ( col == 0 || col == 1 || col == 2 ) )     // change background only for cell( 0, 1 )
+            if ( ( row == 0 || row == 1 ) && ( col == 0 || col == 1 || col == 2 ) )     // change background only for cell( 0, 1 )
             {
 
                 return QBrush( Qt::black );
@@ -176,7 +178,7 @@ QVariant  BracketTableModel::data(        const QModelIndex     &index,
         break;
 
         //-----------------------------------------------
-
+/*
         case Qt::CheckStateRole:
 
             if ( row == 0 && col == 0 )     // add a checkbox to cell( 0, 0 )
@@ -187,7 +189,7 @@ QVariant  BracketTableModel::data(        const QModelIndex     &index,
             }
 
         break;
-
+*/
         //-----------------------------------------------
 
     }
@@ -217,24 +219,40 @@ QVariant  BracketTableModel::headerData(        int                 section,
 
         switch ( section )
         {
+
             case 0:
-                return "AUX";
-            case 1:
                 return "USD/stock";
-            case 2:
+            case 1:
                 return "%";                 // Ticker/Exchange. For instance IBM|SMART
-            case 3:
+            case 2:
                 return "increm. P&L";       // order action: Buy or Sell
             default:
                 return QString( "" );
+
         }
 
-     }
-     else
-     {
+    }
+    else if ( orientation == Qt::Vertical )
+    {
+
+        switch ( section )
+        {
+
+            case 0:
+                return "Take a profit";
+            case 1:
+                return "Stop loss";
+            default:
+                return QString( "" );
+
+        }
+
+    }
+    else
+    {
         //return QString( "Row %1"    ).arg( section );
         return "";
-     }
+    }
 
 }
 
@@ -277,8 +295,7 @@ bool BracketTableModel::setData(        const QModelIndex  &index,
 
     m_rowList[ index.row() ][ index.column() ] = value.toString();
 
-
-    qInfo(          "within ...DataTableModel::setData() \n"            );
+    qInfo(      "within ...DataTableModel::setData() \n"        );
 
     qStdout() <<  m_rowList[ index.row() ][ index.column() ] << Qt::endl;
 
@@ -334,7 +351,7 @@ bool  BracketTableModel::insertRows(        int             position,
 
 bool  BracketTableModel::insertColumns(         int             position,
                                                 int             columns,
-                                          const QModelIndex     &parent         )
+                                          const QModelIndex    &parent         )
 {
 
 

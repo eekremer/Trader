@@ -42,13 +42,21 @@ int main( int argc, char *argv[] )
 
     QApplication app( argc, argv );
 
+    //---------------------------------------------
+
     app.setWindowIcon(  QIcon( ":/rocket.png" )  );
+
+    //---------------------------------------------
 
     MainWindow *window = new MainWindow();
 
     g_client = new Client( window );
 
+    //---------------------------------------------
+
     setLocaleForEntireProgram();
+
+    //---------------------------------------------
 
     createClientThread( g_client );
 

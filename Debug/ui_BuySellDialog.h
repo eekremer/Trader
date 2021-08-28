@@ -32,13 +32,13 @@ public:
         pushButton = new QPushButton(BuySellDialog);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
         pushButton->setEnabled(true);
-        pushButton->setGeometry(QRect(870, 370, 201, 71));
+        pushButton->setGeometry(QRect(100, 80, 201, 71));
         QFont font;
         font.setPointSize(23);
         pushButton->setFont(font);
         checkBox = new QCheckBox(BuySellDialog);
         checkBox->setObjectName(QString::fromUtf8("checkBox"));
-        checkBox->setGeometry(QRect(340, 140, 131, 61));
+        checkBox->setGeometry(QRect(360, 250, 131, 61));
 
         retranslateUi(BuySellDialog);
 
