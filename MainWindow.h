@@ -17,8 +17,8 @@
 #include "OrderViewDelegate.h"
 
 #include "InterObject.h"
+#include "LiveObject.h"
 #include "Implementation/Client.h"
-#include "Implementation/LiveObject.h"
 
 
 // forward declaration

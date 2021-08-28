@@ -27,6 +27,7 @@ HEADERS += AccountTableModel.h \
            DataTableModel.h \
            DataViewDelegate.h \
            InterObject.h \
+           LiveObject.h \
            MainWindow.h \
            Order.h \
            OrderDbManager.h \
@@ -88,7 +89,6 @@ HEADERS += AccountTableModel.h \
            Implementation/Client.h \
            Implementation/ContractSamples.h \
            Implementation/FAMethodSamples.h \
-           Implementation/LiveObject.h \
            Implementation/OrderSamples.h \
            Implementation/ScannerSubscriptionSamples.h \
            Implementation/StdAfx.h \
@@ -100,6 +100,7 @@ SOURCES += AccountTableModel.cpp \
            DataDbManager.cpp \
            DataTableModel.cpp \
            DataViewDelegate.cpp \
+           LiveObject.cpp \
            Main.cpp \
            MainWindow.cpp \
            OrderDbManager.cpp \
@@ -129,7 +130,6 @@ SOURCES += AccountTableModel.cpp \
            Implementation/AvailableAlgoParams.cpp \
            Implementation/Client.cpp \
            Implementation/ContractSamples.cpp \
-           Implementation/LiveObject.cpp \
            Implementation/OrderSamples.cpp \
            Implementation/ScannerSubscriptionSamples.cpp \
            Implementation/StdAfx.cpp \
