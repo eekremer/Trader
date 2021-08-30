@@ -24,18 +24,15 @@ LiveObject::LiveObject()    :       m_priceToOffer          ( -1 ),
 
     qInfo(  "inside default ctor LiveObject::LiveObject()\n"  );
 
-    emit sendText( "Mother fucker !!!" );
-
 }
 
 //************************************************************************************
 
-void  LiveObject::computePrice()
+void  LiveObject::computePriceToOffer()
 {
 
 
-
-    if ( ( m_bidPrice != -1 ) && ( m_askPrice != -1 ) && ( m_sliderValue != -1 ) )
+    if (  ( m_bidPrice != -1 ) && ( m_askPrice != -1 ) && ( m_sliderValue != -1 )  )
     {
 
         // price computation
@@ -44,12 +41,45 @@ void  LiveObject::computePrice()
         m_priceToOffer = m_bidPrice * ( 1 - ( m_sliderValue / 6 ) ) + m_askPrice * ( m_sliderValue / 6 );
 
     }
+    else
+    {
+
+        m_priceToOffer = -1;
+
+    }
 
 }
 
 //************************************************************************************
 
-double  LiveObject::priceToOffer() const
+void  LiveObject::showPriceToOffer()
+{
+
+    emit sendPriceToOfferLabel(  (  QString::number( m_priceToOffer, 'f', 2 )  )  );  // "hola"
+
+}
+
+//************************************************************************************
+
+void  LiveObject::showBidPrice()
+{
+
+    emit sendBidPrice(  (  QString::number( m_bidPrice, 'f', 2 )  )  );  // "hola"
+
+}
+
+//************************************************************************************
+
+void  LiveObject::showAskPrice()
+{
+
+    emit sendAskPrice(  (  QString::number( m_askPrice, 'f', 2 )  )  );  // "hola"
+
+}
+
+//************************************************************************************
+
+double  LiveObject::LiveObject::priceToOffer() const
 {
 
     return m_priceToOffer;
@@ -67,6 +97,7 @@ void  LiveObject::priceToOffer( double  priceToOffer )
 
 //************************************************************************************
 
+// getter
 double  LiveObject::bidPrice() const
 {
 
@@ -76,17 +107,23 @@ double  LiveObject::bidPrice() const
 
 //************************************************************************************
 
+// setter
 void  LiveObject::bidPrice( double  bidPrice )
 {
 
     m_bidPrice = std::move(  bidPrice  );
 
-    computePrice();
+    showBidPrice();
+
+    computePriceToOffer();
+
+    showPriceToOffer();
 
 }
 
 //************************************************************************************
 
+// getter
 double  LiveObject::askPrice() const
 {
 
@@ -96,12 +133,17 @@ double  LiveObject::askPrice() const
 
 //************************************************************************************
 
+// setter
 void  LiveObject::askPrice( double  askPrice )
 {
 
     m_askPrice = std::move(  askPrice  );
 
-    computePrice();
+    showAskPrice();
+
+    computePriceToOffer();
+
+    showPriceToOffer();
 
 }
 
@@ -121,7 +163,9 @@ void  LiveObject::sliderValue( int  sliderValue )
 
     m_sliderValue = std::move(  sliderValue  );
 
+    computePriceToOffer();
 
+    showPriceToOffer();
 
 }
 

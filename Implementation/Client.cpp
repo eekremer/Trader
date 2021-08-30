@@ -2702,8 +2702,10 @@ void Client::tickPrice(                     TickerId 			tickerId,
     if ( field == BID )
     {
 
+        // setter
+        m_window->m_liveObject.bidPrice(    price   );
 
-
+/*
         QModelIndex bidIndex  =  m_window->m_dataModel->index(              0,
                                                                             0,
                                                                             QModelIndex()       );
@@ -2711,9 +2713,6 @@ void Client::tickPrice(                     TickerId 			tickerId,
         m_window->m_dataModel->setData(                     bidIndex,
                                                             QString::number( price, 'f', 2 ),
                                                             Qt::EditRole                        );
-        m_window->m_liveObject.bidPrice(  price  );
-        m_window->m_liveObject.computePrice();
-      //m_window->
 
 
         qInfo(          "within ...Client::tickByTickBidAsk() \n"           );
@@ -2722,6 +2721,7 @@ void Client::tickPrice(                     TickerId 			tickerId,
         m_window->m_bracketModel->setData(                  bidIndex,
                                                             QString::number( price, 'f', 2 ),
                                                             Qt::EditRole                        );
+*/
 
     }
 
@@ -2731,6 +2731,9 @@ void Client::tickPrice(                     TickerId 			tickerId,
     if ( field == ASK )
     {
 
+        m_window->m_liveObject.askPrice(    price   );
+
+/*
         QModelIndex askIndex  =  m_window->m_dataModel->index(              0,
                                                                             1,
                                                                             QModelIndex()               );
@@ -2740,7 +2743,7 @@ void Client::tickPrice(                     TickerId 			tickerId,
                                                             Qt::EditRole                                );
 
         m_window->m_liveObject.askPrice( price );
-
+*/
     }
 
     //-----------------------------------------------------------------------------------------------

@@ -125,12 +125,9 @@ MainWindow::MainWindow(  QWidget  *parent  )
 
     //----------------------------------------------------------------
 
-    // Hack to access UI from other classes
-    connect(        &m_liveObject,
-                    SIGNAL(sendText(const QString&)),
-                    this,
-                    SLOT(updateText(const QString&))       );
+    setPriceToOfferLabel();
 
+    //----------------------------------------------------------------
 
     pthread_mutex_init(            &m_guiEventQueueMutex,
                                     NULL                                );
@@ -393,29 +390,95 @@ void  MainWindow::setPriceSlider()
                         this,
                         SLOT(sliderChanged(int))                     );
 
+    // initialize m_sliderValue to 6
+    emit m_ui->horizontalSlider->valueChanged( 6 );
+
 }
 
 //****************************************************************************************
 
+void  MainWindow::setPriceToOfferLabel()  const
+{
+
+    m_ui->priceLabel->setStyleSheet(        "QLabel{"
+                                            "background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 black, stop: 1 green );"
+                                            "color: white;"
+                                            "font-size: 25px;"
+                                            "border-style: solid;"
+                                            "border-color: green;"
+                                            "border-width: 1px;"
+                                            "border-radius: 5px;"
+                                            "}"
+                                    );
+
+    connect(        &m_liveObject,
+                    SIGNAL(sendPriceToOfferLabel(const QString&)),
+                    this,
+                    SLOT(updatePriceToOfferLabel(const QString&))       );
+
+    connect(        &m_liveObject,
+                    SIGNAL(sendBidPrice(const QString&)),
+                    this,
+                    SLOT(updateBidPrice(const QString&))                );
+
+    connect(        &m_liveObject,
+                    SIGNAL(sendAskPrice(const QString&)),
+                    this,
+                    SLOT(updateAskPrice(const QString&))                );
+
+}
+
+//****************************************************************************************
+
+void  MainWindow::updatePriceToOfferLabel(  const QString&  newPrice  )
+{
+
+    this->m_ui->priceLabel->setText(  newPrice  );
+
+}
+
+//****************************************************************************************
+
+void  MainWindow::updateBidPrice(  const QString&  newPrice  )
+{
+
+    QModelIndex bidIndex  =  this->m_dataModel->index(          0,
+                                                                0,
+                                                                QModelIndex()           );
+
+    this->m_dataModel->setData(             bidIndex,
+                                            newPrice,
+                                            Qt::EditRole                                );
+
+}
+
+//****************************************************************************************
+
+void  MainWindow::updateAskPrice(  const QString&  newPrice   )
+{
+
+    QModelIndex bidIndex  =  this->m_dataModel->index(          0,
+                                                                1,
+                                                                QModelIndex()           );
+
+    this->m_dataModel->setData(             bidIndex,
+                                            newPrice,
+                                            Qt::EditRole                                );
+
+}
+
+//****************************************************************************************
 
 void  MainWindow::sliderChanged(  int  value  )
 {
 
-    qInfo(      "slider value: %d\n", value        );
+    this->m_liveObject.sliderValue (  value );
 
-    if (  ( m_liveObject.bidPrice() != -1 ) && ( m_liveObject.askPrice() != -1 ) )
-    {
+    this->m_liveObject.computePriceToOffer();
 
-        this->m_liveObject.sliderValue (  value );
-
-        this->m_liveObject.computePrice();
-
-        m_ui->priceLabel->setText( QString::number( m_liveObject.priceToOffer(), 'f', 2) );
-
-    }
+    m_ui->priceLabel->setText( QString::number( m_liveObject.priceToOffer(), 'f', 2) );
 
 }
-
 
 //****************************************************************************************
 
@@ -748,16 +811,6 @@ void MainWindow::setInitialSymbol()
                                                    //  2: TSLA
                                                    //  3: MSFT
 
-
-}
-
-//***************************************************************************************
-
-// Hack to access UI from other classes
-void  MainWindow::updateText( const QString& newText )
-{
-
-    m_ui->priceLabel->setText( newText );
 
 }
 

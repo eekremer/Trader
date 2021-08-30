@@ -71,6 +71,10 @@ class MainWindow : public QMainWindow
         void                symbolComboBoxTextChanged       (   const QString&  symbol      );
         void                sliderChanged                   (       int       value         );
 
+        void                updatePriceToOfferLabel         (   const QString&  newPrice    );
+        void                updateBidPrice                  (   const QString&  newPrice    );
+        void                updateAskPrice                  (   const QString&  newPrice    );
+
 
     public:
 
@@ -89,7 +93,7 @@ class MainWindow : public QMainWindow
         void                initialSetUp                    ();
         void                setPriceSlider                  ();
 
-        void                updateText                      (   const QString&  newText     );
+        void                setPriceToOfferLabel            ()  const;
 
 
     private:

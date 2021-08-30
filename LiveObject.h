@@ -14,52 +14,54 @@ class LiveObject  :  public QObject
 
        LiveObject();
 
+       void     computePriceToOffer     ();
+       void     showPriceToOffer        ();
+       void     showBidPrice            ();
+       void     showAskPrice            ();
 
-       void     computePrice            (                                           );
-
-    // bool     didDataChanged          (       double                              );
+    // bool     didDataChanged          (           double                              );
 
 
        // getter's and setter's
 
-       double   priceToOffer            (                                           ) const;
-       void     priceToOffer            (       double      priceToOffer            );
+       double   priceToOffer            (                                               ) const;
+       void     priceToOffer            (           double      priceToOffer            );
 
-       double   bidPrice                (                                           ) const;
-       void     bidPrice                (       double      bidPrice                );
+       double   bidPrice                (                                               ) const;
+       void     bidPrice                (           double      bidPrice                );
 
-       double   askPrice                (                                           ) const;
-       void     askPrice                (       double      askPrice                );
+       double   askPrice                (                                               ) const;
+       void     askPrice                (           double      askPrice                );
 
-       int      sliderValue             (                                           ) const;
-       void     sliderValue             (       int         sliderValue             );
+       int      sliderValue             (                                               ) const;
+       void     sliderValue             (           int         sliderValue             );
 
-       double   openingPrice            (                                           ) const;
-       void     openingPrice            (       double      openingPrice            );
+       double   openingPrice            (                                               ) const;
+       void     openingPrice            (           double      openingPrice            );
 
-       double   closingPrice            (                                           ) const;
-       void     closingPrice            (       double      closingPrice            );
+       double   closingPrice            (                                               ) const;
+       void     closingPrice            (           double      closingPrice            );
 
-       double   lastPrice               (                                           ) const;
-       void     lastPrice               (       double      lastPrice               );
+       double   lastPrice               (                                               ) const;
+       void     lastPrice               (           double      lastPrice               );
 
-       double   profitToTakePrice       (                                           ) const;
-       void     profitToTakePrice       (       double      profitToTakePrice       );
+       double   profitToTakePrice       (                                               ) const;
+       void     profitToTakePrice       (           double      profitToTakePrice       );
 
-       double   stopLossPrice           (                                           ) const;
-       void     stopLossPrice           (       double      stopLossPrice           );
+       double   stopLossPrice           (                                               ) const;
+       void     stopLossPrice           (           double      stopLossPrice           );
 
-       double   profitToTakePercentage  (                                           ) const;
-       void     profitToTakePercentage  (       double      profitToTakePercentage  );
+       double   profitToTakePercentage  (                                               ) const;
+       void     profitToTakePercentage  (           double      profitToTakePercentage  );
 
-       double   stopLossPercentage      (                                           ) const;
-       void     stopLossPercentage      (       double      stopLossPercentage      );
+       double   stopLossPercentage      (                                               ) const;
+       void     stopLossPercentage      (           double      stopLossPercentage      );
 
-       double   incrementalProfit       (                                           ) const;
-       void     incrementalProfit       (       double      incrementalProfit       );
+       double   incrementalProfit       (                                               ) const;
+       void     incrementalProfit       (           double      incrementalProfit       );
 
-       double   incrementalLoss         (                                           ) const;
-       void     incrementalLoss         (       double      incrementalLoss         );
+       double   incrementalLoss         (                                               ) const;
+       void     incrementalLoss         (           double      incrementalLoss         );
 
 
     public slots:
@@ -68,7 +70,9 @@ class LiveObject  :  public QObject
 
     signals:
 
-       void     sendText                (  const QString&   newText                 );
+       void     sendPriceToOfferLabel   (   const   QString&    newText                 );
+       void     sendBidPrice            (   const   QString&    newBidPrice             );
+       void     sendAskPrice            (   const   QString&    newAskPrice             );
 
 
     private:
