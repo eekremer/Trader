@@ -26,21 +26,21 @@
 #include "HistoricalTickLast.h"
 
 
-enum TickType { 	BID_SIZE, 
-					BID, 
-					ASK, 
+enum TickType { 	BID_SIZE,   // = 0
+                    BID,        // = 1  Bid price
+                    ASK,        // = 2  Ask price
 					ASK_SIZE, 
-					LAST, 
-					LAST_SIZE,
+                    LAST,       // = 4  Last price
+                    LAST_SIZE,  // = 5  Last size
 					HIGH, 
 					LOW, 
-					VOLUME, 
-					CLOSE,
+                    VOLUME,     // = 8  trading volume for the day
+                    CLOSE,      // = 9  closing price for the previous day
 					BID_OPTION_COMPUTATION,
 					ASK_OPTION_COMPUTATION,
 					LAST_OPTION_COMPUTATION,
 					MODEL_OPTION,
-					OPEN,
+                    OPEN,       // = 14  current session's opening price
 					LOW_13_WEEK,
 					HIGH_13_WEEK,
 					LOW_26_WEEK,

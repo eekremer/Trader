@@ -26,6 +26,7 @@ HEADERS += AccountTableModel.h \
            DataDbManager.h \
            DataTableModel.h \
            DataViewDelegate.h \
+           DiffTableModel.h \
            InterObject.h \
            LiveObject.h \
            MainWindow.h \
@@ -100,6 +101,7 @@ SOURCES += AccountTableModel.cpp \
            DataDbManager.cpp \
            DataTableModel.cpp \
            DataViewDelegate.cpp \
+           DiffTableModel.cpp \
            LiveObject.cpp \
            Main.cpp \
            MainWindow.cpp \

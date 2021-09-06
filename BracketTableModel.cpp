@@ -269,7 +269,7 @@ Qt::ItemFlags  BracketTableModel::flags(  const QModelIndex  &index  ) const
     if ( !index.isValid() )
         return Qt::ItemIsEnabled;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    return Qt::NoItemFlags;  // Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 
 }
 

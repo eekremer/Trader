@@ -15,11 +15,16 @@ class LiveObject  :  public QObject
        LiveObject();
 
        void     computePriceToOffer     ();
+
        void     showPriceToOffer        ();
        void     showBidPrice            ();
        void     showAskPrice            ();
-
-    // bool     didDataChanged          (           double                              );
+       void     showLastPrice           ();
+       void     showPriceDiff           ();
+       void     showPricePercentageDiff ();
+       void     showOpeningPrice        ();
+       void     showClosingPrice        ();
+       void     showTradingVolume       ();
 
 
        // getter's and setter's
@@ -36,14 +41,23 @@ class LiveObject  :  public QObject
        int      sliderValue             (                                               ) const;
        void     sliderValue             (           int         sliderValue             );
 
+       double   lastPrice               (                                               ) const;
+       void     lastPrice               (           double      lastPrice               );
+
+       double   priceDiff               (                                               ) const;
+       void     priceDiff               (           double      priceDiff               );
+
+       double   pricePercentageDiff     (                                               ) const;
+       void     pricePercentageDiff     (           double      pricePorcentageDiff     );
+
        double   openingPrice            (                                               ) const;
        void     openingPrice            (           double      openingPrice            );
 
        double   closingPrice            (                                               ) const;
        void     closingPrice            (           double      closingPrice            );
 
-       double   lastPrice               (                                               ) const;
-       void     lastPrice               (           double      lastPrice               );
+       double   tradingVolume           (                                               ) const;
+       void     tradingVolume           (           double      tradingVolume           );
 
        double   profitToTakePrice       (                                               ) const;
        void     profitToTakePrice       (           double      profitToTakePrice       );
@@ -73,23 +87,40 @@ class LiveObject  :  public QObject
        void     sendPriceToOfferLabel   (   const   QString&    newText                 );
        void     sendBidPrice            (   const   QString&    newBidPrice             );
        void     sendAskPrice            (   const   QString&    newAskPrice             );
+       void     sendLastPrice           (   const   QString&    newAskPrice             );
 
+       void     sendPriceDiff           (   const   QString&    newAskPrice             );
+       void     sendPricePercentageDiff (   const   QString&    newAskPrice             );
+       void     sendOpeningPrice        (   const   QString&    newAskPrice             );
+       void     sendClosingPrice        (   const   QString&    newAskPrice             );
+       void     sendTradingVolume       (   const   QString&    newAskPrice             );
 
     private:
 
+       // dataTableView
        double   m_priceToOffer;
        double   m_bidPrice;
        double   m_askPrice;
        double   m_sliderValue;
+
+       // diffTableView
+       double   m_lastPrice;
+       double   m_priceDiff;
+       double   m_pricePercentageDiff;
        double   m_openingPrice;
        double   m_closingPrice;
-       double   m_lastPrice;
+       double   m_tradingVolume;
+
+       // brackettableView
        double   m_profitToTakePrice;
        double   m_stopLossPrice;
        double   m_profitToTakePercentage;
        double   m_stopLossPercentage;
        double   m_incrementalProfit;
        double   m_incrementalLoss;
+
+       // orderTableView
+
 
 };
 

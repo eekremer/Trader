@@ -1,4 +1,4 @@
-#include  <QTableWidget>
+﻿#include  <QTableWidget>
 #include  <QDebug>
 #include  <chrono>
 #include  <thread>
@@ -26,26 +26,39 @@ MainWindow::MainWindow(  QWidget  *parent  )
     , m_liveObject()
 {
 
-    /*
-
-        Ui::MainWindow                  *m_ui;
-
-        OrderTableModel                 *m_orderModel   ;
-        DataTableModel                  *m_dataModel    ;
-        BracketTableModel               *m_bracketModel ;
-        DataViewDelegate                *m_dataDelegate ;
-        OrderViewDelegate               *m_orderDelegate;
-
-        std::deque<InterObject>          m_guiEventQueue;
-        pthread_mutex_t                  m_guiEventQueueMutex;
-
-        LiveObject                       m_liveObject;
-
-
-     */
 
 
     m_ui->setupUi(  this  );
+
+    //----------------------------------------------------------------
+
+    // Data Table & View
+
+    m_dataModel = new DataTableModel(  1,  2, nullptr  );
+
+    m_ui->dataTableView->setModel(  m_dataModel  );
+
+    setDataTableViewColumnWidth();
+    setDataTableViewHeaderSize ();
+
+    m_dataDelegate = new DataViewDelegate( this );
+    m_ui->dataTableView->setItemDelegate( m_dataDelegate );
+
+    //----------------------------------------------------------------
+
+    // Data Table & View
+
+    m_diffModel = new DiffTableModel(  1,  6, nullptr  );
+
+    m_ui->diffTableView->setModel(  m_diffModel  );
+
+    //setDiffTableViewColumnWidth();
+    //setDiffTableViewHeaderSize ();
+
+    //m_diffDelegate = new DiffViewDelegate( this );
+    //m_ui->diffTableView->setItemDelegate( m_diffDelegate );
+
+
 
     //----------------------------------------------------------------
 
@@ -58,20 +71,6 @@ MainWindow::MainWindow(  QWidget  *parent  )
     setOrderTableViewColumnWidth();
 
     //m_orderDelegate = new OrderViewDelegate( this );
-
-    //----------------------------------------------------------------
-
-    // Data Table & View
-
-    m_dataModel = new DataTableModel(  1,  6, nullptr  );
-
-    m_ui->dataTableView->setModel(  m_dataModel  );
-
-    setDataTableViewColumnWidth();
-    setDataTableViewHeaderSize ();
-
-    m_dataDelegate = new DataViewDelegate( this );
-    m_ui->dataTableView->setItemDelegate( m_dataDelegate );
 
     //----------------------------------------------------------------
 
@@ -426,10 +425,42 @@ void  MainWindow::setPriceToOfferLabel()  const
                     this,
                     SLOT(updateAskPrice(const QString&))                );
 
+    connect(        &m_liveObject,
+                    SIGNAL(sendLastPrice(const QString&)),
+                    this,
+                    SLOT(updateLastPrice(const QString&))                );
+
+    connect(        &m_liveObject,
+                    SIGNAL(sendPriceDiff(const QString&)),
+                    this,
+                    SLOT(updatePriceDiff(const QString&))                );
+
+    connect(        &m_liveObject,
+                    SIGNAL(sendPricePercentageDiff(const QString&)),
+                    this,
+                    SLOT(updatePricePercentageDiff(const QString&))                );
+
+    connect(        &m_liveObject,
+                    SIGNAL(sendOpeningPrice(const QString&)),
+                    this,
+                    SLOT(updateOpeningPrice(const QString&))                );
+
+    connect(        &m_liveObject,
+                    SIGNAL(sendClosingPrice(const QString&)),
+                    this,
+                    SLOT(updateClosingPrice(const QString&))                );
+
+    connect(        &m_liveObject,
+                    SIGNAL(sendTradingVolume(const QString&)),
+                    this,
+                    SLOT(updateTradingVolume(const QString&))                );
+
+
 }
 
 //****************************************************************************************
 
+// slot
 void  MainWindow::updatePriceToOfferLabel(  const QString&  newPrice  )
 {
 
@@ -439,6 +470,7 @@ void  MainWindow::updatePriceToOfferLabel(  const QString&  newPrice  )
 
 //****************************************************************************************
 
+// slot
 void  MainWindow::updateBidPrice(  const QString&  newPrice  )
 {
 
@@ -454,6 +486,7 @@ void  MainWindow::updateBidPrice(  const QString&  newPrice  )
 
 //****************************************************************************************
 
+// slot
 void  MainWindow::updateAskPrice(  const QString&  newPrice   )
 {
 
@@ -462,6 +495,116 @@ void  MainWindow::updateAskPrice(  const QString&  newPrice   )
                                                                 QModelIndex()           );
 
     this->m_dataModel->setData(             bidIndex,
+                                            newPrice,
+                                            Qt::EditRole                                );
+
+}
+
+//****************************************************************************************
+
+// slot
+void  MainWindow::updateLastPrice(   const QString&  newPrice  )
+{
+
+    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
+                                                                0,
+                                                                QModelIndex()           );
+
+    this->m_diffModel->setData(             bidIndex,
+                                            newPrice,
+                                            Qt::EditRole                                );
+
+}
+
+//****************************************************************************************
+
+// slot
+void  MainWindow::updatePriceDiff(  const QString&  newPrice  )
+{
+
+    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
+                                                                1,
+                                                                QModelIndex()           );
+
+    this->m_diffModel->setData(             bidIndex,
+                                            newPrice,
+                                            Qt::EditRole                                );
+
+}
+
+//****************************************************************************************
+
+// slot
+void  MainWindow::updatePricePercentageDiff(  const QString&  percDiff  )
+{
+
+
+    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
+                                                                2,
+                                                                QModelIndex()           );
+
+    if ( percDiff.toDouble() > 0 )
+    {
+
+        this->m_diffModel->setData(             bidIndex,
+                                                "+" + percDiff + "%",
+                                                Qt::EditRole                                );
+
+    }
+    else
+    {
+
+        this->m_diffModel->setData(             bidIndex,
+                                                percDiff+ "%",
+                                                Qt::EditRole                                );
+
+    }
+
+}
+
+//****************************************************************************************
+
+// slot
+void  MainWindow::updateOpeningPrice(  const QString&  newPrice  )
+{
+
+    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
+                                                                3,
+                                                                QModelIndex()           );
+
+    this->m_diffModel->setData(             bidIndex,
+                                            newPrice,
+                                            Qt::EditRole                                );
+
+}
+
+//****************************************************************************************
+
+// slot
+void  MainWindow::updateClosingPrice(  const QString&  newPrice  )
+{
+
+    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
+                                                                4,
+                                                                QModelIndex()           );
+
+    this->m_diffModel->setData(             bidIndex,
+                                            newPrice,
+                                            Qt::EditRole                                );
+
+}
+
+//****************************************************************************************
+
+// slot
+void  MainWindow::updateTradingVolume(  const QString&  newPrice  )
+{
+
+    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
+                                                                5,
+                                                                QModelIndex()           );
+
+    this->m_diffModel->setData(             bidIndex,
                                             newPrice,
                                             Qt::EditRole                                );
 

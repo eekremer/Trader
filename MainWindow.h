@@ -10,6 +10,7 @@
 #include <pthread.h>
 
 #include "DataTableModel.h"
+#include "DiffTableModel.h"
 #include "BracketTableModel.h"
 #include "OrderTableModel.h"
 
@@ -74,6 +75,14 @@ class MainWindow : public QMainWindow
         void                updatePriceToOfferLabel         (   const QString&  newPrice    );
         void                updateBidPrice                  (   const QString&  newPrice    );
         void                updateAskPrice                  (   const QString&  newPrice    );
+        void                updateLastPrice                 (   const QString&  newPrice    );
+
+        void                updatePriceDiff                 (   const QString&  newPrice    );
+        void                updatePricePercentageDiff       (   const QString&  newPrice    );
+        void                updateOpeningPrice              (   const QString&  newPrice    );
+        void                updateClosingPrice              (   const QString&  newPrice    );
+        void                updateTradingVolume             (   const QString&  newPrice    );
+
 
 
     public:
@@ -105,6 +114,7 @@ class MainWindow : public QMainWindow
 
         OrderTableModel                 *m_orderModel   ;
         DataTableModel                  *m_dataModel    ;
+        DiffTableModel                  *m_diffModel    ;
         BracketTableModel               *m_bracketModel ;
         DataViewDelegate                *m_dataDelegate ;
         OrderViewDelegate               *m_orderDelegate;

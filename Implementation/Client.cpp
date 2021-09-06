@@ -2699,52 +2699,33 @@ void Client::tickPrice(                     TickerId 			tickerId,
 
     //-----------------------------------------------------------------------------------------------
 
-    if ( field == BID )
+    if ( field == BID )         // bid price
     {
-
         // setter
         m_window->m_liveObject.bidPrice(    price   );
-
-/*
-        QModelIndex bidIndex  =  m_window->m_dataModel->index(              0,
-                                                                            0,
-                                                                            QModelIndex()       );
-
-        m_window->m_dataModel->setData(                     bidIndex,
-                                                            QString::number( price, 'f', 2 ),
-                                                            Qt::EditRole                        );
-
-
-        qInfo(          "within ...Client::tickByTickBidAsk() \n"           );
-        qInfo(          "%f \n",    price                                   );
-
-        m_window->m_bracketModel->setData(                  bidIndex,
-                                                            QString::number( price, 'f', 2 ),
-                                                            Qt::EditRole                        );
-*/
-
     }
-
-    //-----------------------------------------------------------------------------------------------
-
-
-    if ( field == ASK )
+    else if ( field == ASK )    // ask price
     {
-
+        // setter
         m_window->m_liveObject.askPrice(    price   );
-
-/*
-        QModelIndex askIndex  =  m_window->m_dataModel->index(              0,
-                                                                            1,
-                                                                            QModelIndex()               );
-
-        m_window->m_dataModel->setData(                     askIndex,
-                                                            QString::number( price, 'f', 2 ),
-                                                            Qt::EditRole                                );
-
-        m_window->m_liveObject.askPrice( price );
-*/
     }
+    else if ( field == LAST )   // last price
+    {
+        // setter
+        m_window->m_liveObject.lastPrice(    price   );
+    }
+    else if ( field == OPEN )   // current session's opening price
+    {
+        // setter
+        m_window->m_liveObject.openingPrice(    price   );
+    }
+    else if ( field == CLOSE )  // closing price for the previous day
+    {
+        // setter
+        m_window->m_liveObject.closingPrice(    price   );
+    }
+
+
 
     //-----------------------------------------------------------------------------------------------
 
@@ -2763,6 +2744,12 @@ void Client::tickSize(                      TickerId 	tickerId,
 											tickerId, 
 											(int)field, 
 											size											);
+
+    if ( field == VOLUME )  // closing price for the previous day
+    {
+        // setter
+        m_window->m_liveObject.tradingVolume(   size   );
+    }
 
 }
 //! [ticksize]

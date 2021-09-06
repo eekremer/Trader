@@ -1,5 +1,4 @@
-
-#include "DataTableModel.h"
+#include "DiffTableModel.h"
 
 #include <QObject>
 #include <QAbstractTableModel>
@@ -16,7 +15,7 @@
     Constructs a table model with at least one row and one column.
 */
 
-DataTableModel::DataTableModel(         int         rows,
+DiffTableModel::DiffTableModel(         int         rows,
                                         int         columns,
                                         QObject    *parent         )
 
@@ -46,7 +45,7 @@ DataTableModel::DataTableModel(         int         rows,
     in the model.
 */
 
-int  DataTableModel::rowCount(  const QModelIndex&  /*parent*/ ) const
+int  DiffTableModel::rowCount(  const QModelIndex&  /*parent*/ ) const
 {
 
     return 1; //m_rowList.size();
@@ -60,7 +59,7 @@ int  DataTableModel::rowCount(  const QModelIndex&  /*parent*/ ) const
     columns in the model. All rows should have the same number of columns.
 */
 
-int  DataTableModel::columnCount(  const QModelIndex&  /*parent*/ ) const
+int  DiffTableModel::columnCount(  const QModelIndex&  /*parent*/ ) const
 {
 
     return m_rowList[ 0 ].size();
@@ -77,7 +76,7 @@ int  DataTableModel::columnCount(  const QModelIndex&  /*parent*/ ) const
     Note: If you do not have a value to return, return an invalid QVariant instead of returning 0.
 */
 
-QVariant  DataTableModel::data(      const QModelIndex&     index,
+QVariant  DiffTableModel::data(      const QModelIndex&     index,
                                            int              role       ) const
 {
 
@@ -206,7 +205,7 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
     requested, we return an invalid variant.
 */
 
-QVariant  DataTableModel::headerData(       int                 section,
+QVariant  DiffTableModel::headerData(       int                 section,
                                             Qt::Orientation     orientation,
                                             int                 role            ) const
 {
@@ -220,9 +219,17 @@ QVariant  DataTableModel::headerData(       int                 section,
         switch ( section )
         {
             case 0:
-                return "BID";
+                return "LAST";          // Last price
             case 1:
-                return "ASK";
+                return "CHANGE";        // Change vs the opening
+            case 2:
+                return " % CH.";           // % Change vs the opening
+            case 3:
+                return "OPENING";       // Current session's opening price
+            case 4:
+                return "CLOSED";        // Closing price for the previous day
+            case 5:
+                return "VOLUME";        // Trading volume for the day
             default:
                 return QString( "" );
         }
@@ -243,13 +250,13 @@ QVariant  DataTableModel::headerData(       int                 section,
     to show an editor that a cell can be selected
 */
 
-Qt::ItemFlags  DataTableModel::flags(  const QModelIndex  &index  ) const
+Qt::ItemFlags  DiffTableModel::flags(  const QModelIndex  &index  ) const
 {
 
     if ( !index.isValid() )
         return Qt::ItemIsEnabled;
 
-    return  Qt::NoItemFlags; // Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    return  Qt::NoItemFlags;  // Qt::ItemIsEnabled; | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 
 }
 
@@ -265,7 +272,7 @@ Qt::ItemFlags  DataTableModel::flags(  const QModelIndex  &index  ) const
     The dataChanged() signal is emitted if the item is changed.
 */
 
-bool DataTableModel::setData(       const QModelIndex   &index,
+bool DiffTableModel::setData(       const QModelIndex   &index,
                                     const QVariant      &value,
                                           int           role            )
 {
@@ -292,9 +299,9 @@ bool DataTableModel::setData(       const QModelIndex   &index,
     Inserts a number of rows into the model at the specified position.
 */
 
-bool  DataTableModel::insertRows(       int             position,
+bool  DiffTableModel::insertRows(       int             position,
                                         int             rows,
-                                  const QModelIndex    &parent         )
+                                  const QModelIndex     &parent         )
 {
 
     int columns = columnCount();
@@ -329,7 +336,7 @@ bool  DataTableModel::insertRows(       int             position,
     empty strings.
 */
 
-bool  DataTableModel::insertColumns(            int             position,
+bool  DiffTableModel::insertColumns(            int             position,
                                                 int             columns,
                                           const QModelIndex     &parent         )
 {
@@ -365,7 +372,7 @@ bool  DataTableModel::insertColumns(            int             position,
     Removes a number of rows from the model at the specified position.
 */
 
-bool  DataTableModel::removeRows(           int             position,
+bool  DiffTableModel::removeRows(           int             position,
                                             int             rows,
                                       const QModelIndex     &parent         )
 {
@@ -394,7 +401,7 @@ bool  DataTableModel::removeRows(           int             position,
     Each row is shortened by the number of columns specified.
 */
 
-bool  DataTableModel::removeColumns(            int             position,
+bool  DiffTableModel::removeColumns(            int             position,
                                                 int             columns,
                                           const QModelIndex&    parent         )
 {

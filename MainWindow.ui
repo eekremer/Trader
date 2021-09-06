@@ -31,7 +31,7 @@
      <rect>
       <x>40</x>
       <y>30</y>
-      <width>661</width>
+      <width>351</width>
       <height>71</height>
      </rect>
     </property>
@@ -434,7 +434,7 @@
    <widget class="QSlider" name="horizontalSlider">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>100</x>
       <y>160</y>
       <width>211</width>
       <height>16</height>
@@ -457,7 +457,7 @@
    <widget class="QLabel" name="priceLabel">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>150</x>
       <y>120</y>
       <width>101</width>
       <height>31</height>
@@ -470,6 +470,16 @@
     </property>
     <property name="text">
      <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QTableView" name="diffTableView">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>30</y>
+      <width>661</width>
+      <height>71</height>
+     </rect>
     </property>
    </widget>
   </widget>
