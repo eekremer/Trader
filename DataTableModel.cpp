@@ -121,33 +121,38 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
 
             if ( row == 0 )
             {
+
                 QFont boldFont;
 
                 boldFont.setBold( false );
 
                 return boldFont;
+
             }
 
         break;
 
         //-----------------------------------------------
 
+        // See table layout: remember that it brings in 3 tables ( 4 x 11 )
+
         case Qt::BackgroundRole:
 
-            if ( row == 0 && ( col == 0 || col == 1 || col == 2 ) )     // change background only for cell( 0, 1 )
+            if ( row == 0 )
             {
 
-                return QBrush( Qt::black );
+                if ( col == 0 ||  col == 1 )      // change background only for cell( 0, 1 )
+                {
 
+                    return QBrush(  Qt::black  );
 
-            }
+                }
+                else if ( col >= 2 && col <= 7 )
+                {
 
-            if ( row == 0 && ( col == 3 ||  col == 4 ) )     // change background only for cell( 0, 1 )
-            {
+                    return QBrush(  Qt::black  );
 
-                return QBrush( Qt::red );
-
-                // here goes RED or GREEN depending on its previous closing
+                }
 
             }
 
@@ -157,10 +162,21 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
 
         case Qt::ForegroundRole:
 
-            if ( row == 0 && ( col == 0 ||  col == 1 || col == 2 ) )     // change background only for cell( 0, 1 )
+            if ( row == 0 )
             {
 
-                return QBrush(  Qt::white  );
+                if ( col == 0 ||  col == 1 )      // change background only for cell( 0, 1 )
+                {
+
+                    return QBrush(  Qt::white  );
+
+                }
+                else if ( col >= 2 && col <= 7 )
+                {
+
+                    return QBrush(  Qt::white  );
+
+                }
 
             }
 
@@ -174,7 +190,9 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
 
             if ( row == 0 )     // change text alignment only for cell( 0, 1 )
             {
+
                 return int( Qt::AlignRight | Qt::AlignVCenter  );
+
             }
 
         break;
@@ -185,7 +203,9 @@ QVariant  DataTableModel::data(      const QModelIndex&     index,
 
             if ( row == 0 && col == 0 )     // add a checkbox to cell( 0, 0 )
             {
+
                 return Qt::Checked;
+
             }
 
         break;
