@@ -282,7 +282,6 @@ bool DiffTableModel::setData(       const QModelIndex   &index,
 
     m_rowList[ index.row() ][ index.column() ] = value.toString();
 
-
     qInfo(          "within ...DataTableModel::setData() \n"            );
     qStdout() <<  m_rowList[ index.row() ][ index.column() ] << Qt::endl;
 

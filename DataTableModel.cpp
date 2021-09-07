@@ -49,7 +49,7 @@ DataTableModel::DataTableModel(         int         rows,
 int  DataTableModel::rowCount(  const QModelIndex&  /*parent*/ ) const
 {
 
-    return 1; //m_rowList.size();
+    return 4;  // m_rowList.size();
 
 }
 
@@ -63,7 +63,7 @@ int  DataTableModel::rowCount(  const QModelIndex&  /*parent*/ ) const
 int  DataTableModel::columnCount(  const QModelIndex&  /*parent*/ ) const
 {
 
-    return m_rowList[ 0 ].size();
+    return 11;  // m_rowList[ 0 ].size();
 
 }
 
@@ -223,16 +223,50 @@ QVariant  DataTableModel::headerData(       int                 section,
                 return "BID";
             case 1:
                 return "ASK";
+            case 2:
+                return "LAST";              // Last price
+            case 3:
+                return "CHANGE";            // Change vs the opening
+            case 4:
+                return " % CH ";            // % Change vs the opening
+            case 5:
+                return "OPENING";           // Current session's opening price
+            case 6:
+                return "CLOSED";            // Closing price for the previous day
+            case 7:
+                return "VOLUME";            // Trading volume for the day
+            case 8:
+                return "USD/stock";
+            case 9:
+                return "%";                 // Ticker/Exchange. For instance IBM|SMART
+            case 10:
+                return "increm. P&L";       // order action: Buy or Sell
             default:
                 return QString( "" );
         }
 
-     }
-     else
-     {
+    }
+    else if ( orientation == Qt::Vertical )
+    {
+
+        switch ( section )
+        {
+
+            case 2:
+                return "Take a profit";
+            case 3:
+                return "Stop loss";
+            default:
+                return QString( "" );
+
+        }
+
+    }
+    else
+    {
         //return QString( "Row %1"    ).arg( section );
         return "";
-     }
+    }
 
 }
 

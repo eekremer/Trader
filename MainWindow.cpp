@@ -32,25 +32,34 @@ MainWindow::MainWindow(  QWidget  *parent  )
 
     //----------------------------------------------------------------
 
-    // Data Table & View
+    // Model
 
-    m_dataModel = new DataTableModel(  1,  2, nullptr  );
-
-    m_ui->dataTableView->setModel(  m_dataModel  );
-
-    setDataTableViewColumnWidth();
-    setDataTableViewHeaderSize ();
-
-    m_dataDelegate = new DataViewDelegate( this );
-    m_ui->dataTableView->setItemDelegate( m_dataDelegate );
+    m_dataModel = new DataTableModel(  4,  11, nullptr  );
 
     //----------------------------------------------------------------
 
-    // Data Table & View
+    // Data View
 
-    m_diffModel = new DiffTableModel(  1,  6, nullptr  );
+    m_ui->dataTableView->setModel(  m_dataModel  );
 
-    m_ui->diffTableView->setModel(  m_diffModel  );
+    setDataTableViewRowColumnHidden();
+
+    //setDataTableViewColumnWidth();
+    //setDataTableViewHeaderSize ();
+
+    //m_dataDelegate = new DataViewDelegate( this );
+
+    //m_ui->dataTableView->setItemDelegate( m_dataDelegate );
+
+    //----------------------------------------------------------------
+
+    // Diff View
+
+    //m_diffModel = new DiffTableModel(  1,  6, nullptr  );
+
+    m_ui->diffTableView->setModel(  m_dataModel  );
+
+    setDiffTableViewRowColumnHidden();
 
     //setDiffTableViewColumnWidth();
     //setDiffTableViewHeaderSize ();
@@ -59,29 +68,18 @@ MainWindow::MainWindow(  QWidget  *parent  )
     //m_ui->diffTableView->setItemDelegate( m_diffDelegate );
 
 
-
     //----------------------------------------------------------------
 
-    // Order Table and View
+    // Bracket View
 
-    m_orderModel = new OrderTableModel(  10,  9, nullptr  );
+    //m_bracketModel = new BracketTableModel(  2,  3, nullptr  );
 
-    m_ui->orderTableView->setModel(  m_orderModel  );
+    m_ui->bracketTableView->setModel(   m_dataModel  );
 
-    setOrderTableViewColumnWidth();
+    setBracketTableViewRowColumnHidden();
 
-    //m_orderDelegate = new OrderViewDelegate( this );
-
-    //----------------------------------------------------------------
-
-    // Bracket Table & View
-
-    m_bracketModel = new BracketTableModel(  2,  3, nullptr  );
-
-    m_ui->bracketTableView->setModel(   m_bracketModel  );
-
-    setBracketTableViewColumnWidth();
-    setBracketTableViewHeaderSize ();
+    //setBracketTableViewColumnWidth();
+    //setBracketTableViewHeaderSize ();
 
     //m_dataDelegate = new DataViewDelegate( this );
     //m_ui->dataTableView->setItemDelegate( m_dataDelegate );
@@ -90,8 +88,17 @@ MainWindow::MainWindow(  QWidget  *parent  )
                                                                         "background-color:grey;"
                                                                   "}"               );
 
+    //----------------------------------------------------------------
 
-    //background-color:grey
+    // Order View
+
+    m_orderModel = new OrderTableModel(  10,  9, nullptr  );
+
+    m_ui->orderTableView->setModel(  m_orderModel  );
+
+    setOrderTableViewColumnWidth();
+
+    //m_orderDelegate = new OrderViewDelegate( this );
 
     //----------------------------------------------------------------
 
@@ -336,21 +343,13 @@ void MainWindow::setDataTableViewColumnWidth()
 void  MainWindow::setDataTableViewHeaderSize()
 {
 
-    //m_ui->dataTableView->setFont(   QFont( "Arial", 30 )   );
-/*
-    // Example 1
-    QFont font = m_ui->dataTableView->horizontalHeader()->font();
 
-    font.setPointSize( 14 );
-
-    m_ui->dataTableView->horizontalHeader()->setFont( font );
-*/
-    // Example 2
     m_ui->dataTableView->horizontalHeader()->setStyleSheet(
                                             "QHeaderView {   font-size: 12pt;"
                                                             "color:white;"
                                                             "background-color:black;"
                                                                                         "}" );
+
 
 }
 
@@ -490,11 +489,11 @@ void  MainWindow::updateBidPrice(  const QString&  newPrice  )
 void  MainWindow::updateAskPrice(  const QString&  newPrice   )
 {
 
-    QModelIndex bidIndex  =  this->m_dataModel->index(          0,
+    QModelIndex askIndex  =  this->m_dataModel->index(          0,
                                                                 1,
                                                                 QModelIndex()           );
 
-    this->m_dataModel->setData(             bidIndex,
+    this->m_dataModel->setData(             askIndex,
                                             newPrice,
                                             Qt::EditRole                                );
 
@@ -506,11 +505,11 @@ void  MainWindow::updateAskPrice(  const QString&  newPrice   )
 void  MainWindow::updateLastPrice(   const QString&  newPrice  )
 {
 
-    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
-                                                                0,
+    QModelIndex lastIndex  =  this->m_dataModel->index(         0,
+                                                                2,
                                                                 QModelIndex()           );
 
-    this->m_diffModel->setData(             bidIndex,
+    this->m_dataModel->setData(             lastIndex,
                                             newPrice,
                                             Qt::EditRole                                );
 
@@ -522,11 +521,11 @@ void  MainWindow::updateLastPrice(   const QString&  newPrice  )
 void  MainWindow::updatePriceDiff(  const QString&  newPrice  )
 {
 
-    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
-                                                                1,
+    QModelIndex diffIndex  =  this->m_dataModel->index(         0,
+                                                                3,
                                                                 QModelIndex()           );
 
-    this->m_diffModel->setData(             bidIndex,
+    this->m_dataModel->setData(             diffIndex,
                                             newPrice,
                                             Qt::EditRole                                );
 
@@ -539,14 +538,14 @@ void  MainWindow::updatePricePercentageDiff(  const QString&  percDiff  )
 {
 
 
-    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
-                                                                2,
-                                                                QModelIndex()           );
+    QModelIndex percDiffIndex  =  this->m_dataModel->index(         0,
+                                                                    4,
+                                                                    QModelIndex()           );
 
     if ( percDiff.toDouble() > 0 )
     {
 
-        this->m_diffModel->setData(             bidIndex,
+        this->m_dataModel->setData(             percDiffIndex,
                                                 "+" + percDiff + "%",
                                                 Qt::EditRole                                );
 
@@ -554,7 +553,7 @@ void  MainWindow::updatePricePercentageDiff(  const QString&  percDiff  )
     else
     {
 
-        this->m_diffModel->setData(             bidIndex,
+        this->m_dataModel->setData(             percDiffIndex,
                                                 percDiff+ "%",
                                                 Qt::EditRole                                );
 
@@ -568,11 +567,11 @@ void  MainWindow::updatePricePercentageDiff(  const QString&  percDiff  )
 void  MainWindow::updateOpeningPrice(  const QString&  newPrice  )
 {
 
-    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
-                                                                3,
-                                                                QModelIndex()           );
+    QModelIndex openingIndex  =  this->m_dataModel->index(          0,
+                                                                    5,
+                                                                    QModelIndex()       );
 
-    this->m_diffModel->setData(             bidIndex,
+    this->m_dataModel->setData(             openingIndex,
                                             newPrice,
                                             Qt::EditRole                                );
 
@@ -584,11 +583,11 @@ void  MainWindow::updateOpeningPrice(  const QString&  newPrice  )
 void  MainWindow::updateClosingPrice(  const QString&  newPrice  )
 {
 
-    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
-                                                                4,
-                                                                QModelIndex()           );
+    QModelIndex closingIndex  =  this->m_dataModel->index(          0,
+                                                                    6,
+                                                                    QModelIndex()       );
 
-    this->m_diffModel->setData(             bidIndex,
+    this->m_dataModel->setData(             closingIndex,
                                             newPrice,
                                             Qt::EditRole                                );
 
@@ -600,11 +599,11 @@ void  MainWindow::updateClosingPrice(  const QString&  newPrice  )
 void  MainWindow::updateTradingVolume(  const QString&  newPrice  )
 {
 
-    QModelIndex bidIndex  =  this->m_diffModel->index(          0,
-                                                                5,
-                                                                QModelIndex()           );
+    QModelIndex tradingVolIndex  =  this->m_dataModel->index(           0,
+                                                                        7,
+                                                                        QModelIndex()   );
 
-    this->m_diffModel->setData(             bidIndex,
+    this->m_dataModel->setData(             tradingVolIndex,
                                             newPrice,
                                             Qt::EditRole                                );
 
@@ -712,8 +711,85 @@ void  MainWindow::setMainWindowButtonStyleSheet()
 
 //*****************************************************************************************
 
+void  MainWindow::setDataTableViewRowColumnHidden()
+{
+
+    // row to hide
+    for ( int i = 1; i < 4; i++ )
+    {
+
+        m_ui->dataTableView->setRowHidden(    i,  true   );
+
+    }
+
+    // columns to hide
+    for ( int j = 2; j < 11; j++ )
+    {
+
+        m_ui->dataTableView->setColumnHidden(    j,  true    );
+
+    }
+
+
+}
+
+//*****************************************************************************************
+
+void  MainWindow::setDiffTableViewRowColumnHidden()
+{
+
+    // row to hide
+    for ( int i = 1; i < 4; i++ )
+    {
+
+        m_ui->diffTableView->setRowHidden   (    i,  true    );
+
+    }
+
+    // columns to hide
+    for ( int j = 0; j < 2; j++ )
+    {
+
+        m_ui->diffTableView->setColumnHidden(    j,  true    );
+
+    }
+
+    for ( int k = 8; k < 11; k++ )
+    {
+
+        m_ui->diffTableView->setColumnHidden(    k,  true    );
+
+    }
+
+}
+
+//*****************************************************************************************
+
+void  MainWindow::setBracketTableViewRowColumnHidden()
+{
+
+    // row to hide
+    for ( int i = 0; i < 2; i++ )
+    {
+
+        m_ui->bracketTableView->setRowHidden(    i,  true    );
+
+    }
+
+    // columns to hide
+    for ( int j = 0; j < 8; j++ )
+    {
+
+        m_ui->bracketTableView->setColumnHidden (    j,  true    );
+
+    }
+
+}
+
+//*****************************************************************************************
+
 // slot: BUY button
-void MainWindow::buyButtonClicked()
+void  MainWindow::buyButtonClicked()
 {
 
     qInfo( "BUY button clicked !!" );

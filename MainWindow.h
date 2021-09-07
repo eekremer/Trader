@@ -62,47 +62,51 @@ class MainWindow : public QMainWindow
 
     private slots:
 
-        void                buyButtonClicked                ();
-        void                sellButtonClicked               ();
-        void                setupButtonClicked              ();
-        void                confirmBuyClicked               ();
-        void                confirmButtonClicked            ();
+        void                buyButtonClicked                    ();
+        void                sellButtonClicked                   ();
+        void                setupButtonClicked                  ();
+        void                confirmBuyClicked                   ();
+        void                confirmButtonClicked                ();
 
-        void                goToBuySellDialog               ();
-        void                symbolComboBoxTextChanged       (   const QString&  symbol      );
-        void                sliderChanged                   (       int       value         );
+        void                goToBuySellDialog                   ();
+        void                symbolComboBoxTextChanged           (   const QString&  symbol      );
+        void                sliderChanged                       (       int       value         );
 
-        void                updatePriceToOfferLabel         (   const QString&  newPrice    );
-        void                updateBidPrice                  (   const QString&  newPrice    );
-        void                updateAskPrice                  (   const QString&  newPrice    );
-        void                updateLastPrice                 (   const QString&  newPrice    );
+        void                updatePriceToOfferLabel             (   const QString&  newPrice    );
+        void                updateBidPrice                      (   const QString&  newPrice    );
+        void                updateAskPrice                      (   const QString&  newPrice    );
+        void                updateLastPrice                     (   const QString&  newPrice    );
 
-        void                updatePriceDiff                 (   const QString&  newPrice    );
-        void                updatePricePercentageDiff       (   const QString&  newPrice    );
-        void                updateOpeningPrice              (   const QString&  newPrice    );
-        void                updateClosingPrice              (   const QString&  newPrice    );
-        void                updateTradingVolume             (   const QString&  newPrice    );
+        void                updatePriceDiff                     (   const QString&  newPrice    );
+        void                updatePricePercentageDiff           (   const QString&  newPrice    );
+        void                updateOpeningPrice                  (   const QString&  newPrice    );
+        void                updateClosingPrice                  (   const QString&  newPrice    );
+        void                updateTradingVolume                 (   const QString&  newPrice    );
 
 
 
     public:
 
-        void                setMainWindowOrderParams        ();
-        void                setMainWindowContractParams     ();
-        void                setOrderTableViewColumnWidth    ();
-        void                setDataTableViewColumnWidth     ();
-        void                setDataTableViewHeaderSize      ();
-        void                setBracketTableViewColumnWidth  ();
-        void                setBracketTableViewHeaderSize   ();
-        void                setMainWindowButtonConnection   ();
-        void                setMainWindowButtonStyleSheet   ();
-        void                insertMsgIntoQueue              (    InterObject   msg          );
-        void                convertQstringToString          ();
-        void                setInitialSymbol                ();
-        void                initialSetUp                    ();
-        void                setPriceSlider                  ();
+        void                setMainWindowOrderParams            ();
+        void                setMainWindowContractParams         ();
+        void                setOrderTableViewColumnWidth        ();
+        void                setDataTableViewColumnWidth         ();
+        void                setDataTableViewHeaderSize          ();
+        void                setBracketTableViewColumnWidth      ();
+        void                setBracketTableViewHeaderSize       ();
+        void                setMainWindowButtonConnection       ();
+        void                setMainWindowButtonStyleSheet       ();
+        void                setDataTableViewRowColumnHidden     ();
+        void                setDiffTableViewRowColumnHidden     ();
+        void                setBracketTableViewRowColumnHidden  ();
 
-        void                setPriceToOfferLabel            ()  const;
+        void                insertMsgIntoQueue                  (    InterObject   msg          );
+        void                convertQstringToString              ();
+        void                setInitialSymbol                    ();
+        void                initialSetUp                        ();
+        void                setPriceSlider                      ();
+
+        void                setPriceToOfferLabel                ()  const;
 
 
     private:
@@ -114,7 +118,7 @@ class MainWindow : public QMainWindow
 
         OrderTableModel                 *m_orderModel   ;
         DataTableModel                  *m_dataModel    ;
-        DiffTableModel                  *m_diffModel    ;
+      //DiffTableModel                  *m_diffModel    ;
         BracketTableModel               *m_bracketModel ;
         DataViewDelegate                *m_dataDelegate ;
         OrderViewDelegate               *m_orderDelegate;
