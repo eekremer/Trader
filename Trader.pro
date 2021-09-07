@@ -21,12 +21,12 @@ CONFIG += c++11
 
 # Input
 HEADERS += AccountTableModel.h \
-           BracketTableModel.h \
+           # BracketTableModel.h \
            BuySellDialog.h \
            DataDbManager.h \
            DataTableModel.h \
            DataViewDelegate.h \
-           DiffTableModel.h \
+           # DiffTableModel.h \
            InterObject.h \
            LiveObject.h \
            MainWindow.h \
@@ -94,14 +94,14 @@ HEADERS += AccountTableModel.h \
            Implementation/ScannerSubscriptionSamples.h \
            Implementation/StdAfx.h \
            Implementation/Utils.h
-FORMS += BuySellDialog.ui MainWindow.ui
+FORMS   += BuySellDialog.ui MainWindow.ui
 SOURCES += AccountTableModel.cpp \
-           BracketTableModel.cpp \
+           # BracketTableModel.cpp \
            BuySellDialog.cpp \
            DataDbManager.cpp \
            DataTableModel.cpp \
            DataViewDelegate.cpp \
-           DiffTableModel.cpp \
+           # DiffTableModel.cpp \
            LiveObject.cpp \
            Main.cpp \
            MainWindow.cpp \

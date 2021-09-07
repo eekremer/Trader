@@ -55,8 +55,6 @@ MainWindow::MainWindow(  QWidget  *parent  )
 
     // Diff View
 
-    //m_diffModel = new DiffTableModel(  1,  6, nullptr  );
-
     m_ui->diffTableView->setModel(  m_dataModel  );
 
     setDiffTableViewRowColumnHidden();
@@ -71,8 +69,6 @@ MainWindow::MainWindow(  QWidget  *parent  )
     //----------------------------------------------------------------
 
     // Bracket View
-
-    //m_bracketModel = new BracketTableModel(  2,  3, nullptr  );
 
     m_ui->bracketTableView->setModel(   m_dataModel  );
 
@@ -162,7 +158,7 @@ void MainWindow::setMainWindowOrderParams()
     // ComboBox - Symbols
     QStringList symbols;
 
-    symbols << "AAPL" << "AMZN" << "TSLA" << "MSFT";
+    symbols << "TSLA" << "AMZN" << "AAPL" << "MSFT";
 
     m_ui->symbolComboBox->addItems( symbols );
 

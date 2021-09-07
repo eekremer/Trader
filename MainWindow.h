@@ -10,8 +10,8 @@
 #include <pthread.h>
 
 #include "DataTableModel.h"
-#include "DiffTableModel.h"
-#include "BracketTableModel.h"
+//#include "DiffTableModel.h"
+//#include "BracketTableModel.h"
 #include "OrderTableModel.h"
 
 #include "DataViewDelegate.h"
@@ -119,7 +119,7 @@ class MainWindow : public QMainWindow
         OrderTableModel                 *m_orderModel   ;
         DataTableModel                  *m_dataModel    ;
       //DiffTableModel                  *m_diffModel    ;
-        BracketTableModel               *m_bracketModel ;
+      //BracketTableModel               *m_bracketModel ;
         DataViewDelegate                *m_dataDelegate ;
         OrderViewDelegate               *m_orderDelegate;
 
